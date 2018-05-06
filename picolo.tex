@@ -29,6 +29,8 @@
 %% \begin{linenumbers}, end it with \end{linenumbers}. Or switch it on
 %% for the whole article with \linenumbers after \end{frontmatter}.
 \usepackage{lineno}
+\usepackage{url}
+\bibliographystyle{unsrt}
 
 %% natbib.sty is loaded by default. However, natbib options can be
 %% provided with \biboptions{...} command. Following options are
@@ -189,17 +191,15 @@ Treatment 3 & 0.0009271 & 0.296 \\
 \caption{Table caption}
 \end{table}
 
-\begin{figure}[h]
-\centering\includegraphics[width=0.4\linewidth]{placeholder}
-\caption{Figure caption}
-\end{figure}
 
 \begin{equation}
 \label{eq:emc}
 e = mc^2
 \end{equation}
 
-Some factors that affect prices of cryptos are listed below. These factors are by no means exhaustive but provide a framework within which mechanisms to analyze them can be discussed. See the sub sections where some techniques are presented.
+Some factors that affect prices of cryptos are listed below. These factors are by no means exhaustive but provide a
+framework within which mechanisms to analyze them can be discussed. See the sub sections where some techniques are
+presented. \cite{Picolo_Whitepaper}
 Factors affecting the prices of crypto assets:
 
 %-----------------------------------------------------------------------------
@@ -212,7 +212,6 @@ Initial implementations of AI algorithms that analyze structured and unstructure
 %-----------------------------------------------------------------------------
 %  BIBLIOGRAPHY
 %-----------------------------------------------------------------------------
-\bibliographystyle{model1-num-names}
 \bibliography{./bib/picolo.bib}
 \end{document}
 
@@ -245,11 +244,13 @@ Initial implementations of AI algorithms that analyze structured and unstructure
 %% \bibitem must have the following form:
 %%   \bibitem{key}...
 %%
-
+%% Example figure:
+%%
+%% \begin{figure}[h]
+%% \centering\includegraphics[width=0.4\linewidth]{placeholder.png}
+%% \caption{Figure caption}
+%% \end{figure}
+%% 
 % \bibitem{}
 
 % \end{thebibliography}
-
-
-\end{document}
-
