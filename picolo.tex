@@ -149,31 +149,24 @@ Decentralization \sep Blockchain \sep Crypto economics \sep Database \sep Distri
 %-----------------------------------------------------------------------------
 \input{background}
 
-\section{Overall Design}
+%-----------------------------------------------------------------------------
+%  OVERALL DESIGN SECTION
+%-----------------------------------------------------------------------------
+\input{design}
 
-    \begin{itemize}
-        \item Overall Picolo architecture.
-        \item Token economics.
-    \end{itemize}
-\section{Network Subsystem}
+%-----------------------------------------------------------------------------
+%  NETWORK SUB-SYSTEM SECTION
+%-----------------------------------------------------------------------------
+\input{network}
 
-    \begin{itemize}
-        \item DHT layer for lookup. Replication and caching for O(1) lookups for popular items.
-        \item Token economics for incentivized participation.
-        \item Building with BFT. 
-    \end{itemize}
-\section{Database Subsystem}
 
-\subsection{Cluster}
-\subsection{Versioning}
-\subsection{Consensus, Replication and Token economics}
-\subsection{Handling Failures}
-\subsection{Recovery from failures}
-\subsection{Clients}
-\subsection{Query execution}
-\subsection{Sharding}
-\subsection{Transactions and hybrid time}
+%-----------------------------------------------------------------------------
+%  DATABASE SUB-SYSTEM SECTION
+%-----------------------------------------------------------------------------
+\input{db}
 
+
+\section{Random stuff}
 \begin{table}[h]
 \centering
 \begin{tabular}{l l l}
