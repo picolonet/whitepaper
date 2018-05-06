@@ -1,0 +1,108 @@
+\ProvidesPackage{MyDocumentSettings}
+\usepackage[utf8]{inputenc}
+% This is your own package.
+% All the settings that normally appeared in the beginning of your LaTeX document
+% can be now placed in one common document. In this little personal package you
+% can customize the way how your document will look and behave.
+
+%-----------------------------------------------------------------------------
+%  Cross references
+%-----------------------------------------------------------------------------
+% The following code defines how you make references to figures, tables, etc...
+% It is defined in one place only, and can be modified for all references
+% in the document at the same time.
+% Instead of typing each time: "see Fig. \ref{myfig}" you can create a command
+% \figref which will do the job. Then in text you only type \figref{myfig} and LaTeX
+% will do the rest.
+\newcommand{\tblref}[1]{Table~\ref{#1}}
+\newcommand{\equref}[1]{(\ref{#1})}
+\newcommand{\figref}[1]{Fig.~\ref{#1}}
+
+
+%-----------------------------------------------------------------------------
+%  Bibliography
+%-----------------------------------------------------------------------------
+% There is a nice small package creating compressed and sorted lists of
+% numerical citations: [8,11-16]
+\usepackage{cite}
+
+%-----------------------------------------------------------------------------
+%  Figures
+%-----------------------------------------------------------------------------
+\usepackage{graphicx}
+\usepackage{subfigure}
+
+% Set a default path where all your figures are kept
+\graphicspath{{./fig/}}
+
+% The following code allows you to scale all your figures at the same time
+% Requires package calc
+\usepackage{calc}
+% To do that we define a new command \fscale. When you define a width of each figure
+% do it like that: width=\fscale{0.57} This will set the width of the figure as 57% of
+% certain width. It could be either as a percentage of the line width, column width
+% or percentage of fixed number in inches. Uncomment the right line...
+%\newcommand{\fscale}[1]{3.5in*\real{#1}} %  percentage of a fixed number
+\newcommand{\fscale}[1]{#1\linewidth}     %  percentage of a linewidth
+
+% endfloat package
+% will place all your figures at the end of your document... if you want.
+%\usepackage{endfloat}
+
+
+%-----------------------------------------------------------------------------
+%  Hyperlinks and URLs
+%-----------------------------------------------------------------------------
+% hyperref package (use only with PdfLaTeX)
+% Creates hyperlinks in the pdf document
+\usepackage[pdftex, colorlinks=true,
+                    bookmarksnumbered=true,
+                    bookmarksopen=true,
+                    bookmarksopenlevel=3,
+                    pdfstartview=FitV,
+                    linkcolor=black,
+                    citecolor=black,
+                    urlcolor=blue,
+          ]{hyperref}
+          \pdfinfo{
+            /Title      (My document title)
+            /Author     (Document Author)
+            /Keywords   (My keywords)}
+
+% hypcap package (use only with PdfLaTeX)
+% improves how the hyperlinks to figures work, when you click a hyperlink
+% it shows the whole figure, not only the figure caption
+\usepackage[figure]{hypcap}
+
+%-----------------------------------------------------------------------------
+%  Math mode
+%-----------------------------------------------------------------------------
+% It may be useful to create short notations for changing fonts in the equation
+% environment (math mode). Remember that you should set a font for long names in
+% equations like that:
+%\begin{equation}
+%    K_{\mr{measured}} = 5
+%\end{equation}
+% If you don't set the long name "measured" to the roman font, it will be displayed
+% as if all letters in the word "measured" were individual variables. On screen
+% it will look something like that: m e a s u r e d....
+\usepackage{amsmath}
+\newcommand{\mr}[1]{\mathrm{#1}}  % Roman font for the math mode
+\newcommand{\mi}[1]{\mathit{#1}}  % Italic font for the math mode
+\newcommand{\mc}[1]{\mathcal{#1}} % Caligrafic (script) font for the math mode
+\newcommand{\ms}[1]{\mathsf{#1}}  % Sans font for the math mode (vectors and matrices)
+\newcommand{\mb}[1]{\mathbf{#1}}  % Bold font for the math mode (vectors and matrices)
+
+
+%-----------------------------------------------------------------------------
+%  Colors
+%-----------------------------------------------------------------------------
+\usepackage{pagecolor}
+\definecolor{linen}{RGB}{240,240,230}
+\definecolor{fwhite}{RGB}{255,250,240}
+\definecolor{oldlace}{RGB}{253,245,230}
+\definecolor{awhite}{RGB}{250,235,215}
+\definecolor{pwhip}{RGB}{255,239,213}
+\definecolor{peach}{RGB}{255,218,185}
+\definecolor{ivory}{RGB}{255,255,240}
+\definecolor{seashell}{RGB}{255,245,238}
