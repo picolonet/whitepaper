@@ -94,10 +94,9 @@
 \begin{abstract}
 %% Text of abstract
 Picolo is a fast, scalable, verifiable, fully-decentralized, globally distributed transaction oriented database for
-Blockchain-based Applications. Picolo uses a probabilistic replication framework on top of DHTs to achieve a O(1)
+blockchain-based Applications. Picolo uses a probabilistic replication framework on top of DHTs to achieve a O(1)
 lookup latency for most queries. Its the first and so-far only system of its kind to distribute data at a global
-scale will full-decentralization and externally-consistent distributed transactions. Its design is tailored to
-support Blockchain-based applications.
+scale will full-decentralization and externally-consistent distributed transactions.
 
 \begin{itemize}
     \item Allows for verifiable transaction logs.
@@ -106,7 +105,7 @@ support Blockchain-based applications.
 \end{abstract}
 
 \begin{keyword}
-Science \sep Publication \sep Complicated
+Decentralization \sep Blockchain \sep Crypto economics \sep Database \sep Distributed \sep SQL
 %% keywords here, in the form: keyword \sep keyword
 
 %% MSC codes here, in the form: \MSC code \sep code
@@ -156,7 +155,6 @@ Science \sep Publication \sep Complicated
 %-----------------------------------------------------------------------------
 %  RELATED WORK SECTION
 %-----------------------------------------------------------------------------
-\section{Related Work}
 \section{Overall Design}
 
     \begin{itemize}
@@ -168,14 +166,19 @@ Science \sep Publication \sep Complicated
     \begin{itemize}
         \item DHT layer for lookup. Replication and caching for O(1) lookups for popular items.
         \item Token economics for incentivized participation.
-        \item Building with BFT.
+        \item Building with BFT. 
     \end{itemize}
 \section{Database Subsystem}
 
 \subsection{Cluster}
 \subsection{Versioning}
-\subsection{Replication and Token economics}
+\subsection{Consensus, Replication and Token economics}
 \subsection{Handling Failures}
+\subsection{Recovery from failures}
+\subsection{Clients}
+\subsection{Query execution}
+\subsection{Sharding}
+\subsection{Transactions and hybrid time}
 
 \begin{table}[h]
 \centering
@@ -202,6 +205,11 @@ framework within which mechanisms to analyze them can be discussed. See the sub 
 presented. \cite{Picolo_Whitepaper}
 Factors affecting the prices of crypto assets:
 
+\section{Verifiable data structures, encryption, data sovereignty}
+
+\section{Attacks on the system}
+
+
 %-----------------------------------------------------------------------------
 %  CONCLUSIONS
 %-----------------------------------------------------------------------------
@@ -212,6 +220,7 @@ Initial implementations of AI algorithms that analyze structured and unstructure
 %-----------------------------------------------------------------------------
 %  BIBLIOGRAPHY
 %-----------------------------------------------------------------------------
+\section{References}
 \bibliography{./bib/picolo.bib}
 \end{document}
 
