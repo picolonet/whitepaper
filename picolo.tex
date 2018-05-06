@@ -7,16 +7,20 @@
 
 \title{Picolo: Fast, Fully decentralized, Globally distributed Open Database Network}
 \author{Adi Kancherla \and Arunesh Mishra}
-\date{May 6, 2018 \\\hfill \\version 1 (private release, still work-in-progress) \\\hfill \\Whitepaper for the project can be found at \cite{Picolo_Whitepaper}}
+\date{May 6, 2018 \\\hfill \\version 1 (private release, work-in-progress)}
 \maketitle
 \begin{abstract}
 
-    Picolo is a fast, scalable, verifiable, fully-decentralized, globally distributed transaction oriented database for Blockchain-based Applications. Picolo uses a probabilistic replication framework on top of DHTs to achieve a O(1) lookup latency for most queries. Its the first and so-far only system of its kind to distribute data at a global scale will full-decentralization and externally-consistent distributed transactions. Its design is tailored to support Blockchain-based applications.
+Picolo is a fast, scalable, verifiable, fully-decentralized, globally distributed transaction oriented database for
+Blockchain-based Applications. Picolo uses a probabilistic replication framework on top of DHTs to achieve a O(1)
+lookup latency for most queries. Its the first and so-far only system of its kind to distribute data at a global
+scale will full-decentralization and externally-consistent distributed transactions. Its design is tailored to
+support Blockchain-based applications.
 
-    \begin{itemize}
-        \item Allows for verifiable transaction logs.
-        \item Token economics that gamify honest participation from nodes over malicious intent.
-    \end{itemize}
+\begin{itemize}
+    \item Allows for verifiable transaction logs.
+    \item Token economics that gamify honest participation from nodes over malicious intent.
+\end{itemize}
 
 \end{abstract}
 
@@ -28,14 +32,36 @@
 
 
     \begin{itemize}
-        \item Introduce the database problem on the blockchain.
+        \item What are Dapps. Dapps will grow, but need to store data.
+        \item Solutions today provide file storage semantics which might not work for all application types.
+        \item Introduce the database problem on the blockchain. What are the requirements for a decentralized database.
         \item Overview of current approaches and limitations (details in the Background and Related work section).
     \end{itemize}
+
+
+\subsection{Picolo's Features}
+\begin{itemize}
+    \item Network layer Scales with O(log N) overhead for N nodes.
+    \item Network lookup using O(1) amortized lookup cost for DHT.
+    \item Horizontally scalable 
+    \item Automated data sharding
+    \item Transactions can be applied across rows, columns and tables across machines
+    \item Client controlled replication and data placement
+    \item Synchronous replication and external consistency, the strongest form of consistency any database can support
+    \item SQL like interface
+    \item Supports storage of typed data
+    \item Supports semi-relational structure for tables
+    \item Configurable backups and restore mechanisms
+    \item Verifiable legder for transactions.
+\end{itemize}
 
 %-----------------------------------------------------------------------------
 %  BACKGROUND SECTION
 %-----------------------------------------------------------------------------
 \section{Background}
+    \begin{itemize}
+    \end{itemize}
+
 %-----------------------------------------------------------------------------
 %  RELATED WORK SECTION
 %-----------------------------------------------------------------------------
@@ -73,7 +99,6 @@ Initial implementations of AI algorithms that analyze structured and unstructure
 %-----------------------------------------------------------------------------
 %  BIBLIOGRAPHY
 %-----------------------------------------------------------------------------
-%\pagebreak
 \bibliographystyle{unsrt}
 \bibliography{./bib/picolo.bib}
 \end{document}
