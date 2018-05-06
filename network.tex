@@ -5,3 +5,30 @@
         \item Building with BFT. 
     \end{itemize}
 
+
+\subsubsection{Consistent Hashing}
+
+In Picolo, we use consistent hashing as a basic mechanism to distribute, replicate and locate content on the network.
+Typical hashing based schemes do a good job of spreading load through a known, fixed collection of servers. Since the
+Blockchain consists of nodes on the Internet which can appear and disappear based on incentives and other criteria, our
+assumption is that machines come and go as they crash or are brought into the network. Also,
+the information about what nodes are functional propagates slowly through the
+network, so that clients may have incompatible “views” of which nodes are available to replicate data. (Note that a
+node can also be a client). This makes standard hashing useless since it relies on clients agreeing on which nodes are responsible for serving a particular
+page.
+
+%For example, Feeley et al [3] implement a distributed global shared memory system for a network of workstations
+%that uses a hash table distributed among the machines to resolve references. Each time a new machine joins the network,
+%the require a central server to redistribute a completely updated hash table to all the machines.  Consistent hashing
+%may help solve such problems.
+
+Like most hashing schemes, consistent hashing assigns a set of items to buckets so that
+each bin receives roughly the same number of items.  Unlike standard hashing schemes, a small change in the bucket set
+does not induce a total remapping of items to buckets. In addition, hashing items into slightly different sets of
+buckets gives only slightly different assignments of items to buckets. We apply consistent hashing to our tree-of-caches
+scheme, and show how this makes the scheme work well even if each client is aware of only a constant fraction of all the
+caching machines. In [5] Litwin et al proposes a hash function that allows buckets to be added one at a time
+sequentially. However our hash function allows the buckets to be added in an arbitrary order. Another scheme that we can
+improve on is given by Devine [2]. In addition, we believe that consistent hashing will be useful in other applications
+(such as quorum systems [7] [8] or distributed name servers) where multiple machines with different views of the network
+must agree on a common storage location for an object without communication
