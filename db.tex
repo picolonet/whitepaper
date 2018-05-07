@@ -1,12 +1,21 @@
-
 \section{Database Subsystem}
-\subsection{Cluster}
+Explain the overall concepts and what is provided? Features like distributed txns, SQL, synchronous replication etc.
+\subsection{Cluster, data locality}
+Cluster means a large number of nodes in the same network - think a mini datacenter. How to ensure data is closes to users and follow constraints like it doesn't leave a jurisdiction
 \subsection{Versioning}
+Keys have timestamps and queries can be made in the past or fetched from a snapshot in the past
+\subsection{Backup  and restore}
+Client configurable backup and restore mechanisms. How does this affect data sovereignty?
 \subsection{Consensus, Replication and Token economics}
-\subsection{Handling Failures}
-\subsection{Recovery from failures}
+Paxos based sync replication. Do nodes have incentive to be a paxos coordinator? Is the charge model based on the total storage cost or based on amount of effective storage used.
+\subsection{Handling and recovery from  Failures}
+Cluster can fail. What happens when data poisoning happens. What if the whole replica set disappears. Make sure there are no correlated failures. Use geo ip to replicate to different regions.
 \subsection{Clients}
-\subsection{Query execution}
+Official picolo clients that dapp developers can embed in their application. A cmd line clienmt is also provided.
+\subsection{Distributed Query execution}
+No idea how this is done yet
 \subsection{Sharding}
+Data needs to be sharded automatically. Same as cdb
 \subsection{Transactions and hybrid time}
+Using atomic clocks, google external ntp service, stratum 1 ntp servers. Use logical time appended to physical time. Handle clocl skew. Nodes that drift too apart should die. 
 

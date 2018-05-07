@@ -1,12 +1,6 @@
-\section{Network Subsystem}
-    \begin{itemize}
-        \item DHT layer for lookup. Replication and caching for O(1) lookups for popular items.
-        \item Token economics for incentivized participation.
-        \item Building with BFT. 
-    \end{itemize}
+\section{Network Subsystem} 
 
-
-\subsubsection{Consistent Hashing}
+\subsection{Consistent Hashing}
 
 In Picolo, we use consistent hashing as a basic mechanism to distribute, replicate and locate content on the network.
 Typical hashing based schemes do a good job of spreading load through a known, fixed collection of servers. Since the
@@ -32,3 +26,15 @@ sequentially. However our hash function allows the buckets to be added in an arb
 improve on is given by Devine [2]. In addition, we believe that consistent hashing will be useful in other applications
 (such as quorum systems [7] [8] or distributed name servers) where multiple machines with different views of the network
 must agree on a common storage location for an object without communication
+
+\subsection{DHT layer for lookup}
+Explain how a DHT works. Add a layer that takes care of data locality
+
+\subsection{Replication and caching layer}
+Beehive stuff for O(1) lookups for power law queries
+
+\subsection{P2P network protocol layer}
+Use gossip or some other protocol to maintain network topology, connections
+
+\subsection{Adding BFT into the lookup layer and Token incentives}
+How will malicious nodes affect the system and how to mitigate/prevent/recover. Do nodes have incentive to participate in network discovery

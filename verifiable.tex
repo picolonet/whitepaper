@@ -1,0 +1,15 @@
+\section{Verifiable data structures, encryption, data sovereignty}
+See how trillian works, audit proofs, transaction logs can be verified. Different ways data can be encrypted.  Fully encrypted onlhy provides key value semantics, while no encryption provides full SQL semantics. In addition indexes can be used to have 'value lookups' where data is partially encrypted. User control of data
+\subsection{Trillian}
+Trillian implements a Merkle tree whose contents are served from a data storage layer, to allow scalability to extremely large trees. On top of this Merkle tree, Trillian provides two modes:
+
+An append-only Log mode, analogous to the original Certificate Transparency logs. In this mode, the Merkle tree is effectively filled up from the left, giving a dense Merkle tree.
+A Map mode that allows transparent storage of arbitrary key:value pairs. In this mode, the key's hash is used to designate a particular leaf of a deep Merkle tree, giving a sparse Merkle tree. (A Trillian Map is an unordered map; it does not allow enumeration of the Map's keys.)
+
+This can be used to construct proofs.
+
+\subsection{Encryption}
+Dapp controlled encryption.
+
+\subsection{Data sovereignty}
+Dapp controlled semantics. Some schema can provide data sovereignty and some cannot. Depends on application semantics.

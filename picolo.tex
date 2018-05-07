@@ -59,7 +59,7 @@
 
 %% Title, authors and addresses
 
-\title{Picolo: Fast, Decentralized Globally Distributed Database Network\tnoteref{title1}}
+\title{Picolo: Fast, Decentralized, Globally Distributed, Open Database Network\tnoteref{title1}}
 \tnotetext[title1]{Work in progress, Version 0.1 Draft.}
 
 \author{Adi Kancherla, Arunesh Mishra\corref{auth1}}
@@ -93,14 +93,22 @@
 
 \begin{abstract}
 %% Text of abstract
-Picolo is a fast, scalable, verifiable, fully-decentralized, globally distributed transaction oriented database for
-blockchain-based Applications. Picolo uses a probabilistic replication framework on top of DHTs to achieve a O(1)
-lookup latency for most queries. Its the first and so-far only system of its kind to distribute data at a global
-scale will full-decentralization and externally-consistent distributed transactions.
+Picolo is a fast, scalable, verifiable, fully-decentralized, globally distributed transaction oriented database network for
+blockchain-based applications. It uses a probabilistic replication framework on top of DHTs to achieve a O(1)
+lookup latency for most queries. It provides high availability in the face of failures by sharding and replicating data across multiple machines.
+
 
 \begin{itemize}
     \item Allows for verifiable transaction logs.
     \item Token economics that gamify honest participation from nodes over malicious intent.
+    \item Node lookup 
+    \item replication
+    \item sharding
+    \item data poisoning
+    \item distributed query processing
+    \item incentives
+    \item verifiability
+    \item attacks
 \end{itemize}
 \end{abstract}
 
@@ -165,43 +173,20 @@ Decentralization \sep Blockchain \sep Crypto economics \sep Database \sep Distri
 %-----------------------------------------------------------------------------
 \input{db}
 
+\input{verifiable}
 
-\section{Random stuff}
-\begin{table}[h]
-\centering
-\begin{tabular}{l l l}
-\hline
-\textbf{Treatments} & \textbf{Response 1} & \textbf{Response 2}\\
-\hline
-Treatment 1 & 0.0003262 & 0.562 \\
-Treatment 2 & 0.0015681 & 0.910 \\
-Treatment 3 & 0.0009271 & 0.296 \\
-\hline
-\end{tabular}
-\caption{Table caption}
-\end{table}
+\input{crypto}
 
 
-\begin{equation}
-\label{eq:emc}
-e = mc^2
-\end{equation}
-
-Some factors that affect prices of cryptos are listed below. These factors are by no means exhaustive but provide a
-framework within which mechanisms to analyze them can be discussed. See the sub sections where some techniques are
-presented. \cite{Picolo_Whitepaper}
-Factors affecting the prices of crypto assets:
-
-\section{Verifiable data structures, encryption, data sovereignty}
-
-\section{Attacks on the system}
 
 
 %-----------------------------------------------------------------------------
 %  CONCLUSIONS
 %-----------------------------------------------------------------------------
 \section{Conclusion}
-Initial implementations of AI algorithms that analyze structured and unstructured data are discussed. Unstructured data is analyzed in two steps: first, at a unit level and second as a sequence by feeding it to an LSTM. Structured data consisting of live feed from exchanges, current and past bets on the platform amongst others is represented as a game state where an independent decision making agent learns to take actions that maximize its game score. A method of determining payouts to platform users is discussed where they are determined by the magnitude as well as the category of contribution.
+We combine results from P2P networking and database community.
+
+Novel way where data is stored in a p2p network, data access is audited, access controls, encryption, user control of data
 
 
 %-----------------------------------------------------------------------------
