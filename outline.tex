@@ -1,0 +1,237 @@
+\documentclass[preprint,12pt]{elsarticle}
+\usepackage{etoolbox}
+\makeatletter
+\patchcmd{\ps@pprintTitle}{\footnotesize\itshape
+       Preprint submitted to \ifx\@journal\@empty Elsevier
+       \else\@journal\fi\hfill\today}{\relax}{}{}
+\makeatother
+
+%% Use the option review to obtain double line spacing
+%% \documentclass[preprint,review,12pt]{elsarticle}
+
+%% Use the options 1p,twocolumn; 3p; 3p,twocolumn; 5p; or 5p,twocolumn
+%% for a journal layout:
+%% \documentclass[final,1p,times]{elsarticle}
+%% \documentclass[final,1p,times,twocolumn]{elsarticle}
+%% \documentclass[final,3p,times]{elsarticle}
+%% \documentclass[final,3p,times,twocolumn]{elsarticle}
+%% \documentclass[final,5p,times]{elsarticle}
+%% \documentclass[final,5p,times,twocolumn]{elsarticle}
+
+%% The graphicx package provides the includegraphics command.
+\usepackage{graphicx}
+%% The amssymb package provides various useful mathematical symbols
+\usepackage{amssymb}
+%% The amsthm package provides extended theorem environments
+%% \usepackage{amsthm}
+
+%% The lineno packages adds line numbers. Start line numbering with
+%% \begin{linenumbers}, end it with \end{linenumbers}. Or switch it on
+%% for the whole article with \linenumbers after \end{frontmatter}.
+\usepackage{lineno}
+\usepackage{url}
+\bibliographystyle{unsrt}
+
+%% natbib.sty is loaded by default. However, natbib options can be
+%% provided with \biboptions{...} command. Following options are
+%% valid:
+
+%%   round  -  round parentheses are used (default)
+%%   square -  square brackets are used   [option]
+%%   curly  -  curly braces are used      {option}
+%%   angle  -  angle brackets are used    <option>
+%%   semicolon  -  multiple citations separated by semi-colon
+%%   colon  - same as semicolon, an earlier confusion
+%%   comma  -  separated by comma
+%%   numbers-  selects numerical citations
+%%   super  -  numerical citations as superscripts
+%%   sort   -  sorts multiple citations according to order in ref. list
+%%   sort&compress   -  like sort, but also compresses numerical citations
+%%   compress - compresses without sorting
+%%
+%% \biboptions{comma,round}
+
+% \biboptions{}
+
+\begin{document}
+
+\begin{frontmatter}
+
+%% Title, authors and addresses
+
+\title{Picolo: Fast, Decentralized, Globally Distributed, Open Database Network\tnoteref{title1}}
+\tnotetext[title1]{Work in progress, Version 0.1 Draft.}
+
+\author{Adi Kancherla, Arunesh Mishra\corref{auth1}}
+\cortext[auth1]{Email: adi,arunesh@picolo.network}
+\address{San Francisco, California}
+
+%% use the tnoteref command within \title for footnotes;
+%% use the tnotetext command for the associated footnote;
+%% use the fnref command within \author or \address for footnotes;
+%% use the fntext command for the associated footnote;
+%% use the corref command within \author for corresponding author footnotes;
+%% use the cortext command for the associated footnote;
+%% use the ead command for the email address,
+%% and the form \ead[url] for the home page:
+%%
+%% \title{Title\tnoteref{label1}}
+%% \tnotetext[label1]{}
+%% \author{Name\corref{cor1}\fnref{label2}}
+%% \ead{email address}
+%% \ead[url]{home page}
+%% \fntext[label2]{}
+%% \cortext[cor1]{}
+%% \address{Address\fnref{label3}}
+%% \fntext[label3]{}
+
+
+%% use optional labels to link authors explicitly to addresses:
+%% \author[label1,label2]{<author name>}
+%% \address[label1]{<address>}
+%% \address[label2]{<address>}
+
+\begin{abstract}
+%% Text of abstract
+Picolo is a fast, scalable, verifiable, fully-decentralized, globally distributed transaction oriented database network for
+blockchain-based applications. It uses a probabilistic replication framework on top of DHTs to achieve a O(1)
+lookup latency for most queries. It provides high availability in the face of failures by sharding and replicating data across multiple machines.
+
+
+\begin{itemize}
+    \item Allows for verifiable transaction logs.
+    \item Token economics that gamify honest participation from nodes over malicious intent.
+    \item Node lookup 
+    \item replication
+    \item sharding
+    \item data poisoning
+    \item distributed query processing
+    \item incentives
+    \item verifiability
+    \item attacks
+\end{itemize}
+\end{abstract}
+
+\begin{keyword}
+Decentralization \sep Blockchain \sep Crypto economics \sep Database \sep Distributed \sep SQL
+%% keywords here, in the form: keyword \sep keyword
+
+%% MSC codes here, in the form: \MSC code \sep code
+%% or \MSC[2008] code \sep code (2000 is the default)
+
+\end{keyword}
+
+\end{frontmatter}
+%-----------------------------------------------------------------------------
+%  INTRODUCTION
+%-----------------------------------------------------------------------------
+\section{Introduction}\label{Sect:Introduction}
+
+
+    \begin{itemize}
+        \item What are Dapps. Dapps will grow, but need to store data.
+        \item Solutions today provide file storage semantics which might not work for all application types.
+        \item Introduce the database problem on the blockchain. What are the requirements for a decentralized database.
+        \item Overview of current approaches and limitations (details in the Background and Related work section).
+    \end{itemize}
+
+
+\subsection{Picolo's Features}
+\begin{itemize}
+    \item Network layer Scales with O(log N) overhead for N nodes.
+    \item Network lookup using O(1) amortized lookup cost for DHT.
+    \item Horizontally scalable 
+    \item Automated data sharding
+    \item Transactions can be applied across rows, columns and tables across machines
+    \item Client controlled replication and data placement
+    \item Synchronous replication and external consistency, the strongest form of consistency any database can support
+    \item SQL like interface
+    \item Supports storage of typed data
+    \item Supports semi-relational structure for tables
+    \item Configurable backups and restore mechanisms
+    \item Verifiable legder for transactions.
+\end{itemize}
+
+%-----------------------------------------------------------------------------
+%  BACKGROUND SECTION
+%-----------------------------------------------------------------------------
+\input{background}
+
+%-----------------------------------------------------------------------------
+%  OVERALL DESIGN SECTION
+%-----------------------------------------------------------------------------
+\input{design}
+
+%-----------------------------------------------------------------------------
+%  NETWORK SUB-SYSTEM SECTION
+%-----------------------------------------------------------------------------
+\input{network}
+
+
+%-----------------------------------------------------------------------------
+%  DATABASE SUB-SYSTEM SECTION
+%-----------------------------------------------------------------------------
+\input{db}
+
+\input{verifiable}
+
+\input{crypto}
+
+
+
+
+%-----------------------------------------------------------------------------
+%  CONCLUSIONS
+%-----------------------------------------------------------------------------
+\section{Conclusion}
+We combine results from P2P networking and database community.
+
+Novel way where data is stored in a p2p network, data access is audited, access controls, encryption, user control of data
+
+
+%-----------------------------------------------------------------------------
+%  BIBLIOGRAPHY
+%-----------------------------------------------------------------------------
+\section{References}
+\bibliography{./bib/picolo.bib}
+\end{document}
+
+%% The Appendices part is started with the command \appendix;
+%% appendix sections are then done as normal sections
+%% \appendix
+
+%% \section{}
+%% \label{}
+
+%% References
+%%
+%% Following citation commands can be used in the body text:
+%% Usage of \cite is as follows:
+%%   \cite{key}          ==>>  [#]
+%%   \cite[chap. 2]{key} ==>>  [#, chap. 2]
+%%   \citet{key}         ==>>  Author [#]
+
+%% References with bibTeX database:
+
+
+%% Authors are advised to submit their bibtex database files. They are
+%% requested to list a bibtex style file in the manuscript if they do
+%% not want to use model1-num-names.bst.
+
+%% References without bibTeX database:
+
+% \begin{thebibliography}{00}
+
+%% \bibitem must have the following form:
+%%   \bibitem{key}...
+%%
+%% Example figure:
+%%
+%% \begin{figure}[h]
+%% \centering\includegraphics[width=0.4\linewidth]{placeholder.png}
+%% \caption{Figure caption}
+%% \end{figure}
+%% 
+% \bibitem{}
+
+% \end{thebibliography}
