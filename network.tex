@@ -1,6 +1,17 @@
 \section{Network Subsystem} 
 
-\subsection{Consistent Hashing}
+The network layer is an overlay among the nodes participating in the Picolo database network. Specifically, its a peer-peer overlay network
+on top of the Internal Protocol (IP). The peer-to-peer overlay routing infrastructure offers efficient, scalable, location-independent
+routing of messages directly to nearby copies of an object or service using only localized resources [TP].
+
+-- Self-repairing.
+-- Soft-state based routing.
+
+\subsection{Overview of p2p overlays}
+
+\subsection{Design of the Picolo overlay network}
+
+\subsection{Consistent Hashing} 
 
 In Picolo, we use consistent hashing as a basic mechanism to distribute, replicate and locate content on the network.
 Typical hashing based schemes do a good job of spreading load through a known, fixed collection of servers. Since the
@@ -19,13 +30,7 @@ page.
 Like most hashing schemes, consistent hashing assigns a set of items to buckets so that
 each bin receives roughly the same number of items.  Unlike standard hashing schemes, a small change in the bucket set
 does not induce a total remapping of items to buckets. In addition, hashing items into slightly different sets of
-buckets gives only slightly different assignments of items to buckets. We apply consistent hashing to our tree-of-caches
-scheme, and show how this makes the scheme work well even if each client is aware of only a constant fraction of all the
-caching machines. In [5] Litwin et al proposes a hash function that allows buckets to be added one at a time
-sequentially. However our hash function allows the buckets to be added in an arbitrary order. Another scheme that we can
-improve on is given by Devine [2]. In addition, we believe that consistent hashing will be useful in other applications
-(such as quorum systems [7] [8] or distributed name servers) where multiple machines with different views of the network
-must agree on a common storage location for an object without communication
+buckets gives only slightly different assignments of items to buckets. 
 
 \subsection{DHT layer for lookup}
 Explain how a DHT works. Add a layer that takes care of data locality
