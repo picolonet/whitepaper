@@ -6,6 +6,13 @@
        \else\@journal\fi\hfill\today}{\relax}{}{}
 \makeatother
 
+\newcommand{\fscale}[1]{#1\linewidth}
+\newcommand{\figref}[1]{Fig.~\ref{#1}}
+\graphicspath{{./fig/}}
+
+\usepackage{sectsty}
+\sectionfont{\Large}
+\subsectionfont{\large}
 %% Use the option review to obtain double line spacing
 %% \documentclass[preprint,review,12pt]{elsarticle}
 
@@ -59,7 +66,7 @@
 
 %% Title, authors and addresses
 
-\title{Picolo: Fast, Decentralized, Globally Distributed, Open Database Network\tnoteref{title1}}
+\title{Picolo: Fast p2p open database network\tnoteref{title1}}
 \tnotetext[title1]{Work in progress, Version 0.1 Draft.}
 
 \author{Adi Kancherla, Arunesh Mishra\corref{auth1}}
@@ -173,12 +180,7 @@ Decentralization \sep Blockchain \sep Crypto economics \sep Database \sep Distri
 %-----------------------------------------------------------------------------
 \input{db}
 
-\input{verifiable}
-
 \input{crypto}
-
-
-
 
 %-----------------------------------------------------------------------------
 %  CONCLUSIONS
