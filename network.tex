@@ -47,17 +47,22 @@ This space can be segregaged using a namespace identifier, which allows multiple
 
 For the rest of this section, the discussion gets isolated to within a single naming layer.
 
-Network layer API:
+\subsection{Core API}
 
-
-\subsection{DHT layer for lookup}
+\subsection{Routing and Lookup}
 Explain how a DHT works. Add a layer that takes care of data locality
 
-\subsection{Replication and caching layer}
+\subsection{Node Dynamics}
+
+Failures, node departures, node additions.
+
+\subsection{Replication and caching}
 Beehive stuff for O(1) lookups for power law queries
 
-\subsection{P2P network protocol layer}
+\subsection{P2P Connectivity protocol}
 Use gossip or some other protocol to maintain network topology, connections
 
-\subsection{Adding BFT into the lookup layer and Token incentives}
+\subsection{Cryptoeconomics}
 How will malicious nodes affect the system and how to mitigate/prevent/recover. Do nodes have incentive to participate in network discovery
+
+\subsection{Analytics and Debug/Fault diagnosis}
