@@ -1,6 +1,15 @@
 \section{Overall Design}
 
 The Picolo database network is a collection of Picolo Nodes or Cluster of nodes.
+
+A Node represents an instance of a participant in the network. A single machine
+can host multiple nodes. It is also possible for a node to span multiple
+machines such as in a datacenter, we call such a setup a Cluster-node. It is also possible
+for a small cluster of machines to collectively represent two or more nodes.  The details of how
+multi-machine nodes are managed are discussed later in Section XXX. For all practical purposes of
+understanding the protocols, all nodes (single m/c or multi-m/c) will behave as independent participants with
+a certain amount of resources at their disposal (disk space, memory, compute capacity, network connectivity, bandwidth and availability).
+
     \begin{itemize}
         \item Overall Picolo architecture.
         	Bottom up architecture - network sub system, database sub system. Verifiable logs. Data poisoning detection.
