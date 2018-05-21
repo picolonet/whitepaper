@@ -100,32 +100,12 @@
 
 \begin{abstract}
 %% Text of abstract
-Picolo is a fast, scalable, verifiable, fully-decentralized, globally distributed transaction oriented database network for
-blockchain-based applications. It uses a probabilistic replication framework on top of DHTs to achieve a O(1)
-lookup latency for most queries. It provides high availability in the face of failures by sharding and replicating data across multiple machines.
-
-
-\begin{itemize}
-    \item Allows for verifiable transaction logs.
-    \item Token economics that gamify honest participation from nodes over malicious intent.
-    \item Node lookup 
-    \item replication
-    \item sharding
-    \item data poisoning
-    \item distributed query processing
-    \item incentives
-    \item verifiability
-    \item attacks
-\end{itemize}
+Picolo is a fast, scalable, verifiable, fully decentralized, globally distributed transaction oriented database network for
+blockchain based applications.  It has a generic SQL interface, provides synchronous replication and external consistency - the strongest form of consistency a database can achieve. It uses a probabilistic replication framework on top of DHTs to achieve a O(1) lookup latency for most queries. It provides high availability in the face of failures by sharding and replicating data across multiple machines. It provides fine grained access control to data by using encryption as the enforcement mechanism and a declarative language to define access rules. 
 \end{abstract}
 
 \begin{keyword}
-Decentralization \sep Blockchain \sep Crypto economics \sep Database \sep Distributed \sep SQL
-%% keywords here, in the form: keyword \sep keyword
-
-%% MSC codes here, in the form: \MSC code \sep code
-%% or \MSC[2008] code \sep code (2000 is the default)
-
+	decentralization \sep blockchain \sep ethereum \sep database \sep sql \sep access control \sep secret sharing \sep threshold cryptography \sep p2p
 \end{keyword}
 
 \end{frontmatter}
@@ -144,20 +124,19 @@ Decentralization \sep Blockchain \sep Crypto economics \sep Database \sep Distri
 
 
 \subsection{Picolo's Features}
+Features that set Picolo apart from other decentralized databases:
 \begin{itemize}
-    \item Network layer Scales with O(log N) overhead for N nodes.
-    \item Network lookup using O(1) amortized lookup cost for DHT.
-    \item Horizontally scalable 
-    \item Automated data sharding
-    \item Transactions can be applied across rows, columns and tables across machines
-    \item Client controlled replication and data placement
-    \item Synchronous replication and external consistency, the strongest form of consistency any database can support
-    \item SQL like interface
-    \item Supports storage of typed data
-    \item Supports semi-relational structure for tables
-    \item Configurable backups and restore mechanisms
-    \item Verifiable legder for transactions.
+	\item Transactions can be applied across rows, columns and tables across nodes
+	\item Client controlled replication and data placement
+	\item Supports storage of typed data
+	\item Supports semi-relational structure for tables
+	\item Configurable backups and restore mechanisms
+	\item Allows for verifiable transaction logs
+	\item Detects data poisoning
+	\item Provides distributed query processing
+	\item Enables fine grained access control to data
 \end{itemize}
+The paper is structured as follows: in section 2, we discuss some related work. Section 3 presents the overall design of the system, section 4 presents the network subsystem, section 5 presents the database subsystem and section 6 presents our approach in dealing with problems that arise in a network made up of untrusted nodes and discusses an incentive mechanism to make them behave as per system's needs. Section 7 concludes the paper.
 
 %-----------------------------------------------------------------------------
 %  BACKGROUND SECTION
