@@ -155,7 +155,7 @@ Rest of the paper is structured as follows: in section 2, we discuss some relate
 \input{crypto}
 
 \section{MX Protocol}
-Nodes in the network need to speak the same language for efficient discovery and communication of data. Hence the following message exchange scheme is proposed. Note that the exact mapping between the following messages and underlying transport protocol is not discussed here and may change depending on the final transport protocol chosen (QUIC vs TCP)
+Nodes in the network need to speak the same language for efficient discovery and communication of data. Hence the following message exchange scheme is proposed similar to \cite{Protocol_Spec}. Note that the exact mapping between the following messages and underlying transport protocol is not discussed here and may change depending on the final transport protocol chosen (QUIC vs TCP)
 \newline
 \newline
 \textbf{PUT}:  A PUT message contains the query to be run, an optional list of nodes to run the query against and an optional max number of hops (needed in case of an empty node list). This is used for creating or updating data in the system.

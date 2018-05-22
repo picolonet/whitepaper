@@ -1,12 +1,13 @@
-
 %-----------------------------------------------------------------------------
 %  BACKGROUND SECTION
 %-----------------------------------------------------------------------------
 \section{Background and Related Work}
+There have been attempts in the academia at building peer-to-peer data management systems (PDMS). PeerDB \cite{PeerDB} pioneered a full-fledged data management system that supports fine-grain content-based searching on a distributed network of nodes with heterogeneous schemas. It proposed a "code goes to data" paradigm where mobile agents are employed to perform query processing at a peer node in order to reduce network bandwidth. PIER \cite{PIER} provides a relational data model and query operators on top of any distributed storage system. It embraces the notion of \textit{data independence} and only concerns itself with query processing. It does not provide any sort of replication or ACID guarantees of a database and does not maintain any indexes of its own. Piazza \cite{Piazza} describes a system where peers have pairwise schema mappings between heterogeneous schemas and how these can be transitively extended to answer queries from peers separated by more than one edge. Queries are reformulated at each peer to match the local schema before execution. While this approach works well for a few reformulations, a large number of them may result in information loss or returning of irrelevant results.
+\newline\newline
+
     \begin{itemize}
-        \item Illustrate existing approaches and their shortcomings.
         \item FileSystems or file-level semantics: IPFS, FileCoin. Storj.
-        \item Bluezelle.
+        \item Bluezelle, fluence, pepperdb
         \item Blockchains that offer faster transactions.
         \item Storing data on the cloud. AWS. GCE.
     \end{itemize}
