@@ -161,6 +161,30 @@ The paper is structured as follows: in section 2, we discuss some related work. 
 
 \input{crypto}
 
+\section{MX Protocol}
+This section only specifies the message exchange protocol of the system. Nodes in the network need to speak the same language for efficient discovery and communication of data. Hence the following message exchange scheme is proposed. Note that the exact mapping between the following messages and underlying transport protocol is not discussed here and may change depending on the final transport protocol chosen (QUIC vs TCP)
+\newline
+\newline
+\textbf{PUT}:  A PUT message contains the query to be run, an optional list of nodes to run the query against and an optional max number of hops (needed in case of an empty node list). This is used for creating or updating data in the system.
+\newline
+\newline
+\textbf{GET}: A GET message contains the query to be run, max number of hops, the number of results to retrieve, the mode of retrieval (pull vs push) and a transaction identifier. Client sends this to a server to retrieve results that match the query. Parameters in GET can be varied depending on application needs - a streaming application may choose the push mode in which server pushes data to the client as it becomes available up until the specified number is met. A latency sensitive application may choose to retrieve a small number of results in a batch in one pull.
+\newline
+\newline
+\textbf{SEND}: Server responds to each GET message with one or more SEND messages with results. In pull mode, there is only one SEND message followed by an END message where as in push mode there are multiple SEND messages followed by an END message.
+\newline
+\newline
+\textbf{END}: Server sends END message to indicate to the client that it has finished sending all results in response to a particular GET message.
+\newline
+\newline
+\textbf{CLOSE}: A client can send a CLOSE message to the server to indicate that it no longer is interested in the remaining query results and close the transaction. It doesn't have to wait until all the results are retrieved.
+\newline
+\newline
+\textbf{OK}: Server sends this message to a client as a positive acknowledgment to the client's message.
+\newline
+\newline
+\textbf{ERROR}: Server sends this message to a client as a negatively acknowledge to the client's message.
+
 %-----------------------------------------------------------------------------
 %  CONCLUSIONS
 %-----------------------------------------------------------------------------
