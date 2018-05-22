@@ -34,7 +34,7 @@ When semantics don't allow to put user in control of data, application controlle
 Applications and users may want to share data with other parties but may wish to impose access controls. There are a few ways of achieving this including building an API on top of the data or using proxy re-encryption techniques. We use a secret sharing scheme instead as it gels well with p2p nature of the system and does not introduce asymmetry like other solutions. Rules can be defined by a SQL like declarative language at any granularity desired like at the level of a single row or a cell. An example row level granularity rule looks like:\newline \newline
 \texttt{SELECT  * \newline FROM users \newline WHERE email=foo@bar.com \newline NODE (SELECT nodeId FROM nodes WHERE domain=application)} \newline \newline
 An example value level (only username is given access to) granularity rule looks like:\newline \newline
-\texttt{ SELECT username \newline FROM users \newline WHERE email=foo@bar.com \newline NODE (SELECT nodeId FROM nodes)}
+\texttt{ SELECT username \newline FROM users \newline WHERE email=foo@bar.com \newline NODE (SELECT nodeId FROM nodes)}\newline\newline
 Here \texttt{NODE} is a new clause we introduce to SQL dialect.
 \subsection{Cluster, data locality}
 Cluster means a large number of nodes in the same network - think a mini datacenter. How to ensure data is closes to users and follow constraints like it doesn't leave a jurisdiction

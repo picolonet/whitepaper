@@ -70,7 +70,7 @@
 \tnotetext[title1]{Work in progress, Version 0.1 Draft.}
 
 \author{Picolo Labs\corref{auth1}}
-\cortext[auth1]{Email: whitepaper@picolo.network}
+\cortext[auth1]{https://picolo.network}
 \address{San Francisco, California}
 
 %% use the tnoteref command within \title for footnotes;
@@ -113,17 +113,9 @@ blockchain based applications.  It has a generic SQL interface, provides synchro
 %  INTRODUCTION
 %-----------------------------------------------------------------------------
 \section{Introduction}\label{Sect:Introduction}
-
-
-    \begin{itemize}
-        \item What are Dapps. Dapps will grow, but need to store data.
-        \item Solutions today provide file storage semantics which might not work for all application types.
-        \item Introduce the database problem on the blockchain. What are the requirements for a decentralized database.
-        \item Overview of current approaches and limitations (details in the Background and Related work section).
-    \end{itemize}
-
-
-\subsection{Picolo's Features}
+We are in the midst of building a new Internet. Blockchain networks like Ethereum have popularized the idea of unstoppable, owner less applications that are run on an open network of untrusted but incentivized nodes without the oversight of a central authority. An increasing number of these decentralized applications (dapps) are being created everyday with evolving data storage needs. The first generation of these dapps stored their data entirely on a blockchain itself while the current generation are storing it on decentralized file storage systems like IPFS with just hashes of these data stored on the blockchain. Although this method works for dapps with simple storage needs like the need for storing data as a blob, it is very limiting for dapps with more complex requirements such as being able to store data at a more fine grained level and querying it efficiently. A popular option is then to use a cloud hosted database (ex: Google’s Cloud SQL) but that turns a dapp into a non-dapp by introducing centrality into the system. \newline\newline
+In this paper we introduce Picolo, an open database network that combines the benefits of a traditional database and peer-to-peer software. It is the world’s first NewSQL decentralized database system that offers features such as a SQL interface, distributed transactions, external consistency \cite{External_Consistency}, lock-free reads and snapshot reads. It is an open network that allows anyone with spare computing power and disk space to join the network and get rewarded for hosting and serving structured data.
+\newline\newline
 Features that set Picolo apart from other decentralized databases:
 \begin{itemize}
 	\item Transactions can be applied across rows, columns and tables across nodes
@@ -135,8 +127,9 @@ Features that set Picolo apart from other decentralized databases:
 	\item Detects data poisoning
 	\item Provides distributed query processing
 	\item Enables fine grained access control to data
+	\newline
 \end{itemize}
-The paper is structured as follows: in section 2, we discuss some related work. Section 3 presents the overall design of the system, section 4 presents the network subsystem, section 5 presents the database subsystem and section 6 presents our approach in dealing with problems that arise in a network made up of untrusted nodes and discusses an incentive mechanism to make them behave as per system's needs. Section 7 concludes the paper.
+Rest of the paper is structured as follows: in section 2, we discuss some related work. Section 3 presents the overall design of the system, section 4 presents the network subsystem, section 5 presents the database subsystem and section 6 presents our approach in dealing with problems that arise in a network made up of untrusted nodes and discusses an incentive mechanism to make them behave as per system's needs. In section 7, we propose a message exchange protocol in the same vein as http but for relational data sharing. Section 8 concludes the paper.
 
 %-----------------------------------------------------------------------------
 %  BACKGROUND SECTION
@@ -162,7 +155,7 @@ The paper is structured as follows: in section 2, we discuss some related work. 
 \input{crypto}
 
 \section{MX Protocol}
-This section only specifies the message exchange protocol of the system. Nodes in the network need to speak the same language for efficient discovery and communication of data. Hence the following message exchange scheme is proposed. Note that the exact mapping between the following messages and underlying transport protocol is not discussed here and may change depending on the final transport protocol chosen (QUIC vs TCP)
+Nodes in the network need to speak the same language for efficient discovery and communication of data. Hence the following message exchange scheme is proposed. Note that the exact mapping between the following messages and underlying transport protocol is not discussed here and may change depending on the final transport protocol chosen (QUIC vs TCP)
 \newline
 \newline
 \textbf{PUT}:  A PUT message contains the query to be run, an optional list of nodes to run the query against and an optional max number of hops (needed in case of an empty node list). This is used for creating or updating data in the system.
