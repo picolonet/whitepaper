@@ -92,6 +92,8 @@ System \cite{overcast}, which provides reliable single-source multicast streams.
 
 \subsection{Design of the Picolo overlay network}
 
+The Picolo overlay network consists of a p2p DHT based lookup for mapping key to objects, content or services. There is a caching layer that allows for frequenly used items to be propagated closer to the demand endpoints in the network including ability to replicate as needed.
+
 \subsubsection{Picolo namespace} 
 1. Nodes and content map to a single 256-bit space. We can use existing hash functions such as SHA-256 for this purpose.
 
