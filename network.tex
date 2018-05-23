@@ -23,7 +23,8 @@ Gnutella \cite{Gnutella} p2p systems were popular in the previous decade for fil
 for sharing of large files over a longer duration of time. Content reliabilty including lookup reliability and network
 latency goals were necessary in this enviroment. 
 
-The second generation of peer-peer systems include research driven projects such as Chord \cite{Stoica_2001}, CAN
+The second generation of peer-peer systems include research driven projects such as Chord \cite{Stoica_2001}, Content
+Addressable Network (CAN)
 \cite{Ratnasamy_2001}, Pastry \cite{Rowstron_2001}, Tapestry \cite{tapestry2004} and
 Kademlia. Chord along with CAN, Tapestry and Pastry developed the concept of distributed hash tables (DHTs) as a
 fundamental mechanism for content-based addressing. They built over the scalability and self-organizing properties of
@@ -54,6 +55,10 @@ namespace. Chord improves the scalability of consistent hashing by removing the 
 every other node. Each node only maintains about \(O (log N) \) state information about other nodes in an \( N \) node
 network. When nodes join or leave, they require \( O(log^2 N) \) messages to keep the network updated.
 
+CAN routes messages in a {\em d}-dimensional space where each node maintains a routing table with \(O(d)\) entries and
+any node can be reached in \(O(dN^{1/d})\) routing hops. CAN's routing table does not grow with network size, but the
+number of routing hops grows faster than \(log N\).
+
 When compared to Chord and CAN, Pastry and Tapestry take network distances into account when constructing overlay
 topologies. While Chord and CAN use shortest overlay hops and other runtime heuristics, both Tapestry and Pastry
 construct locally optimal routing tables to reduce any routing inefficiencies. 
@@ -65,7 +70,12 @@ and achieve network locality in content mapping which also lends support for rep
 In addition, Tapestry also allows some application-based locality management by "publishing" location pointers
 throughout the network for efficiently locating content and services.
 
-Summary of Pastry, CAN, Tapestry.
+Kademlia \cite{kademlia} is another p2p DHT-based routing system that uses prefix-based routing by arranging 160-bit IDs
+(node IDs and content IDs) in a binary tree style data-structure for efficient routing. It uses an XOR-based distance
+metric for building the routing table and for the routing algorithm itself. In terms of its performance and other
+features, it is very similar to the above systems such as Chord, CAN, Pastry and Tapestry, but it offers simplicity in
+its routing and lookup algorithms which make it attrative for implementation. IPFS \cite{ipfs} uses a version of
+Kademlia for locating files for decentralized applications.
 
 Summarize Kademlia.
 
