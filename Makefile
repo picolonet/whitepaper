@@ -1,8 +1,9 @@
 
 all:
-	latex picolo
+	pdflatex picolo
 	bibtex picolo
 	pdflatex picolo.tex
+	bibtex picolo
 	pdflatex picolo.tex
 
 clean:

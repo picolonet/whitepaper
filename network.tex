@@ -12,8 +12,30 @@ routing of messages directly to nearby copies of an object or service using only
 
 \subsection{Background}
 
-History of unstructure p2p netoworks.
-History of DHTs, examples, consistent hashing.
+In this Section, we provide a brief overview of peer-peer systems both in the research and product community that have
+influenced the literature over the last 20 years.
+
+Napster \cite{Napster} was one of the first popular service that provided much of the original inspiration for peer-peer
+systems although its database was centralized.  DNS is an example of a widely deployed distributed and largely
+decentralized key-value database that powers every lookup and interaction on the Internet \cite{Mockapetris_1988}. DNS
+relies on special root servers to bootstrap the lookup protocol. The Freenet \cite{freenet_thesis, Clarke_2001} and the
+Gnutella \cite{Gnutella} p2p systems were popular in the previous decade for file sharing. Both systems were designed
+for sharing of large files over a longer duration of time. Content reliabilty including lookup reliability and network
+latency goals were necessary in this enviroment. 
+
+The second generation of peer-peer systems include research driven projects such as Chord \cite{Stoica_2001}, CAN
+\cite{Ratnasamy_2001}, Pastry \cite{Rowstron_2001}, Tapestry \cite{tapestry2004} and
+Kademlia. Chord along with CAN, Tapestry and Pastry developed the concept of distributed hash tables (DHTs) as a
+fundamental mechanism for content-based addressing. They built over the scalability and self-organizing properties of
+both FreeNet and Gnutella by providing a definite answer to a lookup query in a bounded number of network hops. In fact,
+these protocols are able to locate content within \( O(Log(N)) \) where \(N\) is the number of nodes in the system. From
+an 
+API perspective, these overlays provide a key-based routing (KBR) interface that supports deterministic routing of
+messages to a live node that has the responsiblity for the "value" corresponding to the given key. These systems also
+support high level APIs such as Dynamic Object Location and Routing (DOLR) \cite{dolr2003}.
+
+wh History of unstructure p2p networks.  History of
+DHTs, examples, consistent hashing.
 
 Talk about Chord, Pastry, Tapestry, Kademlia.
 
