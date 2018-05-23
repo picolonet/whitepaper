@@ -28,20 +28,14 @@ The second generation of peer-peer systems include research driven projects such
 Kademlia. Chord along with CAN, Tapestry and Pastry developed the concept of distributed hash tables (DHTs) as a
 fundamental mechanism for content-based addressing. They built over the scalability and self-organizing properties of
 both FreeNet and Gnutella by providing a definite answer to a lookup query in a bounded number of network hops. In fact,
-these protocols are able to locate content within \( O(Log(N)) \) where \(N\) is the number of nodes in the system. From
+these protocols are able to locate content within \( O(log N) \) where \(N\) is the number of nodes in the system. From
 an 
 API perspective, these overlays provide a key-based routing (KBR) interface that supports deterministic routing of
 messages to a live node that has the responsiblity for the "value" corresponding to the given key. These systems also
-support high level APIs such as Dynamic Object Location and Routing (DOLR) \cite{dolr2003}.
+support high level APIs such as Dynamic Object Location and Routing (DOLR) \cite{dolr2003}. Most DHT's use the concept
+of consistent hashing to distribute the load evenly among the nodes.
 
-wh History of unstructure p2p networks.  History of
-DHTs, examples, consistent hashing.
-
-Talk about Chord, Pastry, Tapestry, Kademlia.
-
-{\em Consistent Hashing:} 
-
-In Picolo, we use consistent hashing as a basic mechanism to distribute, replicate and locate content on the network.
+{\em Consistent hashing:}
 Typical hashing based schemes do a good job of spreading load through a known, fixed collection of servers. Since the
 Blockchain consists of nodes on the Internet which can appear and disappear based on incentives and other criteria, our
 assumption is that machines come and go as they crash or are brought into the network. Also,
@@ -50,15 +44,25 @@ network, so that clients may have incompatible “views” of which nodes are av
 node can also be a client). This makes standard hashing useless since it relies on clients agreeing on which nodes are responsible for serving a particular
 page.
 
-%For example, Feeley et al [3] implement a distributed global shared memory system for a network of workstations
-%that uses a hash table distributed among the machines to resolve references. Each time a new machine joins the network,
-%the require a central server to redistribute a completely updated hash table to all the machines.  Consistent hashing
-%may help solve such problems.
-
 Like most hashing schemes, consistent hashing assigns a set of items to buckets so that
 each bin receives roughly the same number of items.  Unlike standard hashing schemes, a small change in the bucket set
 does not induce a total remapping of items to buckets. In addition, hashing items into slightly different sets of
 buckets gives only slightly different assignments of items to buckets. 
+
+Chord uses such hash functions to map nodes and content uniformly to a circular 160-bit
+namespace. Chord improves the scalability of consistent hashing by removing the requirement that every node knows about
+every other node. Each node only maintains about \(O (log N) \) state information about other nodes in an \( N \) node
+network. When nodes join or leave, they require \( O(log^2 N) \) messages to keep the network updated.
+
+When compared to Chord and CAN, Pastry and Tapestry take network distances into account when constructing overlay
+topologies. While Chord and CAN use shortest overlay hops and other runtime heuristics, both Tapestry and Pastry
+construct locally optimal routing tables to reduce any routing inefficiencies. 
+
+Summary of Pastry, CAN, Tapestry.
+
+Summarize Kademlia.
+
+Applications on top of DHTs, OceanStore and others.
 
 \subsection{Design of the Picolo overlay network}
 
