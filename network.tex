@@ -58,6 +58,13 @@ When compared to Chord and CAN, Pastry and Tapestry take network distances into 
 topologies. While Chord and CAN use shortest overlay hops and other runtime heuristics, both Tapestry and Pastry
 construct locally optimal routing tables to reduce any routing inefficiencies. 
 
+Pastry and Tapestry share some similarities to the work by Plaxton et al \cite{Plaxton_1997} and to the routing layer in
+the Landmark hierarchy \cite{Tsuchiya_1988}. The approach consists of routing based on address prefixes or otherwise
+called prefix-based routing. However, both Pastry and Tapestry include an ability to self-organize the network structure
+and achieve network locality in content mapping which also lends support for replication.
+In addition, Tapestry also allows some application-based locality management by "publishing" location pointers
+throughout the network for efficiently locating content and services.
+
 Summary of Pastry, CAN, Tapestry.
 
 Summarize Kademlia.
