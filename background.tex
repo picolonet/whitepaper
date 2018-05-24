@@ -1,15 +1,13 @@
 %-----------------------------------------------------------------------------
 %  BACKGROUND SECTION
 %-----------------------------------------------------------------------------
-\section{Background and Related Work}
+\section{Related Work}
 There have been attempts in the academia at building peer-to-peer data management systems (PDMS). PeerDB \cite{PeerDB} pioneered a full-fledged data management system that supports fine-grain content-based searching on a distributed network of nodes with heterogeneous schemas. It proposed a "code goes to data" paradigm where mobile agents are employed to perform query processing at a peer node in order to reduce network bandwidth. PIER \cite{PIER} provides a relational data model and query operators on top of any distributed storage system. It embraces the notion of \textit{data independence} and only concerns itself with query processing. It does not provide any sort of replication or ACID guarantees of a database and does not maintain any indexes of its own. Piazza \cite{Piazza} describes a system where peers have pairwise schema mappings between heterogeneous schemas and how these can be transitively extended to answer queries from peers separated by more than one edge. Queries are reformulated at each peer to match the local schema before execution. While this approach works well for a few reformulations, a large number of them may result in information loss or returning of irrelevant results.
 \newline\newline
+In the blockchain space, there are a few projects tackling the decentralized storage problem. Filecoin \cite{Filecoin} adds an incentive layer on top of widely used IPFS \cite{IPFS} - a p2p file sharing system. It pays miners for contributing disk space and network bandwidth to the filecoin system. Storj \cite{Storj} and Sia \cite{Sia} are two similar projects that offer decentralized file storage systems for end users wanting to store files on more resilient, secure and censorship resistant networks. While these networks are great for storing large unstructured files like images, videos, documents etc they are not suitable for storing structured data and do not support complex queries beyond simple keyword search.
 
     \begin{itemize}
-        \item FileSystems or file-level semantics: IPFS, FileCoin. Storj.
         \item Bluezelle, fluence, pepperdb
-        \item Blockchains that offer faster transactions.
-        \item Storing data on the cloud. AWS. GCE.
     \end{itemize}
 
 
