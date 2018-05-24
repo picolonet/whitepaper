@@ -1,10 +1,12 @@
-\documentclass[preprint,12pt]{elsarticle}
+\documentclass[preprint,10pt]{elsarticle}
 \usepackage{etoolbox}
 \makeatletter
 \patchcmd{\ps@pprintTitle}{\footnotesize\itshape
        Preprint submitted to \ifx\@journal\@empty Elsevier
        \else\@journal\fi\hfill\today}{\relax}{}{}
 \makeatother
+
+\usepackage[margin=2.5cm]{geometry}
 
 \newcommand{\fscale}[1]{#1\linewidth}
 \newcommand{\figref}[1]{Fig.~\ref{#1}}
