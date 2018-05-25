@@ -117,6 +117,32 @@ Failures, node departures, node additions.
 \subsection{Replication and caching}
 Beehive stuff for O(1) lookups for power law queries
 
+Structured peer-peer distributed hash tables can implement lookups in \( O(log N)\) hops. Since each hop could add between 100-500
+ms of latency, for a network of 10K to 100K nodes this computes to about 4-5 seconds for a lookup (or more). Thus, we
+require a caching and replication strategy to reduce this cost especially for popular items. The discussion in this
+Section applies to any content or service thats is made available through the p2p system and thus extends beyond the
+Database as a blockchain service provided by Picolo.
+
+There has been significant prior work on caching and replicating strategies for peer-peer overlay networks. Methods such
+as Beehive \cite{beehive} provide a closed-form replication algorithm based on a derived equation that guarantees
+\(O(1)\) lookup but require full knowledge of the network, such as number of nodes and popularity values for each data
+item. While this system might be good for analysis and benchmark purposes, its implementation is not pratical for
+Picolo. Kelips \cite{kelips} is a probabilistic algorithm that also provides \(O(1)\) lookup performance (in the
+expected case) by dividing the network into \(O(\sqrt(N))\) affinity groups each of \(\sqrt(N)\) size. They use the
+gossip protocol to replicate content to all nodes within an affinity group. Work by Gupta et al \cite{one_hop_lookup}
+explore the tradeoff between routing table size and lookup latency. They offer a guaranteed \(O(1)\) lookup by
+maintaining routes to each and every node in the network. Farsite \cite{farsite} provides a better ttradeoff by using
+routing tables of \(O(dn^{1/3})\) size to route within \(O(d)\) hops.
+
+Other peer-peer applications such as PAST \cite{past} and CFS \cite{cfs} use fixed size caches on intermediate nodes to
+cache the objects being queried. While they are unable to provide closed-form analytic bounds on query time, their
+average case performance is reasonably good.
+
+
+We draw on the above literature to find the right balance between routing table size, cache and replication storage at
+nodes and lookup latency to design a strategy that achieves \(O(1)\) lookup on average for networks with standard node
+and popularity dynamics.
+
 \subsection{P2P Connectivity protocol}
 Use gossip or some other protocol to maintain network topology, connections
 
