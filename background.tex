@@ -4,8 +4,6 @@
 \section{Related Work}
 There have been attempts in the academia at building peer-to-peer data management systems (PDMS). PeerDB \cite{PeerDB} pioneered a full-fledged data management system that supports fine-grain content-based searching on a distributed network of nodes with heterogeneous schemas. It proposed a "code goes to data" paradigm where mobile agents are employed to perform query processing at a peer node in order to reduce network bandwidth. PIER \cite{PIER} provides a relational data model and query operators on top of any distributed storage system. It embraces the notion of \textit{data independence} and only concerns itself with query processing. It does not provide any sort of replication or ACID guarantees of a database and does not maintain any indexes of its own. Piazza \cite{Piazza} describes a system where peers have pairwise schema mappings between heterogeneous schemas and how these can be transitively extended to answer queries from peers separated by more than one edge. Queries are reformulated at each peer to match the local schema before execution. While this approach works well for a few reformulations, a large number of them may result in information loss or returning of irrelevant results.
 \newline\newline
-
-
 In the blockchain space, there are a few projects tackling the decentralized storage problem. Filecoin \cite{Filecoin}
 adds an incentive layer on top of widely used IPFS \cite{ipfs} - a p2p file sharing system. It pays miners for
 contributing disk space and network bandwidth to the filecoin system. Storj \cite{Storj} and Sia \cite{Sia} are two
@@ -13,9 +11,7 @@ similar projects that offer decentralized file storage systems for end users wan
 secure and censorship resistant networks. While these networks are great for storing large unstructured files like
 images, videos, documents etc they are not suitable for storing structured data and do not support complex queries
 beyond simple keyword search.
-
-    \begin{itemize}
-        \item Bluezelle, big chain db, mediachain
-    \end{itemize}
+\newline\newline
+BigchainDB \cite{bigchaindb} has blockchain like characteristics on top of a MongoDB engine lending itself to being queried like any other NoSql database. Its data model consisting of assets, transactions and outputs makes it easy to assign, track and transfer ownership of data. However, it doesn't have an open participation model where nodes can freely join and leave the network. Membership is controlled and resembles a typical database cluster maintained by devops teams at companies except in this case the teams can be inter-company. Bluzelle \cite{bluzelle} has an open participation model although it only supports key value lookup semantics, has no notion of data sharing and access control, does not support distributed query processing, data availability proofs or verifiability of mutations and has no access logs. Mediachain \cite{mediachain} created a decentralized data network for tracking ownership of creative arts like music. It has features like automatic schema translation that enables searching across sources with different schemas. It also supports a query language that allows for complex querying within a namespace. Our vision is aligned with Mediachain's vision, however, the project is not in active development.
 
 
