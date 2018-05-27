@@ -145,6 +145,18 @@ intent) along with changes in service or object popularity. We also allow for "f
 or service (such as a table-shard, or certain rows in a table) can quickly gain popularity (as given by standard
 Internet virality models \cite{virality_model}).
 
+\begin{itemize}
+    \item A node caches or replicates an item with a probability that is proportional to the number of queries it is
+        expected to get for that item in the upcoming time interval T.
+    \item The difference between a cache and a replica is application specific. For the Database application that the
+        network layer hosts, it depends on whether a particular table or a shard is allowed to have write permissions on
+        the replica.
+    \item When a node caches or replicates an item, it affects the probabilitic demand distribution for the item at
+        nodes that are on the routing path which would have gotten the request has this item not been cached.
+    \item Thus, by repeating this algorith iteratively, it would converge to the best caching pattern which would reduce
+        lookup times with high probability for all items on the network.
+\end{itemize}
+
 \subsection{P2P Connectivity protocol}
 Use gossip or some other protocol to maintain network topology, connections
 
