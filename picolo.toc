@@ -1,7 +1,9 @@
 \contentsline {section}{\numberline {1}Introduction}{3}
 \contentsline {section}{\numberline {2}Related Work}{3}
 \contentsline {section}{\numberline {3}Overall Design}{4}
-\contentsline {section}{\numberline {4}Network Subsystem}{4}
+\contentsline {subsection}{\numberline {3.1}Components}{4}
+\contentsline {subsection}{\numberline {3.2}Participants}{4}
+\contentsline {section}{\numberline {4}Network Subsystem}{5}
 \contentsline {subsection}{\numberline {4.1}Background}{5}
 \contentsline {subsection}{\numberline {4.2}Design of the Picolo overlay network}{6}
 \contentsline {subsubsection}{\numberline {4.2.1}Picolo namespace}{6}
@@ -13,20 +15,20 @@
 \contentsline {subsection}{\numberline {4.8}Cryptoeconomics and Byzantine behavior}{7}
 \contentsline {subsection}{\numberline {4.9}Analytics and Debug/Fault diagnosis}{7}
 \contentsline {section}{\numberline {5}Database Subsystem}{7}
-\contentsline {subsection}{\numberline {5.1}Distributed Query Processing}{7}
-\contentsline {subsection}{\numberline {5.2}Dynamic clustering}{8}
-\contentsline {subsection}{\numberline {5.3}Data sovereignty}{8}
+\contentsline {subsection}{\numberline {5.1}Distributed Query Processing}{8}
+\contentsline {subsection}{\numberline {5.2}Dynamic clustering}{9}
+\contentsline {subsection}{\numberline {5.3}Data sovereignty}{9}
 \contentsline {subsection}{\numberline {5.4}Access control}{9}
 \contentsline {subsection}{\numberline {5.5}Consensus, replication, sharding}{9}
 \contentsline {subsection}{\numberline {5.6}Distributed transactions and hybrid time}{9}
 \contentsline {subsection}{\numberline {5.7}Versioning, Backup \& restore, access logs}{9}
-\contentsline {subsection}{\numberline {5.8}Handling and recovery from failures, data locality and mini-datacenters}{9}
-\contentsline {section}{\numberline {6}Mechanism design}{9}
+\contentsline {subsection}{\numberline {5.8}Handling and recovery from failures, data locality and mini-datacenters}{10}
+\contentsline {section}{\numberline {6}Mechanism design}{10}
 \contentsline {subsection}{\numberline {6.1}Data availability checks}{11}
 \contentsline {subsection}{\numberline {6.2}Slashing conditions}{11}
 \contentsline {subsection}{\numberline {6.3}Attacks}{13}
 \contentsline {subsection}{\numberline {6.4}Incentives}{13}
 \contentsline {section}{\numberline {7}MX Protocol}{13}
-\contentsline {section}{\numberline {8}Conclusion}{14}
-\contentsline {section}{\numberline {9}References}{14}
+\contentsline {section}{\numberline {8}Conclusion}{15}
+\contentsline {section}{\numberline {9}References}{15}
 \contentsline {section}{Appendix \numberline {A}EIP-1729. Introduce SQL semantics to EVM }{18}
