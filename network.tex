@@ -105,9 +105,20 @@ This space can be segregaged using a namespace identifier, which allows multiple
 
 For the rest of this section, the discussion gets isolated to within a single naming layer.
 
-\subsection{Core API}
+\subsubsection{Core API}
+Picolo's network layer supports an API similar to a standard p2p overlay network, for a detailed discussion refer
+\cite{dolr2003}. The primary goal of the API is to publish and locate objects or service identifiers within a given
+namespace. All operations that occur in a namespace can be replicated across namespaces as needed.
 
-\subsection{Routing and Lookup}
+Currenlty, we support the following API methods in a decentralized manner:
+\begin{itemize}
+    \item Publish()
+    \item Unpublish()
+    \item Lookup()
+    \item RemoteCall()
+\end{itemize}
+
+\subsubsection{Routing and Lookup}
 Explain how a DHT works. Add a layer that takes care of data locality
 
 \subsection{Node Dynamics}
