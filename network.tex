@@ -119,7 +119,13 @@ Currenlty, we support the following API methods in a decentralized manner:
 \end{itemize}
 
 \subsubsection{Routing and Lookup}
-Explain how a DHT works. Add a layer that takes care of data locality
+
+\begin{itemize}
+    \item Lookup using a prefix-based DHT. 
+    \item Routing table description.
+    \item Lookup algorithm.
+    \item Caching links for faster lookup. 
+\end{itemize}
 
 \subsection{Node Dynamics}
 
@@ -169,7 +175,17 @@ Internet virality models \cite{virality_model}).
 \end{itemize}
 
 \subsection{P2P Connectivity protocol}
-Use gossip or some other protocol to maintain network topology, connections
+
+When a Picolo node starts for the first time (fresh install), it will query a set of "root" servers, similar to the DNS
+architecture of the Internet which is one of the largest decentralized lookup databases in the world \cite{icann_root}. 
+These root servers populate the nodes with a list of neighboring nodes and content to bootstrap with.
+
+The nodes use QUIC for server-server connections. QUIC primer. Why QUIC ?
+
+Certain network configuations might not allow for QUIC, such as due to firewalls. In such cases, we will use the SPDY
+protocol which offers multi-session transport over the HTTPS ports which every firewall should support.
+
+STUN/NAT traversals and proxies.
 
 \subsection{Cryptoeconomics and Byzantine behavior}
 How will malicious nodes affect the system and how to mitigate/prevent/recover. Do nodes have incentive to participate in network discovery
