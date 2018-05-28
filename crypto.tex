@@ -4,11 +4,12 @@ Since Picolo is an open network and nodes can't be trusted, a robust incentive a
 	\item Node stakes and incentives
 	\item Data availability checks
 	\item Paxos based byzantine consensus \cite{byzantine_paxos}
-	\item Verifiable data structures and checkpointing \cite{trillian}
 \end{enumerate}
 We aim to devise Casper FFG \cite{casper_ffg} style slashing conditions based on the above.
 \newline\newline
 \textbf{Assumptions in the attack model}: We assume a standard Byzantine failure model, i.e., the attacker is able to make changes to the messages at the network layer on a node or alter the behavior at the database layer. The attacker is also able to coordinate the behavior of multiple nodes in real-time to achieve a desired attack scenario. We also allow for the adversary to delay communication between honest nodes so long as the adversary has the ability to do so given the topology of the overlay network (i.e. the adversary should be part of the routing path). We also assume that the attacker is computationally bound, i.e., they cannot gather enough computing resources to subvert state-of-the-art cryptographic techniques such as Elliptic curve, crypto-hash functions (such as SHA-256) or encryption schemes such as AES.
+\newline\newline
+\textbf{Node stake}: All nodes in the network need to have a stake in order to have any meaningful participation i.e before they can start hosting large amounts of data. They can either explicitly make a security deposit when they join thereby increasing their stake or can earn rewards overtime by serving large amounts of data (by acting as cache) and use them for making the deposit. While acting as caching nodes, they are not subject to any PoQ checks (\cref{sec:poq}). 
 \newline\newline
 \textbf{Byzantine behaviour at the database layer}: The central tenet of our design is to use strong cryptographic primitives to push Byzantine behavior at the database layer down to either a DoS style attack vector or to the network layer where we handle it using a combination of crypto-incentives, DHT management and detection. At the database level, each node is responsible for the standard CRUD operations for a given table (or a shard). Each such operation is protected using a cryptographic signature of the entity (dapp or user) that authorizes the request. Thus a malicious node is only able to destroy the data and not alter it. For example, every write request has a signature that certifies the request. Thus, a Merkle proof audit and signature on every table can deter any malicious manipulation of the data stored. The only attack vectors that remain are various versions of DoS style disruption, where a single node or a collection of nodes disrupt the network by delaying messages or destroying the data stored. 
 \newline\newline
@@ -19,7 +20,7 @@ The caching and replication layer prioritizes faster network links and nodes to 
 \newline\newline
 \textbf{Detection}: It is be possible to detect such DoS style behavior quickly at the network layer since the overlay topologies tend to share many links at the layer-3 on the Internet. For example, if a node appears to delay messages at the network level while maintaining fast routes and content availability might indicate malicious intent. The detection “service” can run on the nodes with the maximum stake or trust. They can detect anomalies between different layers of a potentially malicious node and agree to reduce the trust level of that node. Such a detection service can only be thwarted if the malicious node coordinates its behavior across all observable metrics such that it appears as if it is naturally faulty. For this case, it is indistinguishable from a genuinely faulty node for all practical purposes which is handled at the DHT layer (node addition, deletion, failure modes).
 
-\subsection{Data availability checks}
+\subsection{Data availability checks} \label{sec:poq}
 All peers (replicas) in a database cluster constantly ping each other (once every 10 seconds) to check if they are still reachable from one another. These checks are important to ensure that the replication factor of data is always maintained and for automatic fail-over. Normally, these pings contain short meaningless data. We enhance these pings with random checks for actual data nodes are supposed to be storing. We term this \textit{Proof-of-Query (PoQ)} and nodes can prove that they are storing and serving data correctly by responding satisfactorily to PoQ pings. There are two types of PoQs: \textit{peer-PoQ or pPoQ} and \textit{client-PoQ or cPoQ} (see \figref{fig:poq})
 \newline
 \newline
@@ -30,15 +31,40 @@ All peers (replicas) in a database cluster constantly ping each other (once ever
 \newline
 \newline
 \textbf{Source of randomness}: It is important to choose a good source of randomness so as to ensure queries cannot be guessed ahead in time. If one imagines the data set hosted by a cluster as a giant array and the array size is known, a simple secure random number generator that generates numbers between 0 and 1 will work. Verifiers can then simply get the record at index $ \floor{random * size} $
+\newline
+\newline
+\textbf{Note on signatures}: In our current plan signatures are stored per row. So when a row update occurs on a specific column or group of columns, the signature needs to be recreated for the whole row. This involves fetching the whole row, applying the update, creating the signature on the new row and putting back the whole row. The data overhead with this process might prove to be too much. We are evaluating an alternate scheme where signatures are stored per cell instead using a short signature scheme like BLS \cite{bls}. Trade offs between these two schemes need to be more thoroughly evaluated.
 \begin{figure}[h!] \centering
 	\includegraphics[width=\fscale{1}]{poq.png}
 	\caption{Proof-of-Query pings}
 	\label{fig:poq}
 \end{figure}
-
-\subsection{Verifiable data structures}
-All data structures (primarily tables) used by Picolo are backed by an append-only log of mutations and accesses to data. Anyone can reconstruct these data structures by downloading the log and perform a full audit.
+ \subsection{Slashing conditions} \label{sec:slashing}
+ There are three conditions, meeting any of which will result in the node losing its stake:
+ \begin{enumerate}
+ 	\item Node found to be malicious during a paxos write
+ 	\item Node is continuously failing PoQ checks
+ 	\item Node not responding to PoQ checks
+ \end{enumerate}
+\textbf{Malicious behavior during paxos write}: We use a modified version of generalized byzantine paxos algorithm \cite{byzantine_paxos} for achieving replica consensus (\cref{sec:paxos}). The modified version reports back nodes in the paxos group that behaved arbitrarily during a write to the initiator of the write (client). Client can then issue cPoQs (\cref{sec:poq}) to the reported nodes and check if any data corruption occurred. It may also issue new writes and check if paxos is still reporting back arbitrary behavior of the nodes. It can then publish a proof of arbitrary behavior - simply the wrong query results (that fail signature verification) returned by the malicious nodes to a slashing smart contract that slashes deposits of malicious nodes. Malicious nodes cannot repudiate arbitrary behavior since all messages including responses to cPoQs are digitally signed.
+\newline\newline
+\textbf{\Large{diagram depicting the flow and read paxos}}
+\newline\newline
+\textbf{PoQ check failure}: Similar to above, if nodes fail PoQ checks i.e return results whose signatures don't match the respective results, initiator of PoQs can publish proofs to the slashing smart contract to trigger deposit slashing. PoQs can also fail with no data returned due to a genuine hardware failure. In this case more PoQs and calls to collect file system statistics are fired to the node and if these calls indicate hardware failure, the node is simply removed from its paxos group and a replacement will be found. The node can then correct the hardware problem and join a new paxos group or simply choose to withdraw its stake and leave the network.
+\newline\newline
+\textbf{PoQ check unresponsiveness}: When s node has not explicitly left the network but stops responding to queries, its deposit is slowly drained. Arguably this method is more punitive than is necessary, the alternate being simply marking the node dead and finding a replacement, but stake draining acts as a deterrent to nodes going silent abruptly. It keeps the network more reliable and performant as replacing a node can be an expensive process. The function that calculates draining rate should take into account these factors:
+ \begin{enumerate}
+	\item Uptime of the node, $t$
+	\item Amount of data on the node, $\mathcal{D}$
+	\item Current load, $\ell$
+	\item Rewards earned so far, $\mathcal{R}$
+\end{enumerate}
+The function should be inversely proportional to $t$, $\ell$ and $\mathcal{R}$ and directly proportional to $\mathcal{D}$. These relationships make sense because a node with a long uptime might need repair and is genuinely down, a node under heavy load may not be able to respond to PoQs in time as it is busy serving clients, a node that has earned a large amount of rewards so far is trustworthy as it has been serving requests correctly so far and finally since replacing a node hosting a  large amount of data is expensive, it must be penalized for going offline abruptly. Representatively,
+\newline
+$$ \mathcal{F}_{drain} \propto \frac{\mathcal{D}} {t * \ell * \mathcal{R}}$$
+\newline
+The exact function to calculate the rate of drain requires more thought and experimental evaluation with some trial \& error and hence not discussed here.
 \subsection{Attacks}
-Possible attacks on the system
+Storj \cite{Storj} describes a few attacks that are relevant to a storage network. We briefly discuss them here and how Picolo handles them.
 \subsection{Incentives}
- Nodes are paid by dapp developers for storage and usage. Usage entails network ingress and egress. They also need to put up a stake in order to join the network. This stake will be slashed if they are found to be byzantine.
+Nodes are paid by dapp developers for storage and usage. Usage entails network ingress and egress. They also need to put up a stake in order to join the network. This stake will be slashed if they are found to be byzantine.

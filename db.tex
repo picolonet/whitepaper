@@ -36,20 +36,12 @@ Applications and users may want to share data with other parties but may wish to
 An example value level (only username is given access to) granularity rule looks like:\newline \newline
 \texttt{ SELECT username \newline FROM users \newline WHERE email=foo@bar.com \newline NODE (SELECT nodeId FROM nodes)}\newline\newline
 Here \texttt{NODE} is a new clause we introduce to SQL dialect.
-\subsection{Cluster, data locality}
-Cluster means a large number of nodes in the same network - think a mini datacenter. How to ensure data is closes to users and follow constraints like it doesn't leave a jurisdiction
-\subsection{Versioning}
-Keys have timestamps and queries can be made in the past or fetched from a snapshot in the past
-\subsection{Backup  and restore}
-Client configurable backup and restore mechanisms. How does this affect data sovereignty?
-\subsection{Consensus, replication and token economics}
-Paxos based sync replication. Do nodes have incentive to be a paxos coordinator? Is the charge model based on the total storage cost or based on amount of effective storage used.
-\subsection{Handling and recovery from  failures}
-Cluster can fail. What happens when data poisoning happens. What if the whole replica set disappears. Make sure there are no correlated failures. Use geo ip to replicate to different regions.
-\subsection{Clients}
-Official picolo clients that dapp developers can embed in their application. A cmd line clienmt is also provided.
-\subsection{Sharding}
-Data needs to be sharded automatically. Same as cdb
+\subsection{Consensus, replication, sharding} \label{sec:paxos}
+Paxos based sync replication and consensus. Data needs to be sharded automatically. Same as cdb.
 \subsection{Distributed transactions and hybrid time}
 Using atomic clocks, google external ntp service, stratum 1 ntp servers. Use logical time appended to physical time. Handle clock skew. Nodes that drift too apart should die. 
+\subsection{Versioning, Backup \& restore, access logs}
+Keys have timestamps and queries can be made in the past or fetched from a snapshot in the past. Client configurable backup and restore mechanisms. How does this affect data sovereignty?
+\subsection{Handling and recovery from  failures, data locality and mini-datacenters}
+Cluster can fail. What happens when data poisoning happens. What if the whole replica set disappears. Make sure there are no correlated failures. Use geo ip to replicate to different regions. Cluster means a large number of nodes in the same network - think a mini datacenter. How to ensure data is closes to users and follow constraints like it doesn't leave a jurisdiction
 
