@@ -13,20 +13,20 @@ can host multiple nodes. A node consists of a fully-vertically integrated layer 
     \end{itemize}
 \subsection{Components}
 
-\subsection{Participants}
-There are four types of actors in the network:
+\subsection{Participants} \label{sec:participants}
+There are four types of participants in the network:
 \begin{enumerate}
 	\item Storage providers
 	\item Storage consumers
 	\item Data providers
 	\item Data consumers \newline
 \end{enumerate}
-\textbf{Storage providers}: These are akin to the miners in bitcoin or ethereum.
+\textbf{Storage providers}: Storage providers provide compute resources that power the network such as CPU, memory and disk. In our current architecture, these resources are on the same machine. While its possible to separate the ``server" part from ``storage" part as in databases with NAS (network attached storage), in a p2p world with commodity network links, such a design introduces unaccceptable latencies. Storage providers are compensated for powering the network by storage consumers. 
 \newline\newline
-\textbf{Storage consumers}: \DJ app developers
+\textbf{Storage consumers}: \DJ app developers that need to store strucutured data fall into this category. They can simply use the database functionalities provided by the network without the need to perform any database administration tasks. In this sense, the network gives them the same ease of use as a cloud hosted database provider but at a much cheaper rate.
 \newline\newline
-\textbf{Data providers}: These are people with useful data to share.
+\textbf{Data providers}: These are people who want to share their data with the world. This could be highly domain specific data that doesn't lend itself well for sharing using existing tools. Examples galore in academia and industry. Storage consumers above can also be data providers; for example an end user using a dapp that puts data control in the hands of the user enables them to become a data provider for other dapps.
 \newline\newline
-\textbf{Data consumers}: These are people interested in data shared by data providers.
+\textbf{Data consumers}: These are people interested in data shared by data providers. Future of application building does not include hoarding user data in silos, instead innovative applications will be built using data commonly available or shared on a single location. This is the idea behind the paradigm of 'code comes to data' where users solely control their data and allow applications to provide services by selectively giving access to their data.
 
 
