@@ -66,5 +66,16 @@ $$ \mathcal{F}_{drain} \propto \frac{\mathcal{D}} {t * \ell * \mathcal{R}}$$
 The exact function to calculate the rate of drain requires more thought and experimental evaluation with some trial \& error and hence not discussed here.
 \subsection{Attacks}
 Storj \cite{Storj} describes a few attacks that are relevant to a storage network. We briefly discuss them here and how Picolo handles them.
-\subsection{Incentives}
-Nodes are paid by dapp developers for storage and usage. Usage entails network ingress and egress. They also need to put up a stake in order to join the network. This stake will be slashed if they are found to be byzantine.
+\subsection{Market design}
+There are a fixed number of tokens (PINTs - PIcolo Network Tokens), all minted at genesis. They will be distributed according to a well defined plan amongst investors, developers, partners and network participants. The primary economic activity in the network is that the nodes powering the network are paid by consumers for storage, compute and network bandwidth. And the goal of our market design is to optimize towards a single goal:
+\begin{center}
+\colorbox{oldlace}{\textit{\large{\textbf{Value of PINT should increase with usage of the network}}}}
+\end{center}
+To that end, we propose the following mechanisms:
+\subsubsection{Work token model}
+In the utility token model, tokens suffer from the velocity problem. The model also requires that tokens be widely distributed aka into the hands of the consumers which could prove difficult to achieve in practice. Mandating the use of network token to pay for services also introduces friction. The user has to convert fiat to ETH/BTC first, then convert them again to the network token on a different exchange. Providers on the other hand need to again convert these tokens into more mature/liquid tokens in order to realize gains as quickly as possible as the cost of them holding on to these tokens could be higher than they like \cite{moe}. 
+\newline\newline
+To avoid these problems we use the work token model \cite{new_model_utility_token}: network tokens are only required for storage providers to earn the right to join the network. Anyone wishing to become a node on the network need to put up a stake in PINTs in proportion to the resources they'd be providing - more storage provided means more stake required. This stake will be slashed if they are found to be byzantine (\cref{sec:slashing} ).They can then accept payment from users in any form they prefer including in PINTs. This token model also captures the value created by the network 100 \% - when the demand for the network goes up, more providers will want to join the network by purchasing PINTs to use as stake. This puts an upward price pressure on the token and vice-versa.
+\subsubsection{Fair cooperative incentive}
+\subsubsection{Incentives for different parties}
+\subsubsection{Applications and burn}
