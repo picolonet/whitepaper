@@ -24,13 +24,13 @@ properties which are required of any high performance p2p overlay-based lookup l
         Optimal solution would be to always send the query to the nearest copy possible.
     \item {\em Balanced load}: The load should be evenly distributed across the nodes in the network, thus, reducing
         hotspots.
-    \item {\em Dynamic membership}: THe system allows arrival and departure of nodes while maintaining functionality.
+    \item {\em Dynamic membership}: The system allows arrival and departure of nodes while maintaining functionality.
 \end{itemize}
 
--- Self-repairing.
--- Soft-state based routing.
+In the next subsection \ref{net:background}, we summarize a wide-range of research on p2p overlays and storage systems over the last two
+decades that has influenced our design and thought process in Picolo. 
 
-\subsection{Background}
+\subsection{Background} \label{net:background}
 
 In this Section, we provide a brief overview of peer-peer systems both in the research and product community that have
 influenced the literature over the last 20 years.
@@ -111,10 +111,12 @@ distributed directory service and could be built on top of Pastry. Another examp
 System \cite{overcast}, which provides reliable single-source multicast streams.
 
 \subsection{Design of the Picolo overlay network}
+\label{net:design}
 
 The Picolo overlay network consists of a p2p DHT based lookup for mapping key to objects, content or services. There is a caching layer that allows for frequenly used items to be propagated closer to the demand endpoints in the network including ability to replicate as needed.
 
 \subsubsection{Picolo namespace} 
+\label{net:namespace}
 1. Nodes and content map to a single 256-bit space. We can use existing hash functions such as SHA-256 for this purpose.
 
 This space can be segregaged using a namespace identifier, which allows multiple such "naming layers" to co-exist. For example, one way to assign naming layers could be based on a per-application type.
@@ -122,6 +124,7 @@ This space can be segregaged using a namespace identifier, which allows multiple
 For the rest of this section, the discussion gets isolated to within a single naming layer.
 
 \subsubsection{Core API}
+\label{net:core_api}
 Picolo's network layer supports an API similar to a standard p2p overlay network, for a detailed discussion refer
 \cite{dolr2003}. The primary goal of the API is to publish and locate objects or service identifiers within a given
 namespace. All operations that occur in a namespace can be replicated across namespaces as needed.
@@ -135,6 +138,7 @@ Currenlty, we support the following API methods in a decentralized manner:
 \end{itemize}
 
 \subsubsection{Routing and Lookup}
+\label{net:routing}
 
 \begin{itemize}
     \item Lookup using a prefix-based DHT. 
@@ -144,10 +148,12 @@ Currenlty, we support the following API methods in a decentralized manner:
 \end{itemize}
 
 \subsection{Node Dynamics}
+\label{net:node_dynamics}
 
 Failures, node departures, node additions.
 
 \subsection{Replication and caching}
+\label{net:replication}
 Beehive stuff for O(1) lookups for power law queries
 
 Structured peer-peer distributed hash tables can implement lookups in \( O(log N)\) hops. Since each hop could add between 100-500
@@ -191,6 +197,7 @@ Internet virality models \cite{virality_model}).
 \end{itemize}
 
 \subsection{P2P Connectivity protocol}
+\label{net:net_proto}
 
 When a Picolo node starts for the first time (fresh install), it will query a set of "root" servers, similar to the DNS
 architecture of the Internet which is one of the largest decentralized lookup databases in the world \cite{icann_root}. 
@@ -204,6 +211,8 @@ protocol which offers multi-session transport over the HTTPS ports which every f
 STUN/NAT traversals and proxies.
 
 \subsection{Cryptoeconomics and Byzantine behavior}
+\label{net:crypto}
 How will malicious nodes affect the system and how to mitigate/prevent/recover. Do nodes have incentive to participate in network discovery
 
 \subsection{Analytics and Debug/Fault diagnosis}
+\label{net:analytics}
