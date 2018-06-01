@@ -7,9 +7,25 @@ functionality as Decentralized Object Location and Routing (DOLR) \cite{dolr2003
 messages, such as database queries, read/write requests or other management functions to the respective nodes which can
 satisfy them. 
 
-The overlay layer can be implemented on top of any datagram network protocol such as UDP or IP. Specifically on the Internet, we realize its implemented on IP or IPv6 protocols.
-The peer-to-peer overlay routing infrastructure offers efficient, scalable, location-independent
-routing of messages directly to nearby copies of an object or service using only localized resources [TP].
+The overlay layer can be implemented on top of any datagram network protocol such as UDP or IP. Specifically on the
+Internet, we realize its implemented on IP or IPv6 protocols.  The peer-to-peer overlay routing infrastructure offers
+efficient, scalable, location-independent routing of messages directly to nearby copies of an object or service using
+only localized resources \cite{tapestry2004}. We use the word object to loosely refer to content such as Tables, Shards,
+Metadatd and such, that is, any content that is content-addressable and needs to be part of the lookup layer.  Location
+independent routing refers to a class of techniques for locating objects based on content rather than their location,
+while attempting to find the shortest path possible to reach such objects. Picolo's design offers the following
+properties which are required of any high performance p2p overlay-based lookup layer:
+
+\begin{itemize}
+    \item {\em Determinstic Node Mapping}: Picolo is able to locate objects anywhere in the network. That is, there
+        should be no object in the network that cannot be accessed using the lookup layer.
+    \item {\em Low routing inefficiency}: Routes should have low {\em stretch}. Stretch is the ratio between (network
+        level) distance traveled by a query to an object and the minimal network distance from the query to the object.
+        Optimal solution would be to always send the query to the nearest copy possible.
+    \item {\em Balanced load}: The load should be evenly distributed across the nodes in the network, thus, reducing
+        hotspots.
+    \item {\em Dynamic membership}: THe system allows arrival and departure of nodes while maintaining functionality.
+\end{itemize}
 
 -- Self-repairing.
 -- Soft-state based routing.
