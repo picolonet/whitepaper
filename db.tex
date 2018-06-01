@@ -25,7 +25,7 @@ The metadata depicted in the figure contains schema metadata to be exposed to th
 	\end{tabular}
 \end{center}
 When a query is posed to any node in the system, the node first tries to fulfill it with a local query before passing it along to its neighbors. Remember, nodes in the system host data with heterogeneous schemas. Hence the keywords are used to find semantically similar data. Similarity metrics that determine whether a query matches a heterogeneous schema are not discussed here.
-\subsection{Dynamic clustering}
+\subsection{Dynamic clustering} \label{sec:dynamic_cluster}
 Semantic proximity metrics are used to find nodes that are hosting semantically similar schemas. Overtime, these nodes are discovered and are clustered together for better query performance by reducing the number of network hops required.
 \subsection{Data sovereignty}
 Picolo supports two different schema types: \textit{application controlled} and \textit{user controlled}. Applications can use user controlled schemas to put users in absolute control of data and better comply with regulations like GDPR. For example, a decentralized twitter may  want users to have control over their tweets. Users can use any third party client or Picolo's official clients to interact with their tweets effectively rendering the decentralized twitter just another client to the data albeit with better features. \newline\newline

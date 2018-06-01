@@ -89,13 +89,19 @@ There are four types of participants in the network (\cref{sec:participants}). T
 \begin{remark}{\textbf{Forward:}} \label{forward_rule}
 	A node should forward GET messages with positive hop numbers to neighbors.
 \end{remark}
-
+\begin{definition}{\textbf{Semantic group:}}
+	A semantic group is a dynamic cluster (\cref{sec:dynamic_cluster}) of peers that share semantically similar data.
+\end{definition}
+\begin{definition}{\textbf{Access level $\mathcal{A}\ell$:}}
+	Access level of a node is the probability with which its queries will be fulfilled by peers in its semantic group.
+\end{definition}
 \begin{definition}{\textbf{Cooperative:}}
 	A node is said to be cooperative if it follows \cref{forward_rule}.
 \end{definition}
 \begin{definition}{\textbf{Fair:}}
 	A node is said to be fair if it follows rules \ref{reply_rule} and \ref{forward_rule}.
 \end{definition}
+<<<<<<< HEAD
 
 definition2 fairness
 rule 1 fulfilling query itself - PoQ servers as non-free rider proof
@@ -106,3 +112,21 @@ the score determines access level of the node
 
 is verifying whether a node sent a response NP-HARD?
 \subsubsection{Applications and burn}
+=======
+A rational node's objective is to keep its access level high in order to get high quality results to its queries. The access level of each node in a semantic group is tracked by all nodes in the group in a \textit{\textbf{non-interactive}} way i.e a node cannot influence what its peers think the access level of a particular node should be. There is no consensus process amongst nodes to determine a common access level value of a node. Each node determines for itself what the access levels of its peers are based on its past interactions with them. For e.g: if a node $\mathcal{A}$ has responded to a node $\mathcal{B}$'s queries satisfactorily in the past, then $\mathcal{A}$'s access level as far $\mathcal{B}$ is concerned will be high and it will respond to $\mathcal{A}$'s queries favorably in the future. Thus,
+\newline
+$$ \mathcal{A}_{\mathcal{A}\ell} \propto \sum_{i=0}^{n} \mathcal{N}_i[\mathcal{A}_{a\ell}] + \epsilon$$ 
+where $\mathcal{N}_i$ is a node in the semantic group and $\mathcal{N}_i[\mathcal{A}_{a\ell}]$ is $\mathcal{A}$'s access level at that node and $\epsilon$ is a minimum access level all nodes have.
+\newline
+A new node can elect to increase its access level (the $\epsilon$) by depositing PINTs to a smart contract. Peers check the smart contract when they receive a GET message from this node for the first time and update their local information. Each node maintains three metrics that will help determine the access levels of its peers:
+\begin{enumerate}
+	\item The number of times a peer $\mathcal{A}$ followed \ref{reply_rule}, $num_{reply}$
+	\item The number of times a peer $\mathcal{A}$ followed \ref{forward_rule}, $num_{fwd}$
+	\item The ``quality of results" returned by a peer $\mathcal{A}$, $qual (0 < qual < 1)$
+\end{enumerate}
+$qual$ is loosely defined and its upto to each node how to calculate this value as they are the ultimate consumers of results and its in their best interest to faithfully determine it. Thus, the access level of node $\mathcal{A}$ as per a peer $\mathcal{B}$ can be represented as,
+\newline
+$$ \mathcal{A}_{a\ell} \propto num_{reply} * num_{fwd} * qual$$
+One might notice that there is no explicit definition of a malicious node in this mechanism. This is ok since there is no way in which a node can influence its peers; it may choose to not reply or forward messages from its peers and deliberately set the access levels of its peers to 0 locally but that does not affect the functioning of the semantic group it belongs to. All nodes set the access levels of their peers purely based on their own observation. So its upto each node to choose a behavior aka the manner in which it follows the rules \ref{reply_rule} and \ref{forward_rule} that is best for its purposes.
+\subsubsection{Burning games}
+>>>>>>> 6.4.2
