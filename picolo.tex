@@ -39,6 +39,11 @@
 \DeclarePairedDelimiter\ceil{\lceil}{\rceil}
 \DeclarePairedDelimiter\floor{\lfloor}{\rfloor}
 
+\usepackage{amsthm}
+\theoremstyle{definition}
+\newtheorem{definition}{Definition}[section]
+\newtheorem{remark}{Rule}[section]
+
 \usepackage{cleveref}
 \crefformat{section}{\textbf{\S#2#1#3}} % see manual of cleveref, section 8.2.1
 \crefformat{subsection}{\textbf{\S#2#1#3}}
@@ -142,7 +147,7 @@ Rest of the paper is structured as follows: in section 2, we discuss some relate
 
 \input{crypto}
 
-\section{MX Protocol}
+\section{MX Protocol} \label{sec:mx_protocol}
 Nodes in the network need to speak the same language for efficient discovery and communication of data. Hence the following message exchange scheme (see \figref{fig:mx}) is proposed similar to \cite{Protocol_Spec}. Note that the exact mapping between the following messages and underlying transport protocol is not discussed here and may change depending on the final transport protocol chosen (QUIC vs TCP)
 \newline
 \newline

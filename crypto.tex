@@ -83,10 +83,26 @@ In the utility token model, tokens suffer from the velocity problem. The model a
 To avoid these problems we use the work token model \cite{new_model_utility_token}: network tokens are only required for storage providers to earn the right to join the network. Anyone wishing to become a node on the network need to put up a stake in PINTs in proportion to the resources they'd be providing - more storage provided means more stake required. This stake will be slashed if they are found to be byzantine (\cref{sec:slashing}).They can then accept payment from users in any form they prefer including in PINTs. This token model also captures the value created by the network 100 \% - when the demand for the network goes up, more providers will want to join the network by purchasing PINTs to use as stake. This puts an organic upward price pressure on the token and vice-versa.
 \subsubsection{Fair cooperative incentive}
 There are four types of participants in the network (\cref{sec:participants}). The inentives for storage providers and consumers are straight forward - providers get paid by consumers who are benefitting from the service. For the other two types, it is a bit more involved. While the data providers can moentize their data by imposing access controls (\cref{sec:access_control}) and charge for sharing the key information, they might not want to do that. They might be genuinely interested in sharing their data for altruistic purposes or are benefitting in a non-monetary form (e.g: by letting developers create innovative services with the data). But this leads to \textit{free riding} problem and \textit{greedy behavior} amongst nodes. Emmanuelle et. al \cite{fair_incentives} defined the \textit{fair resource sharing} problem and desgined an incentive framework that rewards nodes for acting in a way that maximizes the utility of the network. However, their design depends on a ``middleware layer" that tracks various metrics to properly incentivize and punish nodes. In addition to introducing asymmentry into the network, the tracking mechanism depends on nodes truthfully reporting metrics data. Clearly, this strong assumption will not hold well in a byzantine world as nodes can incorrectly report metrics about their peers in an attempt to damage their participation and access levels defined in \cite{fair_incentives}.
-\newline
-\newline
-definition1 cooperative
+\begin{remark}{\textbf{Reply:}} \label{reply_rule}
+	A node should reply to GET messages (\cref{sec:mx_protocol}) if its dataset contains records that satisfy the query in GET message.
+\end{remark}
+\begin{remark}{\textbf{Forward:}} \label{forward_rule}
+	A node should forward GET messages with positive hop numbers to neighbors.
+\end{remark}
+
+\begin{definition}{\textbf{Cooperative:}}
+	A node is said to be cooperative if it follows \cref{forward_rule}.
+\end{definition}
+\begin{definition}{\textbf{Fair:}}
+	A node is said to be fair if it follows rules \ref{reply_rule} and \ref{forward_rule}.
+\end{definition}
+
 definition2 fairness
 rule 1 fulfilling query itself - PoQ servers as non-free rider proof
 rule 2 sending queries to peers GET MSG with 2 hops
+
+each node maintains coop score, free rider  and quality of results score
+the score determines access level of the node
+
+is verifying whether a node sent a response NP-HARD?
 \subsubsection{Applications and burn}
