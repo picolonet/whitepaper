@@ -145,11 +145,19 @@ namespace. All operations that occur in a namespace can be replicated across nam
 
 Currenlty, we support the following API methods in a decentralized manner:
 \begin{itemize}
-    \item Publish()
-    \item Unpublish()
-    \item Lookup()
-    \item RemoteCall()
+    \item {\em Publish(namespace, object ID, object, credentials)}: Makes the object available on the network, including first a copy on
+        the local node. The object could be a database table or a shard. Operations on the object fall within the
+        context of the database layer and are discussed in a later Section.
+    \item {\em Unpublish(namespace, object ID, credentials)}: Removes the object from the network making it inaccessible.
+    \item {\em Lookup(namespace, object ID, credentials)}: Lookup item with the given object ID using the p2p lookup protocol
+        discussed in this Section. The API returns a node identifier which can be used in the next method to execute a
+        remote funationality on it.
+    \item {\em RemoteCall(namespace, node ID or object ID, credentials, method details)}: This executes a given functionality
+        on a remote node. If the object ID is given, it first does a node lookup using the Lookup() method.
 \end{itemize}
+
+These methods can be called on a single node. They can also be called using a client SDK which shall be provided. The
+client SDK would use the DHT layer to first find "any" node, connect to it and call the above methods.
 
 \subsubsection{Routing and Lookup}
 \label{net:routing}
