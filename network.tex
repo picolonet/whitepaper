@@ -114,15 +114,28 @@ System \cite{overcast}, which provides reliable single-source multicast streams.
 \subsection{Design of the Picolo overlay network}
 \label{net:design}
 
-The Picolo overlay network consists of a p2p DHT based lookup for mapping key to objects, content or services. There is a caching layer that allows for frequenly used items to be propagated closer to the demand endpoints in the network including ability to replicate as needed.
+The Picolo overlay network consists of a p2p DHT based lookup for mapping key to objects, content or services. This
+mapping resides inside a namespace, thus funtionality gets replicated across namespaces allowing a wide-range of
+applications to co-exist. The APIs provided by the network layer are influenced by research from the P2p networking
+community and discussed in Section \ref{net:core_api}.  There is a caching layer that allows for frequenly used items to
+be propagated closer to the demand endpoints in the network including ability to replicate as needed.
 
 \subsubsection{Picolo namespace} 
 \label{net:namespace}
-1. Nodes and content map to a single 256-bit space. We can use existing hash functions such as SHA-256 for this purpose.
 
-This space can be segregaged using a namespace identifier, which allows multiple such "naming layers" to co-exist. For example, one way to assign naming layers could be based on a per-application type.
+Nodes and content map to a single 256-bit space. The addressing is hexadecimal based, which is the radix used for the
+prefix calculation and lookup in the routing table. This design is similar to both IPv6 and also used in Ethereum.  The
+node ID is a hash of its public-key certificate using a SHA-256 hash function. The content ID is a SHA-256 hash of the
+application type, database name and version and the table name (and possibly a shard number if needed). As long as the
+same consistent method is used to create content IDs, the actual format of the input string doesn't affect functionality
+at the network layer.
 
-For the rest of this section, the discussion gets isolated to within a single naming layer.
+This space can be segregaged using a namespace identifier, which allows multiple such "naming layers" to co-exist. For
+example, one way to assign naming layers could be based on a per-application type. The content and node IDs have to be
+unique only within the namespace. The default namespace, which is global, is the keyword "default".
+
+For the rest of this section, the discussion gets isolated to within a single naming layer, such as the "default"
+namespace.
 
 \subsubsection{Core API}
 \label{net:core_api}
