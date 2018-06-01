@@ -64,24 +64,18 @@ The function should be inversely proportional to $t$, $\ell$ and $\mathcal{R}$ a
 $$ \mathcal{F}_{drain} \propto \frac{\mathcal{D}} {t * \ell * \mathcal{R}}$$
 \newline
 The exact function to calculate the rate of drain requires more thought and experimental evaluation with some trial \& error and hence not discussed here.
-\subsection{Attacks}
-Storj \cite{Storj} describes a few attacks that are relevant to a storage network. We briefly discuss them here and how Picolo handles them.
-
-colluding between clients and a few replicas targting another replica
-no data avail proof written to a blockchain in PoQ 
-
 
 \subsection{Market design}
 There are a fixed number of tokens (PINTs - PIcolo Network Tokens), all minted at genesis. They will be distributed according to a well defined plan amongst investors, developers, partners and network participants. The primary economic activity in the network is that the nodes powering the network are paid by consumers for storage, compute and network bandwidth. And the goal of our market design is to optimize towards a single goal:
 \begin{center}
-\colorbox{oldlace}{\textit{\large{\textbf{Value of PINTs should increase with usage of the network}}}}
+	\colorbox{oldlace}{\textit{\large{\textbf{Value of PINTs should increase with usage of the network}}}}
 \end{center}
 To that end, we propose the following mechanisms:
 \subsubsection{Work token model}
 In the utility token model, tokens suffer from the velocity problem. The model also requires that tokens be widely distributed aka into the hands of the consumers which could prove difficult to achieve in practice. Mandating the use of network token to pay for services also introduces friction. The user has to convert fiat to ETH/BTC first, then convert them again to the network token on a different exchange. Providers on the other hand need to again convert these tokens into more mature/liquid tokens in order to realize gains as quickly as possible as the cost of them holding on to these tokens could be higher than they like \cite{moe}. 
 \newline\newline
 To avoid these problems we use the work token model \cite{new_model_utility_token}: network tokens are only required for storage providers to earn the right to join the network. Anyone wishing to become a node on the network need to put up a stake in PINTs in proportion to the resources they'd be providing - more storage provided means more stake required. This stake will be slashed if they are found to be byzantine (\cref{sec:slashing}).They can then accept payment from users in any form they prefer including in PINTs. This token model also captures the value created by the network 100 \% - when the demand for the network goes up, more providers will want to join the network by purchasing PINTs to use as stake. This puts an organic upward price pressure on the token and vice-versa.
-\subsubsection{Fair cooperative incentive}
+\subsubsection{Fair cooperative incentive} \label{sec:fair_incentive}
 There are four types of participants in the network (\cref{sec:participants}). The inentives for storage providers and consumers are straight forward - providers get paid by consumers who are benefitting from the service. For the other two types, it is a bit more involved. While the data providers can moentize their data by imposing access controls (\cref{sec:access_control}) and charge for sharing the key information, they might not want to do that. They might be genuinely interested in sharing their data for altruistic purposes or are benefitting in a non-monetary form (e.g: by letting developers create innovative services with the data). But this leads to \textit{free riding} problem and \textit{greedy behavior} amongst nodes. Emmanuelle et. al \cite{fair_incentives} defined the \textit{fair resource sharing} problem and desgined an incentive framework that rewards nodes for acting in a way that maximizes the utility of the network. However, their design depends on a ``middleware layer" that tracks various metrics to properly incentivize and punish nodes. In addition to introducing asymmentry into the network, the tracking mechanism depends on nodes truthfully reporting metrics data. Clearly, this strong assumption will not hold well in a byzantine world as nodes can incorrectly report metrics about their peers in an attempt to damage their participation and access levels defined in \cite{fair_incentives}.
 \begin{remark}{\textbf{Reply:}} \label{reply_rule}
 	A node should reply to GET messages (\cref{sec:mx_protocol}) if its dataset contains records that satisfy the query in GET message.
@@ -89,14 +83,14 @@ There are four types of participants in the network (\cref{sec:participants}). T
 \begin{remark}{\textbf{Forward:}} \label{forward_rule}
 	A node should forward GET messages with positive hop numbers to neighbors.
 \end{remark}
-\begin{definition}{\textbf{Semantic group:}}
+\begin{definition}{\textbf{Semantic group:}} \label{def:sem_group}
 	A semantic group is a dynamic cluster (\cref{sec:dynamic_cluster}) of peers that share semantically similar data.
 \end{definition}
 \begin{definition}{\textbf{Access level $\mathcal{A}\ell$:}}
-	Access level of a node is the probability with which its queries will be fulfilled by peers in its semantic group.
+	Access level of a node is the probability with which its queries will be fulfilled or other queries will be forwarded to by peers in its semantic group.
 \end{definition}
 \begin{definition}{\textbf{Cooperative:}}
-	A node is said to be cooperative if it follows \cref{forward_rule}.
+	A node is said to be cooperative if it follows rule \ref{forward_rule}.
 \end{definition}
 \begin{definition}{\textbf{Fair:}}
 	A node is said to be fair if it follows rules \ref{reply_rule} and \ref{forward_rule}.
@@ -118,3 +112,33 @@ $$ \mathcal{A}_{a\ell} \propto num_{reply} * num_{fwd} * qual$$
 One might notice that there is no explicit definition of a malicious node in this mechanism. This is ok since there is no way in which a node can influence its peers; it may choose to not reply or forward messages from its peers and deliberately set the access levels of its peers to 0 locally but that does not affect the functioning of the semantic group it belongs to. All nodes set the access levels of their peers purely based on their own observation. So its upto each node to choose a behavior aka the manner in which it follows the rules \ref{reply_rule} and \ref{forward_rule} that is best for its purposes.
 
 \subsubsection{Burning games}
+Games that will encourage the burning of PINTs. Since there are a fixed number of them, burning will put an upward pressure on the price. <Todo: Atleast one idea needs to be mentioned here>
+
+\subsection{Attacks}
+There are four types of participants in the network (\cref{sec:participants}) and a few attacks on/from each of these are discussed below. Storj \cite{Storj} also describes a few attacks that are relevant to a storage network which we touch upon. Below list is by no means exhaustive and we foresee the emergence of a living document in the future dedicated to describing attacks and their mitigations.
+\newline\newline
+\textbf{Cheating provider}: A storage provider who tries to pretend that they are hosting data without actually doing so. This kind of ``passive" attack is mitigated by cPOQ (\cref{sec:poq}).
+\newline\newline
+\textbf{Lying consumer}: A storage consumer may report that a provider is failing cPoQs when it actually isn't. To resolve this, consumers are required to report details of the supposedly failed cPoQ, provider information and give read access to the record that cPoQ is supposed to have returned. Then anyone can check whether the cPoQs are actually failing and determine whether to slash the provider's deposit or not. Practically speaking, a committe consisting of other providers is chosen at random to verify this claim and arrives at a consensus \cite{algorand}. 
+\newline\newline
+\textbf{DDoS on provider}: <solution>
+\newline\newline
+\textbf{Selective dropper}: A storage provider may selectively drop messages from consumers. If this continues for an extended period, a consumer can simply replace this provider with a new one. Since data is replicated across multiple providers, replacement of one should not create any disruption.
+\newline\newline
+\textbf{Egregious egress}: A storage provider may untruthfully report serving a shockingly high amount of data to consumers. Since egress earns them money, it is expected that any rational provider tries this attack. <solution>
+\newline\newline
+\textbf{Free rider}: A peer in a semantic group (\ref{def:sem_group}) may not reply to or forward requests. It just joined the network to gain information about the network like what queries are being sent by clients or gather data from peers while they route it to clients. This attack is mitigated by fair cooperative incentive (\cref{sec:fair_incentive})
+\newline\newline
+\textbf{Greedy Ganesh}: A peer in a semantic group may choose not to forward any requests to peers or forward them with client information stripped so that they can't reply to clients directly. Then once the peers return results and ask it to route them to a client, it will just combine them with results from its local database and reply to the client as if the whole result set originated from it. Clients then see this peer as a high quality peer and send future requests to it. This leads to the formation of data islands as clients will not being able to discover valuable data hosted by other peers.
+\newline\newline
+\textbf{Sybil, Google attack, Honest Geppetto}:
+\newline\newline
+\textbf{Spartacus}:
+\newline\newline
+\textbf{Eclipse}:
+\newline\newline
+\textbf{Hostage Bytes}:
+\newline\newline
+\textbf{Cheating owner}: Micro payments
+\newline\newline
+\textbf{Faithless farmer}: Non public data should be access controlled via encryption to prevent this attack. (section 5 has more details) 
