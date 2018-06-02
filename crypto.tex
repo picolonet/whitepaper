@@ -114,13 +114,13 @@ One might notice that there is no explicit definition of a malicious node in thi
 \subsubsection{Burning games}
 Games that will encourage the burning of PINTs. Since there are a fixed number of them, burning will put an upward pressure on the price. <Todo: Atleast one idea needs to be mentioned here>
 
-\subsubsection{Oracle data}
-Oracles can host data on Picolo 
+\subsubsection{Applications}
+Offchain storage network to store contract state.
 
 \subsection{Attacks}
 There are four types of participants in the network (\cref{sec:participants}) and a few attacks on/from each of these are discussed below. Storj \cite{Storj} also describes a few attacks that are relevant to a storage network which we touch upon. Below list is by no means exhaustive and we foresee the emergence of a living document in the future dedicated to describing attacks and their mitigations.
 \newline\newline
-\textbf{Cheating provider}: A storage provider who tries to pretend that they are hosting data without actually doing so. This kind of ``passive" attack is mitigated by cPoQ (\cref{sec:poq}).
+\textbf{Cheating provider}: A storage provider who tries to pretend that they are hosting data without actually doing so. This kind of ``passive" attack is mitigated by cPOQ (\cref{sec:poq}).
 \newline\newline
 \textbf{Lying consumer}: A storage consumer may report that a provider is failing cPoQs when it actually isn't. To resolve this, consumers are required to report details of the supposedly failed cPoQ, provider information and give read access to the record that cPoQ is supposed to have returned. Then anyone can check whether the cPoQs are actually failing and determine whether to slash the provider's deposit or not. Practically speaking, a committe consisting of other providers is chosen at random to verify this claim and arrives at a consensus \cite{algorand}. 
 \newline\newline
