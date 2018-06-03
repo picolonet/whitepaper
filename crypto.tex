@@ -48,8 +48,6 @@ All peers (replicas) in a database cluster constantly ping each other (once ever
  \end{enumerate}
 \textbf{Malicious behavior during paxos write}: We use a modified version of generalized byzantine paxos algorithm \cite{byzantine_paxos} for achieving replica consensus (\cref{sec:paxos}). The modified version reports back nodes in the paxos group that behaved arbitrarily during a write to the initiator of the write (client). Client can then issue cPoQs (\cref{sec:poq}) to the reported nodes and check if any data corruption occurred. It may also issue new writes and check if paxos is still reporting back arbitrary behavior of the nodes. It can then publish a proof of arbitrary behavior - simply the wrong query results (that fail signature verification) returned by the malicious nodes to a slashing smart contract that slashes deposits of malicious nodes. Malicious nodes cannot repudiate arbitrary behavior since all messages including responses to cPoQs are digitally signed.
 \newline\newline
-\textbf{\Large{diagram depicting the flow and read paxos}}
-\newline\newline
 \textbf{PoQ check failure}: Similar to above, if nodes fail PoQ checks i.e return results whose signatures don't match the respective results, initiator of PoQs can publish proofs to the slashing smart contract to trigger deposit slashing. PoQs can also fail with no data returned due to a genuine hardware failure. In this case more PoQs and calls to collect file system statistics are fired to the node and if these calls indicate hardware failure, the node is simply removed from its paxos group and a replacement will be found. The node can then correct the hardware problem and join a new paxos group or simply choose to withdraw its stake and leave the network.
 \newline\newline
 \textbf{PoQ check unresponsiveness}: When a node has not explicitly left the network but stops responding to queries, its deposit is slowly drained. Arguably this method is more punitive than is necessary, the alternate being simply marking the node dead and finding a replacement, but stake draining acts as a deterrent to nodes going silent abruptly. It keeps the network more reliable and performant as replacing a node can be an expensive process. The function that calculates draining rate should take into account these factors:
@@ -111,11 +109,9 @@ $qual$ is loosely defined and its upto to each node how to calculate this value 
 $$ \mathcal{A}_{a\ell} \propto num_{reply} * num_{fwd} * qual$$
 One might notice that there is no explicit definition of a malicious node in this mechanism. This is ok since there is no way in which a node can influence its peers; it may choose to not reply or forward messages from its peers and deliberately set the access levels of its peers to 0 locally but that does not affect the functioning of the semantic group it belongs to. All nodes set the access levels of their peers purely based on their own observation. So its upto each node to choose a behavior aka the manner in which it follows the rules \ref{reply_rule} and \ref{forward_rule} that is best for its purposes.
 
-\subsubsection{Burning games}
+\subsubsection{Burning games \& applications}
 Games that will encourage the burning of PINTs. Since there are a fixed number of them, burning will put an upward pressure on the price. <Todo: Atleast one idea needs to be mentioned here>
-
-\subsubsection{Applications}
-Offchain storage network to store contract state.
+Offchain storage network to store contract state. Analytics of on chain data etc.
 
 \subsection{Attacks}
 There are four types of participants in the network (\cref{sec:participants}) and a few attacks on/from each of these are discussed below. Storj \cite{Storj} also describes a few attacks that are relevant to a storage network which we touch upon. Below list is by no means exhaustive and we foresee the emergence of a living document in the future dedicated to describing attacks and their mitigations.
