@@ -1,17 +1,10 @@
 \section{Overall Design}
+Picolo is a homogeneous network of nodes running a p2p database software. The network has an open participation model - any node that runs Picolo's software can freely join the network. It may elect to become a \textit{storage provider} \cref{sec:participants} by depositing PINT's (Picolo Network Tokens) and eligible to earn rewards or take on the role of a data provider or consumer. Storage providers power the network and are organized into \textit{clusters}. Each cluster serves a \textit{storage consumer}, typically a \DJ app and consists of $shards$. Each shard is made up of small pieces of data sets defined by a \textit{key range}. Each such key range is replicated for durability and availability where consensus among replicas is achieved by running a paxos based algorithm. Clusters are horizontally scalable by adding more nodes and splitting data into new shards. Storage consumers can directly connect to clusters by passing the need for DHT based lookup, improving latencies.
+\newline\newline
+Nodes are connected to each other via an overlay network and discover each other via DHTs although nodes in a cluster can skip this lookup process by simply caching the connection information. <todo more networking stuff>
 
-The Picolo database network is a collection of Picolo Nodes or Cluster of nodes.
-
-A Node represents an instance of a participant in the network. A single machine
-can host multiple nodes. A node consists of a fully-vertically integrated layer of network and database functionalities.
-
-    \begin{itemize}
-        \item Overall Picolo architecture.
-        	Bottom up architecture - network sub system, database sub system. Verifiable logs. Data poisoning detection.
-        \item Token economics.
-        	Nodes need to put up a stake. Nodes earn tokens paid by dapps or developers who use the network. Who pays for the bandwidth.Options are mining or push the cost to developers
-    \end{itemize}
-\subsection{Components}
+\subsection{Incentive compatibility}
+Picolo is an incentive compatible network. All participants (\cref{sec:participants}) in the network are assumed to be rational and acting in their best interest and may not necessarily be interested in the overall benefit of the network. Hence we employ a mechanism design that incentivizes participants to work towards the proper functioning of the network while keeping individual interests in mind. For instance, we enhanced the normal pings that nodes in a database cluster send to each other for health checking with requests for small amounts of randomly sampled data a node is responsible for. If a node fails this check, its security deposit is slashed. Hence, storage consumers can have reasonable confidence that their data is being reliably stored. At the same time, storage providers are paid for storing and serving data correctly, hence it is also in their best interest to not corrupt or delete consumer's data.
 
 \subsection{Participants} \label{sec:participants}
 There are four types of participants in the network:
@@ -21,12 +14,12 @@ There are four types of participants in the network:
 	\item Data providers
 	\item Data consumers \newline
 \end{enumerate}
-\textbf{Storage providers}: Storage providers provide compute resources that power the network such as CPU, memory and disk. In our current architecture, these resources are on the same machine. While its possible to separate the ``server" part from ``storage" part as in databases with NAS (network attached storage), in a p2p world with commodity network links, such a design introduces unaccceptable latencies. Storage providers are compensated for powering the network by storage consumers. 
+\textbf{Storage providers}: Storage providers provide compute resources that power the network such as CPU, memory and disk. In our current architecture, these resources are on the same machine. While its possible to separate the ``server'' part from ``storage'' part as in databases with NAS (network attached storage), in a p2p world with commodity network links, such a design introduces unacceptable latencies. Storage providers are compensated for powering the network by storage consumers. 
 \newline\newline
-\textbf{Storage consumers}: \DJ app developers that need to store strucutured data fall into this category. They can simply use the database functionalities provided by the network without the need to perform any database administration tasks. In this sense, the network gives them the same ease of use as a cloud hosted database provider but at a much cheaper rate.
+\textbf{Storage consumers}: \DJ app developers that need to store structured data fall into this category. They can simply use the database functionalities provided by the network without the need to perform any database administration tasks. In this sense, the network gives them the same ease of use as a cloud hosted database provider but at a much cheaper rate.
 \newline\newline
-\textbf{Data providers}: These are people who want to share their data with the world. This could be highly domain specific data that doesn't lend itself well for sharing using existing tools. As an example, one might write a program that reads the state of a blockchain like Ethereum and store it in a query-able format on Picolo. They can then sell access to this data. More specifically, one such program might entail observing blockchain state to draw insights on how dapps of a particular category are being used. Storage consumers above can also be data providers; for example an end user using a dapp that stores data on Picolo and puts data control in the hands of the user enables them to become a data provider for other dapps. 
+\textbf{Data providers}: These are people who want to share their data with the world. This could be highly domain specific data that doesn't lend itself well for sharing using existing tools. As an example, one might write a program that reads the state of a blockchain like Ethereum and store it in a query-able format on Picolo. They can then sell access to this data. More specifically, one such program might entail observing blockchain state to draw insights on how \DJ apps of a particular category are being used. Storage consumers above can also be data providers; for example an end user using a dapp that stores data on Picolo and puts data control in the hands of the user enables them to become a data provider for other \DJ apps. 
 \newline\newline
-\textbf{Data consumers}: These are people interested in data shared by data providers. Future of application building does not include hoarding user data in silos, instead innovative applications will be built using data commonly available or shared on a single location. This is the idea behind the paradigm of 'code comes to data' where users solely control their data and allow applications to provide services by selectively giving access to their data.
+\textbf{Data consumers}: These are people/applications/nodes interested in data shared by data providers. Future of application building does not include hoarding user data in silos, instead innovative applications will be built using data commonly available or shared at a single location. This is the idea behind the paradigm of ``code comes to data'' where users solely control their data and allow applications to provide services by selectively giving access to their data.
 
 
