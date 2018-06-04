@@ -104,40 +104,41 @@ A new node can elect to increase its access level (the $\epsilon$) by depositing
 	\item The number of times a peer $\mathcal{A}$ followed \ref{forward_rule}, $num_{fwd}$
 	\item The ``quality of results" returned by a peer $\mathcal{A}$, $qual (0 < qual < 1)$
 \end{enumerate}
-$qual$ is loosely defined and its upto to each node how to calculate this value as they are the ultimate consumers of results and its in their best interest to faithfully determine it. Thus, the access level of node $\mathcal{A}$ as per a peer $\mathcal{B}$ can be represented as,
+$qual$ is loosely defined and its up to each node how to calculate this value as they are the ultimate consumers of results and its in their best interest to faithfully determine it. Thus, the access level of node $\mathcal{A}$ as per a peer $\mathcal{B}$ can be represented as,
 \newline
 $$ \mathcal{A}_{a\ell} \propto num_{reply} * num_{fwd} * qual$$
-One might notice that there is no explicit definition of a malicious node in this mechanism. This is ok since there is no way in which a node can influence its peers; it may choose to not reply or forward messages from its peers and deliberately set the access levels of its peers to 0 locally but that does not affect the functioning of the semantic group it belongs to. All nodes set the access levels of their peers purely based on their own observation. So its upto each node to choose a behavior aka the manner in which it follows the rules \ref{reply_rule} and \ref{forward_rule} that is best for its purposes.
+One might notice that there is no explicit definition of a malicious node in this mechanism. This is ok since there is no way in which a node can influence its peers; it may choose to not reply or forward messages from its peers and deliberately set the access levels of its peers to 0 locally but that does not affect the functioning of the semantic group it belongs to. All nodes set the access levels of their peers purely based on their own observation. So its up to each node to choose a behavior aka the manner in which it follows the rules \ref{reply_rule} and \ref{forward_rule} that is best for its purposes.
 
 \subsubsection{Burning games \& applications}
-Games that will encourage the burning of PINTs. Since there are a fixed number of them, burning will put an upward pressure on the price. <Todo: Atleast one idea needs to be mentioned here>
-Offchain storage network to store contract state. Analytics of on chain data etc.
+Picolo can serve as an enabling layer for interesting consumer games and applications. Creative games that will encourage the burning of PINTs are of special interest to us. Since there are a fixed number of them, burning will put an upward pressure on the price. It can also help in solving scalability challenges of blockchains by allowing them to offload on-chain contract data to its network. 
+\newline\newline
+\textbf{Burning man}: $placeholder$. Come up with a game that incentivizes burning PINTs.
+\newline\newline
+\textbf{Off-chain storage}: Blockchain networks like Ethereum don't need to store all contract data on chain. It doesn't make sense to store contract state of every dapp built on the network across thousands of nodes. It can be offloaded to Picolo for easier, faster querying and cheaper storage. It also increases the performance of the app since storing data on Ethereum consumes a lot of gas and since each block has a max gas limit, there is only so many transactions packed into a single block thereby affecting performance. As we have seen with cryptokitties, if a dapp goes viral, it becomes slow and unusable due to limited throughput of ethereum. Other networks like Enigma \cite{enigma} can also use Picolo to safely store their ``secret contract'' state of secure computations and avoid bloating blocks.
+\newline\newline
+\textbf{Blockchain analytics}: Picolo can be used to examine the state of blockchains, index and store particularly useful set of data. Any enterprising developer can find sets of data that is valuable, mine it and store it on Picolo. They can then sell access to the data by encrypting it and imposing appropriate access controls(\cref{sec:access_control}). As a concrete example, one might write a program to monitor the contract state of cryptokitties and keep track of stats like how many kitties are being created, their times of creation, how often they are sired with other kitties, how often they are changed hands, which kitty is the most popular sire, how quickly is the \textit{giveBirth} method is being called, who are the most frequent callers of that method etc. Picolo can also be used to index data from other storage networks like IPFS and Storj. 
 
 \subsection{Attacks}
-There are four types of participants in the network (\cref{sec:participants}) and a few attacks on/from each of these are discussed below. Storj \cite{Storj} also describes a few attacks that are relevant to a storage network which we touch upon. Below list is by no means exhaustive and we foresee the emergence of a living document in the future dedicated to describing attacks and their mitigations.
+There are four types of participants in the network (\cref{sec:participants}) and a few attacks on/from each of these are discussed below. Storj \cite{Storj} also describes a few attacks that are relevant to a storage network which we touch upon. Below list is by no means exhaustive and we foresee the emergence of a living document dedicated to describing attacks and their mitigations.
 \newline\newline
-\textbf{Cheating provider}: A storage provider who tries to pretend that they are hosting data without actually doing so. This kind of ``passive" attack is mitigated by cPOQ (\cref{sec:poq}).
+\textbf{Cheating provider}: A storage provider who tries to pretend that they are hosting data without actually doing so. This kind of ``passive'' attack is mitigated by cPOQ (\cref{sec:poq}).
 \newline\newline
 \textbf{Lying consumer}: A storage consumer may report that a provider is failing cPoQs when it actually isn't. To resolve this, consumers are required to report details of the supposedly failed cPoQ, provider information and give read access to the record that cPoQ is supposed to have returned. Then anyone can check whether the cPoQs are actually failing and determine whether to slash the provider's deposit or not. Practically speaking, a committe consisting of other providers is chosen at random to verify this claim and arrives at a consensus \cite{algorand}. 
 \newline\newline
-\textbf{DDoS on provider}: <solution>
+\textbf{DDoS on the network}: <solution>
 \newline\newline
 \textbf{Selective dropper}: A storage provider may selectively drop messages from consumers. If this continues for an extended period, a consumer can simply replace this provider with a new one. Since data is replicated across multiple providers, replacement of one should not create any disruption.
 \newline\newline
 \textbf{Egregious egress}: A storage provider may untruthfully report serving a shockingly high amount of data to consumers. Since egress earns them money, it is expected that any rational provider tries this attack. <solution>
 \newline\newline
-\textbf{Free rider}: A peer in a semantic group (\ref{def:sem_group}) may not reply to or forward requests. It just joined the network to gain information about the network like what queries are being sent by clients or gather data from peers while they route it to clients. This attack is mitigated by fair cooperative incentive (\cref{sec:fair_incentive})
+\textbf{Free rider}: A peer in a semantic group (defn \ref{def:sem_group}) may not reply to or forward requests. It just joined the network to gain information about the network like what queries are being sent by clients or gather data from peers while they route it to clients. This attack is mitigated by fair cooperative incentive (\cref{sec:fair_incentive})
 \newline\newline
 \textbf{Greedy Ganesh}: A peer in a semantic group may choose not to forward any requests to peers or forward them with client information stripped so that they can't reply to clients directly. Then once the peers return results and ask it to route them to a client, it will just combine them with results from its local database and reply to the client as if the whole result set originated from it. Clients then see this peer as a high quality peer and send future requests to it. This leads to the formation of data islands as clients will not being able to discover valuable data hosted by other peers.
 \newline\newline
-\textbf{Sybil, Google attack, Honest Geppetto}:
+\textbf{Sybil, Google attack \& Honest Geppetto}: Sybil attacks involve the creation of large amounts of nodes in an attempt to disrupt network operation by hijacking or dropping messages. These attacks are mitigated by requiring nodes to put up stake before they can join the network. Storj paper argues that the Honest Geppetto attack can be mitigated by analyzing relationships between nodes like whether they are operated by the same entity, it doesn't provide any practical techniques for such an analysis so relying on the security deposit might be the only solution in near term.
 \newline\newline
-\textbf{Spartacus}:
+\textbf{Hostage Bytes}: Redundant storage combined with stake slashing condition will mitigate this attack. Although collusion across multiple malicious nodes is difficult in practice, we need to explore a more robust solution to this attack.
 \newline\newline
-\textbf{Eclipse}:
+\textbf{Cheating owner}: Storage consumers might evade payment when its due; this can be mitigated by a threshold payment scheme where if the outstanding amount exceeds a certain value, payment is mandated failing which will prevent the consumer from accessing data.
 \newline\newline
-\textbf{Hostage Bytes}:
-\newline\newline
-\textbf{Cheating owner}: Micro payments
-\newline\newline
-\textbf{Faithless farmer}: Non public data should be access controlled via encryption to prevent this attack. (section 5 has more details) 
+\textbf{Faithless farmer}: Non public data should be access controlled via encryption to prevent this attack. (\cref{sec:access_control}) 
