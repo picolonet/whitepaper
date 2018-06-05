@@ -241,18 +241,25 @@ wishes to be part of the core routing layer.
 With respect to the network layer semantics for making connections, we shall use either the QUIC protocol or the SPDY
 protocol.
 
-The nodes use QUIC for server-server connections. QUIC primer. Why QUIC ?
-STUN protocol \cite{stun_protocol}.
+QUIC is a relatively new transport protocol designed by Google \cite{quic_sigcomm} that provides encrypted, multi-session transport over UDP
+instead of TCP for HTTPS traffic. It replaces the traditional HTTPS stack: HTTP/2, TLS, TCP with an integrated protocol
+layer directly over UDP. The key features include reduction in the head-of-line blocking delay and handshake delays to
+improve the performance for multi-session connections. However, QUIC is relatively new and the knee-jerk reaction from
+firewall manufacturers has been to block it until its fully understood. Also it does not work well with NATs that
+provide STUN protocol \cite{stun_protocol} support for drilling holes through their firewalls.  
 
 The network layer would use techniques derived from the STUN protocol to traverse nodes
 that are behind a NAT. By having a set of nodes (such as ones with a higher stake) behave as
 super-peers, its possible to craft a p2p version of the STUN protocol to enable
 other nodes behind a NAT to become part of the network \cite{p2p_nat}.
 
-Certain network configuations might not allow for QUIC, such as due to firewalls. In such cases, we will use the SPDY
-protocol which offers multi-session transport over the HTTPS ports which every firewall should support.
-
-STUN/NAT traversals and proxies.
+SPDY (pronounced "SPeeDY"), is a protocol from the Chromium Project at Google \cite{speedy_protocol} to improve network performance for web
+pages. It requires changes at both end points for the protocol to work and is able to improve load times by about 64\%
+on average. It build upon previous proposals such as the Stream Control Transmission Protocol (SCTP) \cite{sctp}
+\cite{sctp_rfc} that allow multiple sessions to coexist on a single TCP connection. SPDY can work well in network
+environments where firewalls are biased towards blocking most ports but the HTTP and HTTPS. SPDY allows bi-directional
+session initiation to happen and thus is more p2p flavored that other web protocols. It also has multi-session support
+over an SSL based secure layer that can utilize certificates as credentials among other methods.
 
 \subsection{Cryptoeconomics and Byzantine behavior}
 \label{net:crypto}
