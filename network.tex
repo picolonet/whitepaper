@@ -231,9 +231,23 @@ Internet virality models \cite{virality_model}).
 
 When a Picolo node starts for the first time (fresh install), it will query a set of "root" servers, similar to the DNS
 architecture of the Internet which is one of the largest decentralized lookup databases in the world \cite{icann_root}. 
-These root servers populate the nodes with a list of neighboring nodes and content to bootstrap with.
+These root servers populate the nodes with a list of neighboring nodes and content to bootstrap with. It uses algorithms
+outlined in the previous Section to populate its routing table.
+
+As part of downloading the node binary, each download is given a certificate signed by the Picolo root servers. This
+certificate is the seed credential that lets the node become part of the network and is presented to other nodes when it
+wishes to be part of the core routing layer.
+
+With respect to the network layer semantics for making connections, we shall use either the QUIC protocol or the SPDY
+protocol.
 
 The nodes use QUIC for server-server connections. QUIC primer. Why QUIC ?
+STUN protocol \cite{stun_protocol}.
+
+The network layer would use techniques derived from the STUN protocol to traverse nodes
+that are behind a NAT. By having a set of nodes (such as ones with a higher stake) behave as
+super-peers, its possible to craft a p2p version of the STUN protocol to enable
+other nodes behind a NAT to become part of the network \cite{p2p_nat}.
 
 Certain network configuations might not allow for QUIC, such as due to firewalls. In such cases, we will use the SPDY
 protocol which offers multi-session transport over the HTTPS ports which every firewall should support.
