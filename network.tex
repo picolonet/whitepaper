@@ -140,20 +140,20 @@ namespace.
 \subsubsection{Core API}
 \label{net:core_api}
 Picolo's network layer supports an API similar to a standard p2p overlay network, for a detailed discussion refer
-\cite{dolr2003}. The primary goal of the API is to publish and locate objects or service identifiers within a given
+\cite{dolr2003}. The primary goal of the API is to publish and locate objects, content or service identifiers within a given
 namespace. All operations that occur in a namespace can be replicated across namespaces as needed.
 
 Currenlty, we support the following API methods in a decentralized manner:
 \begin{itemize}
-    \item {\em Publish(namespace, object ID, object, credentials)}: Makes the object available on the network, including first a copy on
+    \item {\em Publish(namespace, content key, object, credentials)}: Makes the content available on the network, including first a copy on
         the local node. The object could be a database table or a shard. Operations on the object fall within the
         context of the database layer and are discussed in a later Section.
-    \item {\em Unpublish(namespace, object ID, credentials)}: Removes the object from the network making it inaccessible.
-    \item {\em Lookup(namespace, object ID, credentials)}: Lookup item with the given object ID using the p2p lookup protocol
+    \item {\em Unpublish(namespace, content key, credentials)}: Removes the content from the network making it inaccessible.
+    \item {\em Lookup(namespace, content key, credentials)}: Lookup item with the given content key using the p2p lookup protocol
         discussed in this Section. The API returns a node identifier which can be used in the next method to execute a
         remote funationality on it.
-    \item {\em RemoteCall(namespace, node ID or object ID, credentials, method details)}: This executes a given functionality
-        on a remote node. If the object ID is given, it first does a node lookup using the Lookup() method.
+    \item {\em RemoteCall(namespace, node ID or content key, credentials, method details)}: This executes a given functionality
+        on a remote node. If the key is given, it first does a node lookup using the Lookup() method.
 \end{itemize}
 
 These methods can be called on a single node. They can also be called using a client SDK which shall be provided. The
@@ -161,6 +161,14 @@ client SDK would use the DHT layer to first find "any" node, connect to it and c
 
 \subsubsection{Routing and Lookup}
 \label{net:routing}
+
+Picolo uses a prefix-based routing mechanism to find the node for a given content key. The content key can be computed
+by using a combination of the Database name, Table name and shard ID (if sharding exists). Optional values such as
+read/write shards or specific functionality flavors can also be used to "color" the content key.
+
+As discussed in the previous Section, using a DHT such as SHA-256, both node IDs and content IDs are now confined to a
+256-bit space. Content keys map to node IDs that are the "closest" in terms of distance in the ID space. The definition
+of closest ID, is given by exeucting the "FindClosest(ContentID)" function on the network, as discussed later.
 
 \begin{itemize}
     \item Lookup using a prefix-based DHT. 
@@ -214,7 +222,7 @@ Internet virality models \cite{virality_model}).
         the replica.
     \item When a node caches or replicates an item, it affects the probabilitic demand distribution for the item at
         nodes that are on the routing path which would have gotten the request has this item not been cached.
-    \item Thus, by repeating this algorith iteratively, it would converge to the best caching pattern which would reduce
+    \item Thus, by repeating this algorithm iteratively, it would converge to the best caching pattern which would reduce
         lookup times with high probability for all items on the network.
 \end{itemize}
 
