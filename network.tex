@@ -226,8 +226,14 @@ Internet virality models \cite{virality_model}).
         lookup times with high probability for all items on the network.
 \end{itemize}
 
-\subsection{P2P Connectivity protocol}
+\subsection{Node Connectivity protocol}
 \label{net:net_proto}
+
+We describe the details of the transport protocol layer of a Picolo node. We call this the Node Connectivity Protocol
+layer. This protocol layer is responsible for connecting to a set of peers, maintaining network connectivity under
+possibly varying network conditions and allowing for a peer-peer network programing model (as opposed to client-server
+programming model which most transport protocols are based off).  The protocol layer should also work with nodes that
+are behind Network Address Translators (NATs) \cite{nats}.
 
 When a Picolo node starts for the first time (fresh install), it will query a set of "root" servers, similar to the DNS
 architecture of the Internet which is one of the largest decentralized lookup databases in the world \cite{icann_root}. 
@@ -240,6 +246,11 @@ wishes to be part of the core routing layer.
 
 With respect to the network layer semantics for making connections, we shall use either the QUIC protocol or the SPDY
 protocol.
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=0.7\textwidth]{fig/pic_netlayer.png}
+  \caption{Comparison of network stacks for Traditional HTTP/2, QUIC and SPDY.}
+\end{figure}
 
 QUIC is a relatively new transport protocol designed by Google \cite{quic_sigcomm} that provides encrypted, multi-session transport over UDP
 instead of TCP for HTTPS traffic. It replaces the traditional HTTPS stack: HTTP/2, TLS, TCP with an integrated protocol
