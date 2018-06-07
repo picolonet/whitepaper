@@ -186,6 +186,9 @@ FindHomeNodes(x) \) be the set of home nodes for \(x\). If \( |H_x| = 1\) then e
 node. It might be desirable to map a given content ID to more than 1 nodes for application specific needs such as a
 table-shard replication. In any case, the size of \( H_x \) should be small for any given \(x\).
 
+\begin{property}[Unique Home node set]. The home node set \(H_x\) for a content ID \(x\) must be unique, that is,
+    \(H_x\) must generated the exact same set regardless of where it is computed in the network.
+\end{property}
 
 \begin{itemize}
     \item Lookup using a prefix-based DHT. 
