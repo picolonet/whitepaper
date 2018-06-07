@@ -174,6 +174,19 @@ a pointer to the node that stores the content. This segregation allows certain n
 network routing functionality (and handle that load) or provide the database functionality or both depending on other
 factors (such as resource availability).
 
+The goal of the routing protocol is to find a route with low stretch (ideally a stretch of 1.0). Stretch is the ratio
+between (network level) distance traveled by a query to an object and the minimal network distance from the query to the
+object. Since we are routing at the overlay layer, a route on the p2p overlay might result in a suboptimal route at the
+network level. Figure XXX illustrates the concept of network stretch and why a low stretch is important.
+
+FILL
+
+Picolo's network layer maps a given content ID to a set of "home" nodes. Let \(x\) be a node and \(H_x =
+FindHomeNodes(x) \) be the set of home nodes for \(x\). If \( |H_x| = 1\) then each content ID has exactly one home
+node. It might be desirable to map a given content ID to more than 1 nodes for application specific needs such as a
+table-shard replication. In any case, the size of \( H_x \) should be small for any given \(x\).
+
+
 \begin{itemize}
     \item Lookup using a prefix-based DHT. 
     \item Routing table description.
