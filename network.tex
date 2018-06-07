@@ -167,8 +167,12 @@ by using a combination of the Database name, Table name and shard ID (if shardin
 read/write shards or specific functionality flavors can also be used to "color" the content key.
 
 As discussed in the previous Section, using a DHT such as SHA-256, both node IDs and content IDs are now confined to a
-256-bit space. Content keys map to node IDs that are the "closest" in terms of distance in the ID space. The definition
-of closest ID, is given by exeucting the "FindClosest(ContentID)" function on the network, as discussed later.
+256-bit space. Content keys map to node IDs that are the their "home" nodes. A home node is the one which has the
+"closest" ID in terms of lexicographic distance in the ID space. The definition of is given by exeucting the
+"FindHomeNodes(ContentID)" function on the network, as discussed later. The home node can either store the content itself or
+a pointer to the node that stores the content. This segregation allows certain nodes to either participate in the
+network routing functionality (and handle that load) or provide the database functionality or both depending on other
+factors (such as resource availability).
 
 \begin{itemize}
     \item Lookup using a prefix-based DHT. 
