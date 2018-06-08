@@ -198,10 +198,29 @@ table-shard replication. In any case, the size of \( H_x \) should be small for 
     \(H_x\) must generated the exact same set regardless of where it is computed in the network.
 \end{property}
 
+Network nodes in Picolo have two types of routing links. The first is called a {\em principal} route which defines the
+core neighbor links that connect the node to its neighbors. Issues with these links might cause the node to be marked as
+having failures (and thus trigger failure mode operation semantics). The second set of links are used for optimizations,
+such as to content links to popular items, or to cache links to popular home nodes etc. We call these the {\em cache
+links} or {\em secondary links}.
 
 Nodes in Picolo send periodic {\em heartbeat} messages to other nodes through the p2p overlay network as given by their
 routing tables. This heatbeat message includes any content links or content IDs that the nodes are hosting. These messages
-are routed along the {\em principal} routing links which every node maintains.
+are routed along the {\em principal} routing links which every node maintains. These messages help refresh the primary
+link based routing overlay network and help discover "holes" or link/node failures. The messages also help deposit
+content links at the nodes that forward the heartbeats. The content links expire according to a timeout and are
+refreshed with such messages. This operation of advertising content is called {\em publishing}. Picolo also supports
+targeted republishing of content such as when a node comes back online after a disruption or when a node leaves/joins
+the network.
+
+{\em Query routing:}: Lookup or querying for a specific content ID (or a set) happens in the following manner. A client
+that wishes to make such a query connects to one of the network nodes in Picolo. The network node then computes
+\(FindHomeNodes(contentID)\) for the requested content. The lookup or query request is then forwarded to one (or more)
+of the home nodes from this set. In the process of this lookup, if at any stage, multiple node paths are encountered,
+then the query can be forwarded along all paths (to minimize latency but incur a slightly higher cost) or can be
+forwarded along the path with the best latency. These tradeoffs can be exposed at the \(FindHomeNodes(contentID)\) API
+call to allow the application developer to make such choices.
+
 
 \begin{itemize}
     \item Lookup using a prefix-based DHT. 
