@@ -11,9 +11,16 @@ The overlay layer can be implemented on top of any datagram network protocol suc
 Internet, we realize its implemented on IP or IPv6 protocols.  The peer-to-peer overlay routing infrastructure offers
 efficient, scalable, location-independent routing of messages directly to nearby copies of an object or service using
 only localized resources \cite{tapestry2004}. We use the word object to loosely refer to content such as Tables, Shards,
-Metadatd and such, that is, any content that is content-addressable and needs to be part of the lookup layer.  Location
+Metadata and such, that is, any content that is content-addressable and needs to be part of the lookup layer.  
+
+{\em Location Independent routing:} Location
 independent routing refers to a class of techniques for locating objects based on content rather than their location,
-while attempting to find the shortest path possible to reach such objects. Picolo's design offers the following
+while attempting to find the shortest path possible to reach such objects. This property is important in our design 
+for Picolo and any decentralized system since it helps reduce the impact of failures, node departures and Byzantine
+node behavior (including collusion) since a node does not have explicit {\em control} over the content it can host or
+be responbile for. This control gets delegated to the content routing layer, where using certain mechanisms, it becomes
+possible to provide some level of hosting/location control to the application (dapp) developer, user or other policy-based
+decision processes (such as privacy policies enforced by a Government or organization).  Picolo's design offers the following
 properties which are required of any high performance p2p overlay-based lookup layer:
 
 \begin{itemize}
@@ -196,6 +203,7 @@ table-shard replication. In any case, the size of \( H_x \) should be small for 
 
 \begin{property}[Unique Home node set] The home node set \(H_x\) for a content ID \(x\) must be unique, that is,
     \(H_x\) must generated the exact same set regardless of where it is computed in the network.
+\label{property_unique_home}
 \end{property}
 
 Network nodes in Picolo have two types of routing links. The first is called a {\em principal} route which defines the
@@ -221,6 +229,19 @@ then the query can be forwarded along all paths (to minimize latency but incur a
 forwarded along the path with the best latency. These tradeoffs can be exposed at the \(FindHomeNodes(contentID)\) API
 call to allow the application developer to make such choices.
 
+FILL
+
+Figure XXX shows an example of routing a query for a content ID YYY. The dotted arrows show the cached content links from
+secondary or cache routing network. The primary or principal links are shown in solid arrow. The example the lookup operation
+for the content ID YYY originating at two different points in the network A and B. The query at A utilizes the principal
+links and finds the home node for the content ID YYY. The query at B ends up hitting a node C which has a cached link that
+directly routes it to the home node for YYY, thus saving a few network hops. In practice, our routing caching algorithm will
+ensure that most lookups and queries can be satisfied using the cache routing network, so that we can get an \(O(1)\) lookup
+performance in the expected/average case.
+
+\begin{theorem}
+Picolo's network layer can perform location independent routing given Property \ref{property_unique_home}.
+\end{theorem}
 
 \begin{itemize}
     \item Lookup using a prefix-based DHT. 
