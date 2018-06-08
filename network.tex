@@ -120,6 +120,11 @@ applications to co-exist. The APIs provided by the network layer are influenced 
 community and discussed in Section \ref{net:core_api}.  There is a caching layer that allows for frequenly used items to
 be propagated closer to the demand endpoints in the network including ability to replicate as needed.
 
+A Picolo {\em network node} is a node that participates in the Picolo network overlay functionality such as primary and
+secondary routing, functions that allow topology maintenance and related mechanisms. It is possible for a Picolo node to
+particpate in the network functionality, the database functionality or both depending on its resources (such as disk
+space, internet connectivity).
+
 \subsubsection{Picolo namespace} 
 \label{net:namespace}
 
@@ -167,17 +172,20 @@ by using a combination of the Database name, Table name and shard ID (if shardin
 read/write shards or specific functionality flavors can also be used to "color" the content key.
 
 As discussed in the previous Section, using a DHT such as SHA-256, both node IDs and content IDs are now confined to a
-256-bit space. Content keys map to node IDs that are the their "home" nodes. A home node is the one which has the
-"closest" ID in terms of lexicographic distance in the ID space. The definition of is given by exeucting the
-"FindHomeNodes(ContentID)" function on the network, as discussed later. The home node can either store the content itself or
-a pointer to the node that stores the content. This segregation allows certain nodes to either participate in the
-network routing functionality (and handle that load) or provide the database functionality or both depending on other
-factors (such as resource availability).
+256-bit space. Every content ID maps to one or more {\em home nodes} that form a {\em home node set}. A home node is the
+one which has the `closest' ID in terms of lexicographic distance in the ID space. The definition of a home node set is
+given by exeucting the \(FindHomeNodes(ContentID)\) function on the network, as discussed later. The home node can
+either store the content itself or a link to the host (or machine) that stores the content. This segregation allows
+certain nodes to either participate in the network routing functionality (and handle that load) or provide the database
+functionality or both depending on other factors (such as resource availability). In the case that a Picolo node stores
+a link to another host which hosts the content, such a link is called a {\em content link}. When a Picolo node stores a
+link to another node which does not host the content directly, such a link is called a {\em node link}.
 
 The goal of the routing protocol is to find a route with low stretch (ideally a stretch of 1.0). Stretch is the ratio
-between (network level) distance traveled by a query to an object and the minimal network distance from the query to the
-object. Since we are routing at the overlay layer, a route on the p2p overlay might result in a suboptimal route at the
-network level. Figure XXX illustrates the concept of network stretch and why a low stretch is important.
+between (network level) distance traveled from node A to node B to the minimal network distance between node A and B.
+Since we are routing at the overlay layer, a route on the p2p overlay might result in a suboptimal route at the network
+level. Figure XXX illustrates the concept of network stretch and why a low stretch is important. In essence, stretch
+captures any inefficiencies at the network layer incurred by routing at the p2p overlay layer.
 
 FILL
 
@@ -186,9 +194,14 @@ FindHomeNodes(x) \) be the set of home nodes for \(x\). If \( |H_x| = 1\) then e
 node. It might be desirable to map a given content ID to more than 1 nodes for application specific needs such as a
 table-shard replication. In any case, the size of \( H_x \) should be small for any given \(x\).
 
-\begin{property}[Unique Home node set]. The home node set \(H_x\) for a content ID \(x\) must be unique, that is,
+\begin{property}[Unique Home node set] The home node set \(H_x\) for a content ID \(x\) must be unique, that is,
     \(H_x\) must generated the exact same set regardless of where it is computed in the network.
 \end{property}
+
+
+Nodes in Picolo send periodic {\em heartbeat} messages to other nodes through the p2p overlay network as given by their
+routing tables. This heatbeat message includes any content links or content IDs that the nodes are hosting. These messages
+are routed along the {\em principal} routing links which every node maintains.
 
 \begin{itemize}
     \item Lookup using a prefix-based DHT. 
