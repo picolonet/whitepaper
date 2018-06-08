@@ -243,6 +243,12 @@ performance in the expected/average case.
 Picolo's network layer can perform location independent routing given Property \ref{property_unique_home}.
 \end{theorem}
 
+The proof for this theorem follows from two facts. First, for a content \(x\), the function \(H_x = FindHomeNodes(x)\) returns
+the same set of nodes regardless of which network node this is executed on, thus, proving that the result is purely a function
+of the content \(x\). Secondly, due to the routing protcol requires home nodes (either directly hosting content or content links)
+to periodically send heartbeat messages through the principal links to the rest of the network. This ensures that any node in the 
+network will have the routing layer capabilty to reach atleast one node in this set \(H_x\), thus demonstrating the invariant. 
+
 \begin{itemize}
     \item Lookup using a prefix-based DHT. 
     \item Routing table description.
