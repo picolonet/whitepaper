@@ -249,6 +249,15 @@ of the content \(x\). Secondly, due to the routing protcol requires home nodes (
 to periodically send heartbeat messages through the principal links to the rest of the network. This ensures that any node in the 
 network will have the routing layer capabilty to reach atleast one node in this set \(H_x\), thus demonstrating the invariant. 
 
+
+\begin{theorem}[Fault Tolerance]
+   
+    For a content ID \(x\) with its set of home nodes given by \( H_x = FindHomeNodes(x) \) and \(S_n\) be the set of
+all nodes (of cardinality \(n\)) which satisfies the above properties, if \( |H_x| > 1 \) and \( \forall a, b \in S_n,
+    P(a|b) = P(a) \) where \( P(a) = \) probability of node \(a \in H_x \), then \(H_x\) has fault tolerance with
+    relabilty of \( | H_x | \).
+\end{theorem}
+
 \begin{itemize}
     \item Lookup using a prefix-based DHT. 
     \item Routing table description.
