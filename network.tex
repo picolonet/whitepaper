@@ -249,7 +249,6 @@ of the content \(x\). Secondly, due to the routing protcol requires home nodes (
 to periodically send heartbeat messages through the principal links to the rest of the network. This ensures that any node in the 
 network will have the routing layer capabilty to reach atleast one node in this set \(H_x\), thus demonstrating the invariant. 
 
-
 \begin{theorem}[Fault Tolerance]
    
     For a content ID \(x\) with its set of home nodes given by \( H_x = FindHomeNodes(x) \) and \(S_n\) be the set of
@@ -257,6 +256,14 @@ all nodes (of cardinality \(n\)) which satisfies the above properties, if \( |H_
     P(a|b) = P(a) \) where \( P(a) = \) probability of node \(a \in H_x \), then \(H_x\) has fault tolerance with
     relabilty of \( | H_x | \).
 \end{theorem}
+
+\subsubsection{Delegate Routing}
+
+Node and content IDs in Picolo map to a relatively large space, i.e. \(2^{256}\) in size. Let \( H_x =
+FindHomeNodes(x)\) for content ID x. Given the large ID space and relatively sparse nature of the network nodes (a
+thousand or a million nodes out of \(2^{256}\), it is unlikely that nodes in \(H_x\) would have an exact match in the
+network. This is the case with all other content based DHTs as well \cite{Stoica_2001, Rowstron_2001, tapestry2004}. We
+solve this problem by mapping each node \(y \in H_x \) to a \(Delegate(y)\) which is a node that exists on the network.
 
 \begin{itemize}
     \item Lookup using a prefix-based DHT. 
