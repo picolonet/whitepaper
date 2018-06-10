@@ -262,8 +262,15 @@ all nodes (of cardinality \(n\)) which satisfies the above properties, if \( |H_
 Node and content IDs in Picolo map to a relatively large space, i.e. \(2^{256}\) in size. Let \( H_x =
 FindHomeNodes(x)\) for content ID x. Given the large ID space and relatively sparse nature of the network nodes (a
 thousand or a million nodes out of \(2^{256}\), it is unlikely that nodes in \(H_x\) would have an exact match in the
-network. This is the case with all other content based DHTs as well \cite{Stoica_2001, Rowstron_2001, tapestry2004}. We
-solve this problem by mapping each node \(y \in H_x \) to a \(Delegate(y)\) which is a node that exists on the network.
+network. This is the case with all other content based DHTs as well \cite{Stoica_2001, Rowstron_2001, tapestry2004}.
+Nevertheless, we route to each node in \(H_x\) as if it exists. During this process we might encounter empty neighbor
+links on the way. In such cases, the algorithm selects an alternate link but does it in a way that is deterministic
+across the whole network. Routing will terminate when we reach a node which is the best match and the lookup cannot be
+routed further. This node then, becomes the {\em Delegate} for the subject node \(y\). We call this {\em Delegate
+Routing} where we route the query to each node \(y \in H_x \) such that it gets mapped to a node that is a {\em
+delegate for \(y\).
+
+% We solve this problem by mapping each node \(y \in H_x \) to a \(Delegate(y)\) which is a node that exists on the network.
 
 \begin{itemize}
     \item Lookup using a prefix-based DHT. 
