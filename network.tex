@@ -270,19 +270,39 @@ routed further. This node then, becomes the {\em Delegate} for the subject node 
 Routing} where we route the query to each node \(y \in H_x \) such that it gets mapped to a node that is a {\em
 delegate for \(y\).
 
+In the routing table, an entry at a level \(l\) will be empty only if no such nodes exist in the network that have a
+match. Thus, the same entry will be empty for all nodes in the network. As a result, regardless of where the lookup
+query originates for a content ID \(x\), it will always compute to the same delegate node \(y\). Delegate routing thus
+becomes a determinstic routing function computed by the network in a distributed manner. It is important to note that
+this mapping is the same regardless of where the function computation originates in the network.
+% TODO mark this as a property ?
 % We solve this problem by mapping each node \(y \in H_x \) to a \(Delegate(y)\) which is a node that exists on the network.
-
-\begin{itemize}
-    \item Lookup using a prefix-based DHT. 
-    \item Routing table description.
-    \item Lookup algorithm.
-    \item Caching links for faster lookup. 
-\end{itemize}
 
 \subsection{Node Dynamics}
 \label{net:node_dynamics}
 
-Failures, node departures, node additions.
+{\em Node insertion:} Node insertion happens in the following manner. A new node \(N\) first creates its 256 bit ID,
+say, \(N_{id}\), using any credentials it has. Credentials can include node identifier information, owernship certificate information and
+such. Next, \( N \) connects to the core nodes that are available through DNS mechanisms. It uses a special API call
+requesting that \(N\) be inserted into the network. \(N\) computes its neighbor maps in the following manner. It uses
+the Delegate routing function to find the set of delegate nodes to route to the content ID \(N_{id}\). However, at each
+hop we use the information from the nodes being contacted to construct the neighbor map. Finally, we inform the delegate
+nodes of the new node \(N\), so that they can update their neighbor maps as well thus, ensuring that any future queries
+for \(N_{id}\) will get routed to \(N\). 
+
+{\em Failures and node departures:} Nodes can depart the Picolo overlay network in two ways: First, is the case of a
+graceful departure, where the departing node send out an explicit notification through the network informing of the
+departure. This allows the network to adapt before the node leaves, by updating the routing tables and moving content
+out of the departing node if necessary.
+
+Second is the case of a sudden departure such as a node getting shutdown, failing for various reasons or getting
+disconnected from the network due to Internet connectivity issues. A node with a degraded Internet connection can also
+be treated under this scenario. The basic mechanism to recover from such failures is using the heartbeat advertisements
+as discussed previously. Each link on the overlay network includes heartbeat messages which help update the latency
+metrics and also result in re-publishing or updating the content list hosted on a node. Upon missing a certain number of
+messages from a node suspected of failure, neighboring nodes and request an explicit update from such a node. Upon
+timeout, the neighboring nodes arrive at a consensus that the suspected node has failed and thus update their routing
+tables accordingly by initiating the departure API calls as for the first case.
 
 \subsection{Replication and caching}
 \label{net:replication}
