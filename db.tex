@@ -72,3 +72,5 @@ Applications and users may want to share data with other parties but may wish to
 An example value level (only username is given access to) granularity rule looks like:\newline \newline
 \texttt{ SELECT username \newline FROM users \newline WHERE email=foo@bar.com \newline NODE (SELECT nodeId FROM nodes)}\newline\newline
 Here \texttt{NODE} is a new clause we introduce to SQL dialect.
+
+cca and cpa attack resistance
