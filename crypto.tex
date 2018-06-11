@@ -109,10 +109,8 @@ $qual$ is loosely defined and its up to each node how to calculate this value as
 $$ \mathcal{A}_{a\ell} \propto num_{reply} * num_{fwd} * qual$$
 One might notice that there is no explicit definition of a malicious node in this mechanism. This is ok since there is no way in which a node can influence its peers; it may choose to not reply or forward messages from its peers and deliberately set the access levels of its peers to 0 locally but that does not affect the functioning of the semantic group it belongs to. All nodes set the access levels of their peers purely based on their own observation. So its up to each node to choose a behavior aka the manner in which it follows the rules \ref{reply_rule} and \ref{forward_rule} that is best for its purposes.
 
-\subsubsection{Burning games \& applications}
-Picolo can serve as an enabling layer for interesting consumer games and applications. Creative games that will encourage the burning of PINTs are of special interest to us. Since there are a fixed number of them, burning will put an upward pressure on the price. It can also help in solving scalability challenges of blockchains by allowing them to offload on-chain contract data to its network. 
-\newline\newline
-\textbf{Burning man}: $placeholder$. Come up with a game that incentivizes burning PINTs.
+\subsubsection{Applications}
+Picolo can serve as an enabling layer for interesting consumer games and applications. Picolo can also help in solving scalability challenges of blockchains by allowing them to offload on-chain contract data to its network. 
 \newline\newline
 \textbf{Off-chain storage}: Blockchain networks like Ethereum don't need to store all contract data on chain. It doesn't make sense to store contract state of every dapp built on the network across thousands of nodes. It can be offloaded to Picolo for easier, faster querying and cheaper storage. It also increases the performance of the app since storing data on Ethereum consumes a lot of gas and since each block has a max gas limit, there is only so many transactions packed into a single block thereby affecting performance. As we have seen with cryptokitties, if a dapp goes viral, it becomes slow and unusable due to limited throughput of ethereum. Other networks like Enigma \cite{enigma} can also use Picolo to safely store their ``secret contract'' state of secure computations and avoid bloating blocks.
 \newline\newline
@@ -125,11 +123,11 @@ There are four types of participants in the network (\cref{sec:participants}) an
 \newline\newline
 \textbf{Lying consumer}: A storage consumer may report that a provider is failing cPoQs when it actually isn't. To resolve this, consumers are required to report details of the supposedly failed cPoQ, provider information and give read access to the record that cPoQ is supposed to have returned. Then anyone can check whether the cPoQs are actually failing and determine whether to slash the provider's deposit or not. Practically speaking, a committe consisting of other providers is chosen at random to verify this claim and arrives at a consensus \cite{algorand}. 
 \newline\newline
-\textbf{DDoS on the network}: <solution>
+\textbf{DDoS on the network}: One simple solution would be to require all requests burn a miniscule amount of PINTs per each request to the network. Other solution could be to adaptively drop GET messages with high hop numbers when network is under load. Since most genuine messages already know where the data they want is located and have their hop numbers small, this adaptive dropping won't affect them. As such, this remains an open problem and more sophisticated solutions will be explored as the network develops.
 \newline\newline
 \textbf{Selective dropper}: A storage provider may selectively drop messages from consumers. If this continues for an extended period, a consumer can simply replace this provider with a new one. Since data is replicated across multiple providers, replacement of one should not create any disruption.
 \newline\newline
-\textbf{Egregious egress}: A storage provider may untruthfully report serving a shockingly high amount of data to consumers. Since egress earns them money, it is expected that any rational provider tries this attack. <solution>
+\textbf{Egregious egress}: A storage provider may untruthfully report serving a shockingly high amount of data to consumers. Since egress earns them money, it is expected that any rational provider tries this attack. Since load is evenly spread across all replicas hosting a data set, a replica reporting a high sigma deviation can be detected and counter measures can be taken. 
 \newline\newline
 \textbf{Free rider}: A peer in a semantic group (defn \ref{def:sem_group}) may not reply to or forward requests. It just joined the network to gain information about the network like what queries are being sent by clients or gather data from peers while they route it to clients. This attack is mitigated by fair cooperative incentive (\cref{sec:fair_incentive})
 \newline\newline
