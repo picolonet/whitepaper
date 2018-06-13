@@ -50,9 +50,6 @@ the transport mechanism used in Picolo for node-node communication.
 
 \subsection{Background} \label{net:background}
 
-In this Section, we provide a brief overview of peer-peer systems both in the research and product community that have
-influenced the literature over the last 20 years.
-
 Napster \cite{Napster} was one of the first popular service that provided much of the original inspiration for peer-peer
 systems although its database was centralized.  DNS is an example of a widely deployed distributed and largely
 decentralized key-value database that powers every lookup and interaction on the Internet \cite{Mockapetris_1988}. DNS
@@ -146,19 +143,21 @@ space, internet connectivity).
 \subsubsection{Picolo namespace} 
 \label{net:namespace}
 
-Nodes and content map to a single 256-bit space. The addressing is hexadecimal based, which is the radix used for the
-prefix calculation and lookup in the routing table. This design is similar to both IPv6 and also used in Ethereum.  The
-node ID is a hash of its public-key certificate using a SHA-256 hash function. The content ID is a SHA-256 hash of the
-application type, database name and version and the table name (and possibly a shard number if needed). As long as the
-same consistent method is used to create content IDs, the actual format of the input string doesn't affect functionality
-at the network layer.
+Both nodes and content have IDs that map to a single 256-bit space using a hash function. This technique is fundamental
+to make the routing layer content-addressable. The addressing is hexadecimal based, which is the radix used for the
+prefix calculation and lookup in the routing table. This design is similar to how addressing and routing work in IPv6.
+The node ID is a hash of its public-key certificate using a SHA-256 hash function. The content ID is a SHA-256 hash of
+the application type, database name and version and the table name (and possibly a shard number if needed). As long as
+the same consistent method is used to create content IDs, the actual format of the input string doesn't affect
+functionality at the network layer (and can thus be determined by the application being used such as a Database, etc).
 
 This space can be segregaged using a namespace identifier, which allows multiple such "naming layers" to co-exist. For
 example, one way to assign naming layers could be based on a per-application type. The content and node IDs have to be
 unique only within the namespace. The default namespace, which is global, is the keyword "default".
 
-For the rest of this section, the discussion gets isolated to within a single naming layer, such as the "default"
-namespace.
+Each namespace has a separate datastructure and functionality thus, creating an isolated "virtual overlay" on a
+per-namespace basis. For the rest of this section, the discussion gets isolated to within a single naming layer, such as
+the "default" namespace.
 
 \subsubsection{Core API}
 \label{net:core_api}
@@ -180,7 +179,9 @@ Currenlty, we support the following API methods in a decentralized manner:
 \end{itemize}
 
 These methods can be called on a single node. They can also be called using a client SDK which shall be provided. The
-client SDK would use the DHT layer to first find "any" node, connect to it and call the above methods.
+client SDK would use the DHT layer to first find "any" node, connect to it and call the above methods. These methods
+might use other algorithmic constructs which define core aspects of the routing layer and shall be discussed further in
+the following subsections.
 
 \subsubsection{Routing and Lookup}
 \label{net:routing}
