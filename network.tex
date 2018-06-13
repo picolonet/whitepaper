@@ -198,7 +198,7 @@ Optional values such as read/write shards or specific functionality flavors can 
 % DONE. Describe the routing map. level by level. for a single lookup node. Diagram to illustrate an example routing map.
 % DONE. Describe the home node function as hash(content_ID, j) for j = 1 to R_N to generate N home nodes. ContentID = a json
 % blob of a 256 bit string and some parameters such as replica size R_N.
-% RouteToDelegates(home_node), describe delegate based routing. Example using a diagram.
+% DONE. RouteToDelegates(home_node), describe delegate based routing. Example using a diagram.
 % Describe algorithm to construct the neighbor map for a new node. any optimizations.
 %   Describe algorithm to notify neighbors.
 % Discussion on failures and any optimizations.
@@ -382,14 +382,25 @@ above extend directly to the \(DelegateNodes(X)\) as a drop-in replacement for t
 \subsection{Node Dynamics}
 \label{net:node_dynamics}
 
-{\em Node insertion:} Node insertion happens in the following manner. A new node \(N\) first creates its 256 bit ID,
-say, \(N_{id}\), using any credentials it has. Credentials can include node identifier information, owernship certificate information and
-such. Next, \( N \) connects to the core nodes that are available through DNS mechanisms. It uses a special API call
-requesting that \(N\) be inserted into the network. \(N\) computes its neighbor maps in the following manner. It uses
-the Delegate routing function to find the set of delegate nodes to route to the content ID \(N_{id}\). However, at each
-hop we use the information from the nodes being contacted to construct the neighbor map. Finally, we inform the delegate
-nodes of the new node \(N\), so that they can update their neighbor maps as well thus, ensuring that any future queries
-for \(N_{id}\) will get routed to \(N\). 
+We discuss how the network functions when new nodes join or existing nodes leave the network including unexpected node
+departures.
+
+\subsubsection{Node insertion}
+
+In this Section, we discuss how a new node can join the network and create a routing map for both the principal layer
+and the secondary layer. The routing map has to be created so that the network properties and key Theorems hold.
+
+Node insertion happens in the following manner. A new node \(N\) first creates its 256 bit ID,
+say, \(N_{id}\), using any credentials it has. Credentials can include node identifier information, owernship
+certificate information and such. Next, \( N \) connects to the core nodes that are available through DNS mechanisms or
+other bootstrapping methods. It uses a special API call requesting that \(N\) be inserted into the network. This API
+call helps \(N\) become part of the network by building its principal routing map correctly and informing other nodes
+that it is available.
+
+\(N\) computes its principal routing maps in the following manner. It uses the Delegate routing function to find the set of delegate
+nodes to route to the content ID \(N_{id}\). However, at each hop we use the information from the nodes being contacted
+to construct the neighbor map.  Finally, we inform the delegate nodes of the new node \(N\), so that they can update
+their neighbor maps as well thus, ensuring that any future queries for \(N_{id}\) will get routed to \(N\). 
 
 {\em Failures and node departures:} Nodes can depart the Picolo overlay network in two ways: First, is the case of a
 graceful departure, where the departing node send out an explicit notification through the network informing of the
