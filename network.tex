@@ -202,6 +202,7 @@ Optional values such as read/write shards or specific functionality flavors can 
 % Describe algorithm to construct the neighbor map for a new node. any optimizations.
 %   Describe algorithm to notify neighbors.
 % Discussion on failures and any optimizations.
+% IMP: How are secondary routing links organized ?
 
 {\em Routing to a destination ID:}
 Given a destination ID, each Picolo node that participates in the routing functionality constructs a routing map, which
@@ -257,7 +258,7 @@ The function \(HomeNodes(ContentID)\) returns a set of home nodes. An implementa
 \begin{align}
     X_id &= \{X_{256}, r\} \\
     H_X &= HomeNodes(X_id) \\
-        &= \{ y_i : y_i = SHA-256(X_{256}, j) \forall j = 1 .. r\}
+        &= \{ y_i : y_i = \textrm{SHA-256}(X_{256}, j) \quad \forall \quad j = 1 .. r\}
 \end{align}
 
 Mapping a content to multiple home nodes is purely for fault tolerance purposes and can be configured by the Database
