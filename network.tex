@@ -196,7 +196,7 @@ Optional values such as read/write shards or specific functionality flavors can 
 
 % TODO:
 % DONE. Describe the routing map. level by level. for a single lookup node. Diagram to illustrate an example routing map.
-% Describe the home node function as hash(content_ID, j) for j = 1 to R_N to generate N home nodes. ContentID = a json
+% DONE. Describe the home node function as hash(content_ID, j) for j = 1 to R_N to generate N home nodes. ContentID = a json
 % blob of a 256 bit string and some parameters such as replica size R_N.
 % RouteToDelegates(home_node), describe delegate based routing. Example using a diagram.
 % Describe algorithm to construct the neighbor map for a new node. any optimizations.
@@ -262,8 +262,8 @@ The function \(HomeNodes(ContentID)\) returns a set of home nodes. An implementa
 
 Mapping a content to multiple home nodes is purely for fault tolerance purposes and can be configured by the Database
 schema (application designer) as needed. For simplicity of the rest of this Section, we shall assume that there is a
-single home node, i.e., \( r = 1\) as all the algorithms and concepts easily extend to the case with multiple home
-nodes.
+single home node, i.e., \( r = 1\) or \( |H_X| = 1\) as all the algorithms and concepts easily extend to the case with
+multiple home nodes.  In any case, the size of \( H_X \) is expected to be small for any given \(X\).
 
 In Picolo, nodes can participate in different kinds of functionality such as hosting or routing or both. This
 segregation allows certain nodes to either participate in the network routing functionality (and handle that load) or
@@ -280,15 +280,14 @@ captures any inefficiencies at the network layer incurred by routing at the p2p 
 
 FILL
 
-Picolo's network layer maps a given content ID to a set of "home" nodes. Let \(x\) be a node and \(H_x =
-FindHomeNodes(x) \) be the set of home nodes for \(x\). If \( |H_x| = 1\) then each content ID has exactly one home
-node. It might be desirable to map a given content ID to more than 1 nodes for application specific needs such as a
-table-shard replication. In any case, the size of \( H_x \) should be small for any given \(x\).
-
-\begin{property}[Unique Home node set] The home node set \(H_x\) for a content ID \(x\) must be unique, that is,
-    \(H_x\) must generated the exact same set regardless of where it is computed in the network.
+\begin{property}[Unique Home node set] The home node set \(H_X\) for a content ID \(X\) must be unique, that is,
+    \(H_X\) must generated the exact same set regardless of where it is computed in the network.
 \label{property_unique_home}
 \end{property}
+
+Note that the example implementation of \(HomeNodes(ContentID)\) does satisfy this property. This property is important
+to ensure that our decentralized overlay-based routing algorithm as discussed in this Section will work in a
+deterministic manner regardless of the starting point in the network.
 
 Network nodes in Picolo have two types of routing links. The first is called a {\em principal} route which defines the
 core neighbor links that connect the node to its neighbors. Issues with these links might cause the node to be marked as
