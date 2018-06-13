@@ -191,6 +191,18 @@ by using a combination of the Database name, Table name and shard ID (if shardin
 Optional values such as read/write shards or specific functionality flavors can also be used to "color" the content key
 (i.e. create variants or replicas etc).
 
+% TODO Figures:
+% network stretch example (nice to have).
+
+% TODO:
+% Describe the routing map. level by level. for a single lookup node. Diagram to illustrate an example routing map.
+% Describe the home node function as hash(content_ID, j) for j = 1 to R_N to generate N home nodes. ContentID = a json
+% blob of a 256 bit string and some parameters such as replica size R_N.
+% RouteToDelegates(home_node), describe delegate based routing. Example using a diagram.
+% Describe algorithm to construct the neighbor map for a new node. any optimizations.
+%   Describe algorithm to notify neighbors.
+% Discussion on failures and any optimizations.
+
 As discussed in the previous Section, using a DHT such as SHA-256, both node IDs and content IDs are now confined to a
 256-bit space. Every content ID maps to one or more {\em home nodes} that form a {\em home node set}. A home node is the
 one which has the `closest' ID in terms of lexicographic distance in the ID space. The definition of a home node set is
