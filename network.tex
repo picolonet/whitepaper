@@ -290,22 +290,29 @@ Note that the example implementation of \(HomeNodes(ContentID)\) does satisfy th
 to ensure that our decentralized overlay-based routing algorithm as discussed in this Section will work in a
 deterministic manner regardless of the starting point in the network.
 
-Network nodes in Picolo have two types of routing links. The first is called a {\em principal} route which defines the
-core neighbor links that connect the node to its neighbors. Issues with these links might cause the node to be marked as
-having failures (and thus trigger failure mode operation semantics). The second set of links are used for optimizations,
-such as to content links to popular items, or to cache links to popular home nodes etc. We call these the {\em cache
-links} or {\em secondary links}.
+{\em Secondary Routing Layer for Low-Stretch:} Network nodes in Picolo have two types of routing layers. The first is
+called a {\em principal} route layer which defines the core neighbor links that connect the node to its neighbors. The
+Pricipal or primary route layer uses the route map as discussed above that uses a prefix-based routing algorithm. The
+goal of the principal routing layer is to maintain highly reliable foundational network topology. Issues with these
+links might cause the node to be marked as having serious failures (and thus trigger failure mode operation semantics).
+The second set of links are direct links to specific nodes and are maintained as a hash table of <Node ID, IP Address>
+mappings. These are used for optimizations, such as to content links to popular items or to cache links to popular home
+nodes, etc. We call these the {\em cache links} or {\em secondary links}. We shall discuss the distributed caching
+algorithm separately in Section \ref{net:replication} which will high probabilistic guarantee of a lookup cost of
+\(O(1)\) thus reducing the routing stretch.
 
-Nodes in Picolo send periodic {\em heartbeat} messages to other nodes through the p2p overlay network as given by their
-routing tables. This heatbeat message includes any content links or content IDs that the nodes are hosting. These messages
-are routed along the {\em principal} routing links which every node maintains. These messages help refresh the primary
-link based routing overlay network and help discover "holes" or link/node failures. The messages also help deposit
-content links at the nodes that forward the heartbeats. The content links expire according to a timeout and are
-refreshed with such messages. This operation of advertising content is called {\em publishing}. Picolo also supports
-targeted republishing of content such as when a node comes back online after a disruption or when a node leaves/joins
-the network.
+{\em Explicit soft-state publishing:} Nodes in Picolo send periodic {\em heartbeat} messages to other nodes through the
+p2p overlay network as given by their routing tables. This heatbeat message includes any content links or content IDs
+that the nodes are hosting. These messages are routed along the {\em principal} routing links which every node maintains
+for two reasons: Firstly, these messages are not latency critical and thus don't need to use the secondary layer. They
+serve to validate and refresh the network metrics of the primary links. They help discover "holes" or link/node
+failures. Secondly, these heartbeat messages also help deposit content links at various intermediate nodes that help
+route them. The content links and latency metrics expire according to a timeout and are refreshed with such messages.
+This operation of advertising content with an automatic expiry is called {\em soft-state publishing}. Picolo also
+supports targeted re-publishing of content such as when a node comes back online after a disruption or when a node
+leaves/joins the network.
 
-{\em Query routing:}: Lookup or querying for a specific content ID (or a set) happens in the following manner. A client
+{\em Query routing:} Lookup or querying for a specific content ID (or a set) happens in the following manner. A client
 that wishes to make such a query connects to one of the network nodes in Picolo. The network node then computes
 \(FindHomeNodes(contentID)\) for the requested content. The lookup or query request is then forwarded to one (or more)
 of the home nodes from this set. In the process of this lookup, if at any stage, multiple node paths are encountered,
