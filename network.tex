@@ -256,8 +256,8 @@ count \( r > 1\), then the content maps to a {\em set} of home nodes where each 
 
 The function \(HomeNodes(ContentID)\) returns a set of home nodes. An implementation of this function using SHA-256 is as follows:
 \begin{align}
-    X_id &= \{X_{256}, r\} \\
-    H_X &= HomeNodes(X_id) \\
+    X_{id} &= \{X_{256}, r\} \\
+    H_X &= HomeNodes(X_{id}) \\
         &= \{ y_i : y_i = \textrm{SHA-256}(X_{256}, j) \quad \forall \quad j = 1 .. r\}
 \end{align}
 
