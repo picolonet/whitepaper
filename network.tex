@@ -402,10 +402,11 @@ nodes to route to the content ID \(N_{id}\). However, at each hop we use the inf
 to construct the neighbor map.  Finally, we inform the delegate nodes of the new node \(N\), so that they can update
 their neighbor maps as well thus, ensuring that any future queries for \(N_{id}\) will get routed to \(N\). 
 
-{\em Failures and node departures:} Nodes can depart the Picolo overlay network in two ways: First, is the case of a
-graceful departure, where the departing node send out an explicit notification through the network informing of the
-departure. This allows the network to adapt before the node leaves, by updating the routing tables and moving content
-out of the departing node if necessary.
+\subsubsection{Failures and node departures}
+
+Nodes can depart the Picolo overlay network in two ways: First, is the case of a graceful departure, where the departing
+node send out an explicit notification through the network informing of the departure. This allows the network to adapt
+before the node leaves, by updating the routing tables and moving content out of the departing node if necessary.
 
 Second is the case of a sudden departure such as a node getting shutdown, failing for various reasons or getting
 disconnected from the network due to Internet connectivity issues. A node with a degraded Internet connection can also
@@ -440,11 +441,11 @@ cache the objects being queried. While they are unable to provide closed-form an
 average case performance is reasonably good.
 
 We draw on the above literature to find the right balance between routing table size, cache and replication storage at
-nodes versus lookup latency. The strategy presented in this Section achieves \(O(1)\) lookup on average for networks with standard node
-and popularity dynamics. In other words, we allow for node joins, failures, unexpected departures (including malicious
-intent) along with changes in service or object popularity. We also allow for "flash crowds", that is, an item, object
-or service (such as a table-shard, or certain rows in a table) can quickly gain popularity (as given by standard
-Internet virality models \cite{virality_model}).
+nodes versus lookup latency. The strategy presented in this Section achieves \(O(1)\) lookup on average for networks
+with standard node and popularity dynamics. In other words, we allow for node joins, failures, unexpected departures
+(including malicious intent) along with changes in service or object popularity. We also allow for "flash crowds", that
+is, an item, object or service (such as a table-shard, or certain rows in a table) can quickly gain popularity (as given
+by standard Internet virality models \cite{virality_model}).
 
 \begin{itemize}
     \item A node caches or replicates an item with a probability that is proportional to the number of queries it is
@@ -457,6 +458,12 @@ Internet virality models \cite{virality_model}).
     \item Thus, by repeating this algorithm iteratively, it would converge to the best caching pattern which would reduce
         lookup times with high probability for all items on the network.
 \end{itemize}
+
+Each node maintains these cached links as a part of the secondary or "cache" routing layer which is essentially a lookup
+map of <node ID, IP Address> pairs. It is possible for nodes to maintain relatively large caches since they are only
+limited by the memory and node dynamic characteristics of the network. Cached links that use the methodologies discussed
+above can significantly reduce lookup latencies. Also the downside of a stale cache link is quite low, since any node
+can always initiate a principal routing layer based lookup procedure.
 
 \subsection{Node Connectivity protocol}
 \label{net:net_proto}
