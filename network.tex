@@ -518,13 +518,35 @@ over an SSL based secure layer that can utilize certificates as credentials amon
 %\label{net:crypto}
 %How will malicious nodes affect the system and how to mitigate/prevent/recover. Do nodes have incentive to participate in network discovery
 
-\subsection{Analytics and Debug/Fault diagnosis}
+\subsection{Trust and Governance}
 \label{net:analytics}
 
-Nodes maintain local analytic counters which are periodically updated to a special distributed system-level analytics
+\subsubsection{Analytics and Debug/Fault diagnosis}
+Nodes maintain local analytics which are periodically updated to a special distributed system-level analytics
 database. Analytics include counters for table queries, statistics for various operations (CRUD), latency numbers, route
 changes and similar network statistics. The analytics database is a special permissioned database that only entities
-(developers, institutions) with the right credentials can access.
+(developers, institutions) with the right credentials can modify.
 
 A similar but separate database is used for fault diagnosis, collecting data on Byzantine failures, crash logs and
-unexpected node departures. 
+unexpected node departures. A third database is purely used for logs, both at the network level and the database level.
+
+Both databases are readable by all nodes who are part of the network. These databases provide the basic mechanism for
+establishing trust and stake for nodes in the network.
+
+\subsubsection{Trust ladder}
+While we haven't created a detailed specification for how Trust and Governance work in the network, the basic principles
+are the following:
+\begin{itemize}
+    \item New nodes that obtain a fresh certificate, start at the lowest level of trust. They are able to participate in
+        read-only functionalities of the network, such as basic routing, providing read-only replicas and such.
+    \item Using the network, debug/ fault and analytics logs, the network is able to elevate the trust level of a node.
+        This can be seen as a form of stake. The network can also allow nodes that place a security deposit to start at
+        a certain level of trust.
+    \item Nodes at a higher level of trust gain access to great amounts of functionality. For example, the ability to
+        change the principal routes, or be able to bootstrap new nodes into the network requires a higher level of trust
+        or stake.
+    \item The highest level of trust includes nodes that have the ability to update node binaries, issue certificates,
+        grant access to other nodes and similar acts of Governance. While it might be possible for regular nodes to
+        enter this level through a combination of service-based trust and stake, the membership might be managed by a
+        council of network admins or developers.
+\end{itemize}
