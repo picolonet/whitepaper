@@ -9,16 +9,9 @@ requests or other management functions to the respective nodes which can satisfy
 use the word object or content to loosely refer to content such as Tables, Shards, Metadata and such, i.e., any
 application specific data that is content-addressable and needs to be part of the lookup layer. An item is content
 addressable if its {\em address} or {\em key} or the primary {\em identifier} is purely a function of its content and
-does not include parameters relating to the location and method of storage.
-
-This overlay layer can be implemented on top of any datagram network protocol such as UDP or IP for transport. While we
-use IP or IPv6 for the layer-3 connectivity on the Internet, it is possible to use a suite of protocols for the
-transport layer depending on the localized network conditions. In Section \ref{net:net_proto}, we discuss the details of
-the transport mechanism used in Picolo for node-node communication.
-
-The peer-to-peer overlay routing infrastructure offers
+does not include parameters relating to the location and method of storage. Our p2p overlay routing infrastructure offers
 efficient, scalable, location-independent routing of messages directly to nearby copies of an object or service using
-only localized resources \cite{tapestry2004}.
+only localized resources.
 
 {\em Location Independent routing:} Location independent routing refers to a class of techniques for locating objects
 based on content rather than their location, while attempting to find the shortest path possible to reach such objects.
@@ -35,18 +28,25 @@ performance p2p overlay-based lookup layer:
 
 \begin{itemize}
     \item {\em Determinstic Node Mapping}: Picolo is able to locate objects anywhere in the network. That is, there
-        should be no object in the network that cannot be accessed using the lookup layer.
+        should be no object in the network that cannot be accessed using the lookup layer. Also, the mapping of objects
+        to their location in the network should be the same regardless of where the lookup originates.
     \item {\em Low routing inefficiency}: Routes should have low {\em stretch}. Stretch is the ratio between (network
         level) distance traveled by a query to an object and the minimal network distance from the query to the object.
         Optimal solution would be to always send the query to the nearest copy possible.
     \item {\em Balanced load}: The load should be evenly distributed across the nodes in the network, thus, reducing
         hotspots.
     \item {\em Dynamic membership}: The system allows arrival and departure of nodes while maintaining functionality.
+        This is important for handling failures and Byzantine behavior of nodes.
 \end{itemize}
 
 In the next subsection \ref{net:background}, we summarize a wide-range of research on p2p overlays and storage systems over the last two
 decades that has influenced our design and thought process in Picolo. In Section \ref{net:design} we present the overall
 design of the network layer including the namespace (Section \ref{net:namespace}), 
+
+This overlay layer can be implemented on top of any datagram network protocol such as UDP or IP for transport. While we
+use IP or IPv6 for the layer-3 connectivity on the Internet, it is possible to use a suite of protocols for the
+transport layer depending on the localized network conditions. In Section \ref{net:net_proto}, we discuss the details of
+the transport mechanism used in Picolo for node-node communication.
 
 \subsection{Background} \label{net:background}
 
@@ -72,22 +72,23 @@ an
 API perspective, these overlays provide a key-based routing (KBR) interface that supports deterministic routing of
 messages to a live node that has the responsiblity for the "value" corresponding to the given key. These systems also
 support high level APIs such as Dynamic Object Location and Routing (DOLR) \cite{dolr2003}. Most DHT's use the concept
-of consistent hashing to distribute the load evenly among the nodes.
+of consistent hashing to distribute the load evenly among the nodes. Consistent hashing refers to a technique which
+creates `buckets' of items such that a small change in the buckets does not lead to a large amount of rehashing.
 
-{\em Consistent hashing:}
-Typical hashing based schemes do a good job of spreading load through a known, fixed collection of servers. Since the
-Blockchain consists of nodes on the Internet which can appear and disappear based on incentives and other criteria, our
-assumption is that machines come and go as they crash or are brought into the network. Also,
-the information about what nodes are functional propagates slowly through the
-network, so that clients may have incompatible “views” of which nodes are available to replicate data. (Note that a
-node can also be a client). This makes standard hashing useless since it relies on clients agreeing on which nodes are responsible for serving a particular
-page.
-
-Like most hashing schemes, consistent hashing assigns a set of items to buckets so that
-each bin receives roughly the same number of items.  Unlike standard hashing schemes, a small change in the bucket set
-does not induce a total remapping of items to buckets. In addition, hashing items into slightly different sets of
-buckets gives only slightly different assignments of items to buckets. 
-
+% {\em Consistent hashing:}
+% Typical hashing based schemes do a good job of spreading load through a known, fixed collection of servers. Since the
+% Blockchain consists of nodes on the Internet which can appear and disappear based on incentives and other criteria, our
+% assumption is that machines come and go as they crash or are brought into the network. Also,
+% the information about what nodes are functional propagates slowly through the
+% network, so that clients may have incompatible “views” of which nodes are available to replicate data. (Note that a
+% node can also be a client). This makes standard hashing useless since it relies on clients agreeing on which nodes are responsible for serving a particular
+% page.
+% 
+% Like most hashing schemes, consistent hashing assigns a set of items to buckets so that
+% each bin receives roughly the same number of items.  Unlike standard hashing schemes, a small change in the bucket set
+% does not induce a total remapping of items to buckets. In addition, hashing items into slightly different sets of
+% buckets gives only slightly different assignments of items to buckets. 
+% 
 Chord uses such hash functions to map nodes and content uniformly to a circular 160-bit
 namespace. Chord improves the scalability of consistent hashing by removing the requirement that every node knows about
 every other node. Each node only maintains about \(O (log N) \) state information about other nodes in an \( N \) node
