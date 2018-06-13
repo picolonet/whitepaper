@@ -203,6 +203,12 @@ Optional values such as read/write shards or specific functionality flavors can 
 %   Describe algorithm to notify neighbors.
 % Discussion on failures and any optimizations.
 
+{\em Routing to a destination ID:}
+Given a destination ID, each Picolo node that participates in the routing functionality constructs a routing map, which
+is similar to routing tables used in layer-3 systems today. Using these routing maps, routing of a message happens {\em
+locally} and {\em incrementally} at each node in the overlay path to the destination. The core routing concept is
+prefix-based which is similar to the Classless InterDomain Routing (CIDR) routing architecture for the Internet \cite{}.
+
 As discussed in the previous Section, using a DHT such as SHA-256, both node IDs and content IDs are now confined to a
 256-bit space. Every content ID maps to one or more {\em home nodes} that form a {\em home node set}. A home node is the
 one which has the `closest' ID in terms of lexicographic distance in the ID space. The definition of a home node set is
