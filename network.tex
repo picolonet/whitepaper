@@ -206,8 +206,43 @@ Optional values such as read/write shards or specific functionality flavors can 
 {\em Routing to a destination ID:}
 Given a destination ID, each Picolo node that participates in the routing functionality constructs a routing map, which
 is similar to routing tables used in layer-3 systems today. Using these routing maps, routing of a message happens {\em
-locally} and {\em incrementally} at each node in the overlay path to the destination. The core routing concept is
-prefix-based which is similar to the Classless InterDomain Routing (CIDR) routing architecture for the Internet \cite{}.
+locally} and {\em incrementally} at each node in the overlay path to the destination. The core routing method is to
+route using a prefix-match. This is similar to the Classless InterDomain Routing (CIDR) routing architecture for the Internet
+\cite{cidr_rfc}.
+
+The routing works as follows. We resolve digits from the most significant to the least (left to right). A node N has a
+routing map with multiple levels. The number of levels are equal to the number of digits in the ID space. For a 256 bit
+ID with a hexadecimal base, we have 64 digits. At level \(i\), we have nodes that match \(i\) digits with the
+destination ID for \( i \in [0..63]\).
+
+At any given level, the number of entries are equal to the base of the ID space, that is, we have 16 entries, one for
+each digit \( [ 0, 1, 2..F\ \). At the \(i\) th level, the \( j\)th entry is the node with \( prefix(ID, i) + j\).
+at where each level represents matching a prefix of that length (just like a routing table
+for IPv6). As an example, Table \ref{table:routing_map} shows the different levels for the node with ID "691D".
+Suppose we wish to route the ID "692B" given the routing table and we are doing a lookup at level 2. This means we
+have a prefix match of "69" and are searching for a node in the column for the digit "2". This happens to be node
+\(C_2\) and thus the query is then forwarded there. Similarly, suppose we are asked to route to node "615B". This would
+be at level 1 since we have a match for the prefix "6". We would thus route to node \(B_1\) matching the column"1" and
+row "6".
+
+\begin{table}[h]
+\begin{center}
+    \renewcommand{\arraystretch}{1.5}
+\begin{tabular} {| c | c | c | c | c | c |}
+    \hline
+    Prefix & 0 & 1 & 2 & .. & F \\
+    \hline
+    \hline
+    None & \(A_0\) & \(A_1\) & \(A_2\) & .. & \(A_F\) \\
+    6 & \(B_0\) & \(B_1\) & \(B_2\) & .. & \(B_F\) \\
+    69 & \(C_0\) & \(C_1\) & \(C_2\) & .. & \(C_F\) \\
+    691 & \(D_0\) & \(D_1\) & \(D_2\) & .. & \(D_F\) \\
+    \hline
+\end{tabular}
+\label{table:routing_map}
+\caption{Example of a routing map for node with ID "691D".}
+\end{center}
+\end{table}
 
 As discussed in the previous Section, using a DHT such as SHA-256, both node IDs and content IDs are now confined to a
 256-bit space. Every content ID maps to one or more {\em home nodes} that form a {\em home node set}. A home node is the
