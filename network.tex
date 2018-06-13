@@ -2,28 +2,36 @@
 
 The network layer is a fully decentralized, peer-peer overlay-based routing layer among the nodes participating in the
 Picolo database network. The most important goal of the network layer is to help locate content as efficiently and
-quickly as possible while surviving certain kinds of failure or malicious intent. Peer-peer networking literature refers
-to this functionality as Decentralized Object Location and Routing (DOLR) \cite{dolr2003}. The network layer focuses on
-delivering messages which have application semantics such as database queries, read/write requests or other management
-functions to the respective nodes which can satisfy them. 
+quickly as possible while surviving certain kinds of failure or malicious intent.
 
-In the rest of this Section, we use the word object to loosely refer to content such as Tables, Shards, Metadata and
-such, that is, any content that is content-addressable and needs to be part of the lookup layer.  
+The network layer focuses on delivering messages which have application semantics such as database queries, read/write
+requests or other management functions to the respective nodes which can satisfy them. In the rest of this Section, we
+use the word object or content to loosely refer to content such as Tables, Shards, Metadata and such, i.e., any
+application specific data that is content-addressable and needs to be part of the lookup layer. An item is content
+addressable if its {\em address} or {\em key} or the primary {\em identifier} is purely a function of its content and
+does not include parameters relating to the location and method of storage.
 
-This overlay layer can be implemented on top of any datagram network protocol such as UDP or IP. Specifically on the
-Internet, we realize its implemented on IP or IPv6 protocols.  The peer-to-peer overlay routing infrastructure offers
+This overlay layer can be implemented on top of any datagram network protocol such as UDP or IP for transport. While we
+use IP or IPv6 for the layer-3 connectivity on the Internet, it is possible to use a suite of protocols for the
+transport layer depending on the localized network conditions. In Section \ref{net:net_proto}, we discuss the details of
+the transport mechanism used in Picolo for node-node communication.
+
+The peer-to-peer overlay routing infrastructure offers
 efficient, scalable, location-independent routing of messages directly to nearby copies of an object or service using
 only localized resources \cite{tapestry2004}.
 
-{\em Location Independent routing:} Location
-independent routing refers to a class of techniques for locating objects based on content rather than their location,
-while attempting to find the shortest path possible to reach such objects. This property is important in our design 
-for Picolo and any decentralized system since it helps reduce the impact of failures, node departures and Byzantine
-node behavior (including collusion) since a node does not have explicit {\em control} over the content it can host or
-be responbile for. This control gets delegated to the content routing layer, where using certain mechanisms, it becomes
-possible to provide some level of hosting/location control to the application (dapp) developer, user or other policy-based
-decision processes (such as privacy policies enforced by a Government or organization).  Picolo's design offers the following
-properties which are required of any high performance p2p overlay-based lookup layer:
+{\em Location Independent routing:} Location independent routing refers to a class of techniques for locating objects
+based on content rather than their location, while attempting to find the shortest path possible to reach such objects.
+This property is important in our design for Picolo and any decentralized system since it helps reduce the impact of
+failures, node departures and Byzantine node behavior (including collusion) since a node does not have explicit {\em
+control} over the content it can host or be responbile for. This control gets delegated to the content routing layer,
+where using certain mechanisms, it becomes possible to provide some level of hosting/location control to the application
+(dapp) developer, user or other policy-based decision processes (such as privacy policies enforced by a Government or
+organization).  Peer-peer networking literature refers to this functionality as Decentralized Object Location and
+Routing (DOLR) \cite{dolr2003}.
+
+Picolo's design offers the following properties which are required of any high
+performance p2p overlay-based lookup layer:
 
 \begin{itemize}
     \item {\em Determinstic Node Mapping}: Picolo is able to locate objects anywhere in the network. That is, there
