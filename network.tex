@@ -314,10 +314,10 @@ leaves/joins the network.
 
 {\em Query routing:} Lookup or querying for a specific content ID (or a set) happens in the following manner. A client
 that wishes to make such a query connects to one of the network nodes in Picolo. The network node then computes
-\(FindHomeNodes(contentID)\) for the requested content. The lookup or query request is then forwarded to one (or more)
+\(HomeNodes(contentID)\) for the requested content. The lookup or query request is then forwarded to one (or more)
 of the home nodes from this set. In the process of this lookup, if at any stage, multiple node paths are encountered,
 then the query can be forwarded along all paths (to minimize latency but incur a slightly higher cost) or can be
-forwarded along the path with the best latency. These tradeoffs can be exposed at the \(FindHomeNodes(contentID)\) API
+forwarded along the path with the best latency. These tradeoffs can be exposed at the \(HomeNodes(contentID)\) API
 call to allow the application developer to make such choices.
 
 FILL
@@ -350,22 +350,32 @@ all nodes (of cardinality \(n\)) which satisfies the above properties, if \( |H_
 
 \subsubsection{Delegate Routing}
 
-Node and content IDs in Picolo map to a relatively large space, i.e. \(2^{256}\) in size. Let \( H_x =
-FindHomeNodes(x)\) for content ID x. Given the large ID space and relatively sparse nature of the network nodes (a
-thousand or a million nodes out of \(2^{256}\), it is unlikely that nodes in \(H_x\) would have an exact match in the
-network. This is the case with all other content based DHTs as well \cite{Stoica_2001, Rowstron_2001, tapestry2004}.
-Nevertheless, we route to each node in \(H_x\) as if it exists. During this process we might encounter empty neighbor
+There is one pratical aspect of routing in a p2p overlay like Picolo that we have not addressed in order to
+simpify the discussion thus far.  This has to do with whether home nodes will actually exist in a sparse network space.
+We discuss this issue and present a solution that is a drop-in replacement for the \(HomeNodes(X)\) function and
+preserves the above Theorems and properties.
+
+Node and content IDs in Picolo map to a relatively large space, i.e. \(2^{256}\) in size. Let \( H_X =
+HomeNodes(X)\) for content ID x. Given the large ID space and relatively sparse nature of the network nodes (a
+thousand or a million nodes out of \(2^{256}\), it is unlikely that nodes in \(H_X\) would have an exact match in the
+network. (this is expected with any content based DHTs routing layer \cite{Stoica_2001, Rowstron_2001}).
+Nevertheless, we route to each node in \(H_X\) as if it exists. During this process we might encounter empty neighbor
 links on the way. In such cases, the algorithm selects an alternate link but does it in a way that is deterministic
 across the whole network. Routing will terminate when we reach a node which is the best match and the lookup cannot be
 routed further. This node then, becomes the {\em Delegate} for the subject node \(y\). We call this {\em Delegate
-Routing} where we route the query to each node \(y \in H_x \) such that it gets mapped to a node that is a {\em
-delegate} for \(y\).
+Routing} where we route the query to each node \(y \in H_X \) such that it gets mapped to a node that is a {\em
+delegate} for the home node with ID \(y\).
 
 In the routing table, an entry at a level \(l\) will be empty only if no such nodes exist in the network that have a
 match. Thus, the same entry will be empty for all nodes in the network. As a result, regardless of where the lookup
-query originates for a content ID \(x\), it will always compute to the same delegate node \(y\). Delegate routing thus
+query originates for a content ID \(X\), it will always compute to the same delegate node \(y\). Delegate routing thus
 becomes a determinstic routing function computed by the network in a distributed manner. It is important to note that
 this mapping is the same regardless of where the function computation originates in the network.
+
+Thus, we can replace the function \(HomeNodes(X)\) with a new function \(H_X = DelegateNodes(X)\) that automatically returns a
+set \(H_X\) such that each node in \(H_X\) exists in the network. All the analysis, properties and Theorems discussed
+above extend directly to the \(DelegateNodes(X)\) as a drop-in replacement for the \(HomeNodes(X)\) function.
+
 % TODO mark this as a property ?
 % We solve this problem by mapping each node \(y \in H_x \) to a \(Delegate(y)\) which is a node that exists on the network.
 
