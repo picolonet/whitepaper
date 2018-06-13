@@ -109,8 +109,10 @@ $qual$ is loosely defined and its up to each node how to calculate this value as
 $$ \mathcal{A}_{a\ell} \propto num_{reply} * num_{fwd} * qual$$
 One might notice that there is no explicit definition of a malicious node in this mechanism. This is ok since there is no way in which a node can influence its peers; it may choose to not reply or forward messages from its peers and deliberately set the access levels of its peers to 0 locally but that does not affect the functioning of the semantic group it belongs to. All nodes set the access levels of their peers purely based on their own observation. So its up to each node to choose a behavior aka the manner in which it follows the rules \ref{reply_rule} and \ref{forward_rule} that is best for its purposes.
 
-\subsubsection{Applications}
+\subsection{Applications}
 Picolo can serve as an enabling layer for interesting consumer games and applications. Picolo can also help in solving scalability challenges of blockchains by allowing them to offload on-chain contract data to its network. 
+\newline\newline
+\textbf{Data layer for web 3.0}: Our long term vision is to become $the$ data network of web 3.0 
 \newline\newline
 \textbf{Off-chain storage}: Blockchain networks like Ethereum don't need to store all contract data on chain. It doesn't make sense to store contract state of every dapp built on the network across thousands of nodes. It can be offloaded to Picolo for easier, faster querying and cheaper storage. It also increases the performance of the app since storing data on Ethereum consumes a lot of gas and since each block has a max gas limit, there is only so many transactions packed into a single block thereby affecting performance. As we have seen with cryptokitties, if a dapp goes viral, it becomes slow and unusable due to limited throughput of ethereum. Other networks like Enigma \cite{enigma} can also use Picolo to safely store their ``secret contract'' state of secure computations and avoid bloating blocks.
 \newline\newline
