@@ -187,8 +187,9 @@ the following subsections.
 \label{net:routing}
 
 Picolo uses a prefix-based routing mechanism to find the node for a given content key. The content key can be computed
-by using a combination of the Database name, Table name and shard ID (if sharding exists). Optional values such as
-read/write shards or specific functionality flavors can also be used to "color" the content key.
+by using a combination of the Database name, Table name and shard ID (if sharding exists, or version information).
+Optional values such as read/write shards or specific functionality flavors can also be used to "color" the content key
+(i.e. create variants or replicas etc).
 
 As discussed in the previous Section, using a DHT such as SHA-256, both node IDs and content IDs are now confined to a
 256-bit space. Every content ID maps to one or more {\em home nodes} that form a {\em home node set}. A home node is the
@@ -318,8 +319,6 @@ tables accordingly by initiating the departure API calls as for the first case.
 
 \subsection{Replication and caching}
 \label{net:replication}
-Beehive stuff for O(1) lookups for power law queries
-
 Structured peer-peer distributed hash tables can implement lookups in \( O(log N)\) hops. Since each hop could add between 100-500
 ms of latency, for a network of 10K to 100K nodes this computes to about 4-5 seconds for a lookup (or more). Thus, we
 require a caching and replication strategy to reduce this cost especially for popular items. The discussion in this
@@ -406,9 +405,17 @@ environments where firewalls are biased towards blocking most ports but the HTTP
 session initiation to happen and thus is more p2p flavored that other web protocols. It also has multi-session support
 over an SSL based secure layer that can utilize certificates as credentials among other methods.
 
-\subsection{Cryptoeconomics and Byzantine behavior}
-\label{net:crypto}
-How will malicious nodes affect the system and how to mitigate/prevent/recover. Do nodes have incentive to participate in network discovery
+%\subsection{Cryptoeconomics and Byzantine behavior}
+%\label{net:crypto}
+%How will malicious nodes affect the system and how to mitigate/prevent/recover. Do nodes have incentive to participate in network discovery
 
 \subsection{Analytics and Debug/Fault diagnosis}
 \label{net:analytics}
+
+Nodes maintain local analytic counters which are periodically updated to a special distributed system-level analytics
+database. Analytics include counters for table queries, statistics for various operations (CRUD), latency numbers, route
+changes and similar network statistics. The analytics database is a special permissioned database that only entities
+(developers, institutions) with the right credentials can access.
+
+A similar but separate database is used for fault diagnosis, collecting data on Byzantine failures, crash logs and
+unexpected node departures. 
