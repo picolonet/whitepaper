@@ -399,8 +399,11 @@ that it is available.
 
 \(N\) computes its principal routing maps in the following manner. It uses the Delegate routing function to find the set of delegate
 nodes to route to the content ID \(N_{id}\). However, at each hop we use the information from the nodes being contacted
-to construct the neighbor map.  Finally, we inform the delegate nodes of the new node \(N\), so that they can update
-their neighbor maps as well thus, ensuring that any future queries for \(N_{id}\) will get routed to \(N\). 
+to construct the neighbor map.
+
+{\em New Node Notification:} The final step is to inform the other nodes of \(N\). This is done by going through the
+nodes at each level in the routing map that \(N\) has constructed and sending them an explicit heartbeat message. This
+includes any nodes that are delegates for \(N\). This will ensure that new queries will start getting routed to \(N\).
 
 \subsubsection{Failures and node departures}
 
