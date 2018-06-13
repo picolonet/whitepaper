@@ -195,7 +195,7 @@ Optional values such as read/write shards or specific functionality flavors can 
 % network stretch example (nice to have).
 
 % TODO:
-% Describe the routing map. level by level. for a single lookup node. Diagram to illustrate an example routing map.
+% DONE. Describe the routing map. level by level. for a single lookup node. Diagram to illustrate an example routing map.
 % Describe the home node function as hash(content_ID, j) for j = 1 to R_N to generate N home nodes. ContentID = a json
 % blob of a 256 bit string and some parameters such as replica size R_N.
 % RouteToDelegates(home_node), describe delegate based routing. Example using a diagram.
@@ -213,17 +213,16 @@ route using a prefix-match. This is similar to the Classless InterDomain Routing
 The routing works as follows. We resolve digits from the most significant to the least (left to right). A node N has a
 routing map with multiple levels. The number of levels are equal to the number of digits in the ID space. For a 256 bit
 ID with a hexadecimal base, we have 64 digits. At level \(i\), we have nodes that match \(i\) digits with the
-destination ID for \( i \in [0..63]\).
+destination ID for \( i \in [ 0..63 ]\).
 
 At any given level, the number of entries are equal to the base of the ID space, that is, we have 16 entries, one for
-each digit \( [ 0, 1, 2..F\ \). At the \(i\) th level, the \( j\)th entry is the node with \( prefix(ID, i) + j\).
-at where each level represents matching a prefix of that length (just like a routing table
-for IPv6). As an example, Table \ref{table:routing_map} shows the different levels for the node with ID "691D".
-Suppose we wish to route the ID "692B" given the routing table and we are doing a lookup at level 2. This means we
-have a prefix match of "69" and are searching for a node in the column for the digit "2". This happens to be node
-\(C_2\) and thus the query is then forwarded there. Similarly, suppose we are asked to route to node "615B". This would
-be at level 1 since we have a match for the prefix "6". We would thus route to node \(B_1\) matching the column"1" and
-row "6".
+each digit \( [ 0, 1, 2..F ] \). At the \(i\) th level, the \( j\)th entry is the node with a prefix of \( prefix(ID, i)
++ j\), where \(prefix(A,j\) is represents the prefix in string \(A\) of length \(j\). As an example, Table
+\ref{table:routing_map} shows the different levels for the node with ID "691D".  Suppose we wish to route the ID "692B"
+given the routing table and we are doing a lookup at level 2. This means we have a prefix match of "69" and are
+searching for a node in the column for the digit "2". This happens to be node \(C_2\) and thus the query is then
+forwarded there. Similarly, suppose we are asked to route to node "615B". This would be at level 1 since we have a match
+for the prefix "6". We would thus route to node \(B_1\) matching the column"1" and row "6".
 
 \begin{table}[h]
 \begin{center}
@@ -244,15 +243,34 @@ row "6".
 \end{center}
 \end{table}
 
-As discussed in the previous Section, using a DHT such as SHA-256, both node IDs and content IDs are now confined to a
-256-bit space. Every content ID maps to one or more {\em home nodes} that form a {\em home node set}. A home node is the
-one which has the `closest' ID in terms of lexicographic distance in the ID space. The definition of a home node set is
-given by exeucting the \(FindHomeNodes(ContentID)\) function on the network, as discussed later. The home node can
-either store the content itself or a link to the host (or machine) that stores the content. This segregation allows
-certain nodes to either participate in the network routing functionality (and handle that load) or provide the database
-functionality or both depending on other factors (such as resource availability). In the case that a Picolo node stores
-a link to another host which hosts the content, such a link is called a {\em content link}. When a Picolo node stores a
-link to another node which does not host the content directly, such a link is called a {\em node link}.
+{\em Home Node Set:} The content ID for a given content is computed using a cryptographic function such as SHA-256. The
+network design allows the use of any cryptographic hash function with a even distribution of hash values. The content ID 
+consists of this hash value, a {\em replica count r} and possibly any other parameters bundled as a json blob.
+
+As discussed in the previous Section both node IDs and content IDs are confined to a 256-bit space.  Every content ID
+maps to one or more {\em home nodes} that form a {\em home node set}. A home node is the node that is responsible for
+either directly hosting the content if it has that capability or has a link to another node that hosts content.
+Essentially from the routing layer's perspetive, the routing function ends once we reach a home node. If the replica
+count \( r > 1\), then the content maps to a {\em set} of home nodes where each home node is independent from the rest.
+
+The function \(HomeNodes(ContentID)\) returns a set of home nodes. An implementation of this function using SHA-256 is as follows:
+\begin{align}
+    X_id &= \{X_{256}, r\} \\
+    H_X &= HomeNodes(X_id) \\
+        &= \{ y_i : y_i = SHA-256(X_{256}, j) \forall j = 1 .. r\}
+\end{align}
+
+Mapping a content to multiple home nodes is purely for fault tolerance purposes and can be configured by the Database
+schema (application designer) as needed. For simplicity of the rest of this Section, we shall assume that there is a
+single home node, i.e., \( r = 1\) as all the algorithms and concepts easily extend to the case with multiple home
+nodes.
+
+In Picolo, nodes can participate in different kinds of functionality such as hosting or routing or both. This
+segregation allows certain nodes to either participate in the network routing functionality (and handle that load) or
+provide the database functionality or both depending on various factors (such as resource availability). In the case
+that a Picolo home node stores a link to another node which hosts the content, such a link is called a {\em content
+link}. This link is not part of the routing layer since the routing functionality ends with finding a home node. When a
+Picolo node stores a link to another node as a part of the routing map such a link is called a {\em node link}.
 
 The goal of the routing protocol is to find a route with low stretch (ideally a stretch of 1.0). Stretch is the ratio
 between (network level) distance traveled from node A to node B to the minimal network distance between node A and B.
