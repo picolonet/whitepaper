@@ -185,9 +185,9 @@ Nodes in the network need to speak the same language for efficient discovery and
 %  CONCLUSIONS
 %-----------------------------------------------------------------------------
 \section{Conclusions and Future work}
-We combine results from P2P networking and database community.
-
-Novel way where data is stored in a p2p network, data access is audited, access controls, encryption, user control of data, access control leakage detection,  perf analysis of abe, dos and sybil
+We described a database network that serves as the backbone for web 3.0 data. The network is made up of homogeneous nodes that self-organize into a p2p network based on DHTs and run a database software that provides features such as SQL interface, external consistency, auto-sharding of data and self-replication in case of failures. The network is incentive-compatible and has mechanisms in place for rewarding desirable behavior and punishing malicious intent. The network can be used by blockchain apps to store their contract state or normal apps to store generic application data and put the data owner in complete control. We discussed mechanisms to ensure data confidentiality, integrity, availability and a scheme to provide fine grained access control. We listed various attacks that are possible on the network and their respective mitigation/prevention measures.
+\newline\newline
+We leave the practical construction and performance analysis of attribute-based encryption scheme for a future paper. Methods to detect access control leakage, more robust defenses against DDos and Sybil attacks are left as a future exercise. A more generic access control framework based on functional encryption \cite{functional_encryption} that promises increased privacy and seems to be a step towards the holy grail of fully homomorphic encryption \cite{FHE} will also be explored in the future.
 %-----------------------------------------------------------------------------
 %  BIBLIOGRAPHY
 %-----------------------------------------------------------------------------
