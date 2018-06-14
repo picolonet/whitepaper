@@ -48,8 +48,8 @@ discuss route optimizations using caching and replication in Section \ref{net:re
 The Picolo overlay layer can be implemented on top of any datagram network protocol such as UDP or IP for transport.
 While we use IP or IPv6 for the layer-3 connectivity on the Internet, it is possible to use a suite of protocols for the
 transport layer depending on the localized network conditions. In Section \ref{net:net_proto}, we discuss the details of
-the transport mechanism used in Picolo for node-node communication. Finally, we discuss how responsibility is delegates
-to nodes, how Trust and Governance happens in Section \ref{net:gov}.
+the transport mechanism used in Picolo for node-node communication. Finally, we discuss how responsibility is delegated
+to nodes and how Trust and Governance happens in Section \ref{net:gov}.
 
 \subsection{Background} \label{net:background}
 
@@ -189,7 +189,7 @@ the following subsections.
 \subsubsection{Routing and Lookup}
 \label{net:routing}
 
-Picolo uses a prefix-based routing mechanism to find the node for a given content key. The content key can be computed
+Picolo uses a prefix-based routing mechanism to find the node for a given content ID. The content ID can be computed
 by using a combination of the Database name, Table name and shard ID (if sharding exists, or version information).
 Optional values such as read/write shards or specific functionality flavors can also be used to "color" the content key
 (i.e. create variants or replicas etc).
@@ -221,7 +221,7 @@ destination ID for \( i \in [ 0..63 ]\).
 
 At any given level, the number of entries are equal to the base of the ID space, that is, we have 16 entries, one for
 each digit \( [ 0, 1, 2..F ] \). At the \(i\) th level, the \( j\)th entry is the node with a prefix of \( prefix(ID, i)
-+ j\), where \(prefix(A,j\) is represents the prefix in string \(A\) of length \(j\). As an example, Table
++ j\), where \(prefix(A,j)\) represents the prefix of \(A\) of length \(j\). As an example, Table
 \ref{table:routing_map} shows the different levels for the node with ID "691D".  Suppose we wish to route the ID "692B"
 given the routing table and we are doing a lookup at level 2. This means we have a prefix match of "69" and are
 searching for a node in the column for the digit "2". This happens to be node \(C_2\) and thus the query is then
@@ -243,7 +243,8 @@ for the prefix "6". We would thus route to node \(B_1\) matching the column"1" a
     \hline
 \end{tabular}
 \label{table:routing_map}
-\caption{Example of a routing map for node with ID "691D".}
+\caption{Example of a routing map for node with ID "691D". Suppose we were to route to ID "601D", we would forward this
+    to node \(B_0\). Similarly, to route to ID "6911", we would forward to node \(D_1\).}
 \end{center}
 \end{table}
 
