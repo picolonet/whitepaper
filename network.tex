@@ -39,14 +39,17 @@ performance p2p overlay-based lookup layer:
         This is important for handling failures and Byzantine behavior of nodes.
 \end{itemize}
 
-In the next subsection \ref{net:background}, we summarize a wide-range of research on p2p overlays and storage systems over the last two
-decades that has influenced our design and thought process in Picolo. In Section \ref{net:design} we present the overall
-design of the network layer including the namespace (Section \ref{net:namespace}), 
+In the next subsection \ref{net:background}, we summarize a wide-range of research on p2p overlays and storage systems
+over the last two decades that has influenced our design and thought process in Picolo. In Section \ref{net:design} we
+present the overall design of the network layer including the Picolo namespace (Section \ref{net:namespace}). Section
+\ref{net:node_dynamics} presents mechanisms to handle node arrivals and departures into the Picolo overlay network. We
+discuss route optimizations using caching and replication in Section \ref{net:replication}.
 
-This overlay layer can be implemented on top of any datagram network protocol such as UDP or IP for transport. While we
-use IP or IPv6 for the layer-3 connectivity on the Internet, it is possible to use a suite of protocols for the
+The Picolo overlay layer can be implemented on top of any datagram network protocol such as UDP or IP for transport.
+While we use IP or IPv6 for the layer-3 connectivity on the Internet, it is possible to use a suite of protocols for the
 transport layer depending on the localized network conditions. In Section \ref{net:net_proto}, we discuss the details of
-the transport mechanism used in Picolo for node-node communication.
+the transport mechanism used in Picolo for node-node communication. Finally, we discuss how responsibility is delegates
+to nodes, how Trust and Governance happens in Section \ref{net:gov}.
 
 \subsection{Background} \label{net:background}
 
@@ -285,7 +288,7 @@ inefficiency is captured by the "stretch" metric as a ratio of the p2p overlay r
 is A to B to F in this example). Since this is at the routing layer which most network messages would take, even small
 improvements would result in significant practical performance gains seen at the application level.
 
-\begin{figure}[h]
+\begin{figure}[t]
     \centering
     \includegraphics[width=0.40\textwidth]{fig/network-stretch.png}
   \caption{Example of why a low network stretch is important fo any p2p routing overlay protocol. The solid lines show
@@ -333,7 +336,7 @@ then the query can be forwarded along all paths (to minimize latency but incur a
 forwarded along the path with the best latency. These tradeoffs can be exposed at the \(HomeNodes(contentID)\) API
 call to allow the application developer to make such choices.
 
-\begin{figure}[h]
+\begin{figure}[t]
     \centering
     \includegraphics[width=0.55\textwidth]{fig/routing-eg.png}
   \caption{Example of routing a query for the ID "5824". The query originates at node "691D" in the above illustration.
@@ -519,7 +522,7 @@ wishes to be part of the core routing layer.
 
 With respect to the network layer semantics for making connections, we shall use either the QUIC protocol or the SPDY
 protocol.
-\begin{figure}[h]
+\begin{figure}[t]
     \centering
     \includegraphics[width=0.5\textwidth]{fig/pic_netlayer.png}
   \caption{Comparison of network stacks for Traditional HTTP/2, QUIC and SPDY.}
@@ -550,7 +553,7 @@ over an SSL based secure layer that can utilize certificates as credentials amon
 %How will malicious nodes affect the system and how to mitigate/prevent/recover. Do nodes have incentive to participate in network discovery
 
 \subsection{Trust and Governance}
-\label{net:analytics}
+\label{net:gov}
 
 \subsubsection{Analytics and Debug/Fault diagnosis}
 Nodes maintain local analytics which are periodically updated to a special distributed system-level analytics
