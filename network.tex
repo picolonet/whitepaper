@@ -379,12 +379,20 @@ network will have the routing layer capabilty to reach atleast one node in this 
 
 \begin{theorem}[Fault Tolerance]
    
-    For a content ID \(X\) with its set of home nodes given by \( H_X = HomeNodes(X) \) and \(S_n\) be the set of all
-    nodes (of cardinality \(n\)) which satisfies the above properties, if \( |H_x| > 1 \) and \( \forall a, b \in S_n,
-    P(a|b) = P(a) \) where \( P(a) = \) probability of node \(a \in H_x \), then \(H_x\) has fault tolerance with
-    relabilty of \( | H_x | \).
+    Let \(X\) be any content ID and let its set of home nodes be given by \( H_X = HomeNodes(X) \). Also, let \(S_n\) be
+    the set of all nodes (of cardinality \(n\)) which form the network that satisfy the above properties and Theorems.
+    Now, if \( |H_x| > 1 \) and \( \forall a, b \in S_n, P(a|b) = P(a) \) where \( P(a) = \) probability of node \(a \in
+    H_x \), then \(H_x\) has fault tolerance with relabilty of \( | H_x | \).
 
 \end{theorem}
+
+The proof of this Theorem can be seen in the following manner. First, the Theorem \ref{property_unique_home} states that
+Picolo can do location independent routing for any node \(y \in S_n\) where \(S_n\) is the set of nodes in the network.
+Now, for a content ID \(X\) if the probability of any node \(z \in H_X\) is uncorrelated with any other nodes (they are
+independent) then by Theorem \ref{property_unique_home} they can be independently routed by the network. Now, the fault
+tolerance property follows from the observation that the only remaining way faults (network or node failures) can be
+correlated is by attempting a hash-prediction (reverse hash attacks) on the cryptographic hash function used in the
+\(HomeNodes(X)\) function, which has been proven to be computationally hard for our choice of SHA-256.
 
 \subsubsection{Delegate Routing}
 
