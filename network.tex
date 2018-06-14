@@ -344,14 +344,22 @@ call to allow the application developer to make such choices.
 
 Figure \ref{fig:routing-eg} shows an example of routing a query for a content ID "5824" originating at node with ID
 "691D". The dotted arrows show the cached content links from secondary or cache routing network. The primary or
-principal links are shown in solid arrow. In this example, node "691D" routes the query for "5824" to the node "
+principal links are shown in solid arrow. In this example, node "691D" routes the query for "5824" to the node "5146"
+first as a level 0 match in its principal routing map. At this point, the first digit "5" is match and the node "5146"
+has a principal route to "5891" (matches "58") and then to "5823" (matches "582") which is the home node for the content
+ID "5824". "5823" then routes the query to the storage node which hosts the content. This would be the route that a
+query could take if it were to follow the principal routes in the routing map.
 
-The example the lookup operation
-for the content ID YYY originating at two different points in the network A and B. The query at A utilizes the principal
-links and finds the home node for the content ID YYY. The query at B ends up hitting a node C which has a cached link that
-directly routes it to the home node for YYY, thus saving a few network hops. In practice, our routing caching algorithm will
+The secondary routes are also shown in the Figure as dotted lines. In the example shown, node "5146" has a cached link
+to the storage node for the content ID "5824" and thus directly routes the message to that node. Cached links can thus
+optimize the routing and reduce the network stretch by a significant factor.  In practice, our routing caching algorithm will
 ensure that most lookups and queries can be satisfied using the cache routing network, so that we can get an \(O(1)\) lookup
 performance in the expected/average case.
+
+%The example the lookup operation
+%for the content ID YYY originating at two different points in the network A and B. The query at A utilizes the principal
+%links and finds the home node for the content ID YYY. The query at B ends up hitting a node C which has a cached link that
+%directly routes it to the home node for YYY, thus saving a few network hops.
 
 \begin{theorem}
 Picolo's network layer can perform location independent routing given Property \ref{property_unique_home}.
