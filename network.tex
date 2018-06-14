@@ -336,14 +336,17 @@ call to allow the application developer to make such choices.
 \begin{figure}[h]
     \centering
     \includegraphics[width=0.55\textwidth]{fig/routing-eg.png}
-  \caption{Example of routing a query for the ID "5824". The query originates at node 691D in the above illustration.
+  \caption{Example of routing a query for the ID "5824". The query originates at node "691D" in the above illustration.
     The solid black lines show the principal routing map. The dashed lines show the cached links. The think grey curved
     arrow shows the eventual path taken by the query.}
     \label{fig:routing-eg}
 \end{figure}
 
-Figure \ref{fig:routing-eg} shows an example of routing a query for a content ID YYY. The dotted arrows show the cached content links from
-secondary or cache routing network. The primary or principal links are shown in solid arrow. The example the lookup operation
+Figure \ref{fig:routing-eg} shows an example of routing a query for a content ID "5824" originating at node with ID
+"691D". The dotted arrows show the cached content links from secondary or cache routing network. The primary or
+principal links are shown in solid arrow. In this example, node "691D" routes the query for "5824" to the node "
+
+The example the lookup operation
 for the content ID YYY originating at two different points in the network A and B. The query at A utilizes the principal
 links and finds the home node for the content ID YYY. The query at B ends up hitting a node C which has a cached link that
 directly routes it to the home node for YYY, thus saving a few network hops. In practice, our routing caching algorithm will
