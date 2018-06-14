@@ -36,7 +36,7 @@ All peers (replicas) in a database cluster constantly ping each other (once ever
 \textbf{Note on signatures}: In our current plan signatures are stored per row. So when a row update occurs on a specific column or group of columns, the signature needs to be recreated for the whole row. This involves fetching the whole row, applying the update, creating the signature on the new row and putting back the whole row. The data overhead with this process might prove to be too much. We are evaluating an alternate scheme where signatures are stored per cell instead using a short signature scheme like BLS \cite{bls}. Trade offs between these two schemes need to be more thoroughly evaluated.
 \begin{figure}[h!] \centering
 	\includegraphics[width=\fscale{1}]{poq.png}
-	\caption{Proof-of-Query pings}
+	\caption{\textsf{Proof-of-Query} pings}
 	\label{fig:poq}
 \end{figure}
  \subsection{Slashing conditions} \label{sec:slashing}
@@ -107,7 +107,7 @@ where $\mathcal{N}_i$ is a node in the semantic group and $\mathcal{N}_i[\mathca
 $$ \mathcal{A}_{a\ell} \propto \textsf{num}_\textsf{reply} * \textsf{num}_\textsf{fwd} * \textsf{qual}$$
 One might notice that there is no explicit definition of a malicious node in this mechanism. This is ok since there is no way in which a node can influence its peers; it may choose to not reply or forward messages from its peers and deliberately set the access levels of its peers to 0 locally but that does not affect the functioning of the semantic group it belongs to. All nodes set the access levels of their peers purely based on their own observation. So its up to each node to choose a behavior aka the manner in which it follows rules \ref{reply_rule} and \ref{forward_rule}.
 
-\subsection{Applications}
+\subsection{Applications} \label{sect:applications}
 \textsf{Picolo} can serve as an enabling layer for interesting consumer games and applications. \textsf{Picolo} can also help in solving scalability challenges of blockchains by allowing them to offload on-chain contract data to its network. 
 \newline\newline
 \textbf{Data layer for web 3.0}: Our long term vision is to become $the$ data network of web 3.0 
