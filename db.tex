@@ -17,7 +17,7 @@ In the context of a database, two commands are commutative if they are mutating 
 \newline\newline
 \textbf{Byzantine fault detection}: Once acceptors receive new proposals, they first verify if the new sequence contains as a prefix an already accepted sequence by them in the past. If not, they simply reject it. If it does, then they sign their acceptance and multicast it to other acceptors. Other acceptors then perform the same check and if it passes, signal their acceptance by $appending$ their signature and multicast it again. This process continues until $\mathcal{N} - f$ acceptors each receive messages with $\mathcal{N} - f$ signatures at which point, the sequence is considered agreed upon and a message is sent back to the proposer indicating consensus. Here $\mathcal{N} \ge 3f+1$. During this process if an honest acceptor receives a multicast that contains signatures of an acceptor $\mathcal{M_A}$ on two non-commutative sequences (see \figref{fig:byz_faults}), then it will trigger a slashing condition (\cref{sec:slashing}). Since we require at least $\mathcal{N} - f$ acceptors to agree on a proposal, at least one of them is guaranteed to be honest and it will trigger the slashing condition. 
 \begin{figure}[h!] \centering
-	\includegraphics[width=\fscale{1}]{byz_faults.png}
+	\includegraphics[width=\fscale{0.76}]{byz_faults.png}
 	\caption{Byzantine fault detection during Paxos. Replica A sending conflicting messages is detected by B and C}
 	\label{fig:byz_faults}
 \end{figure}
@@ -37,7 +37,7 @@ Our long term goal for \textsf{Picolo} is to make it \textit{the} data network f
 \subsubsection{Distributed query processing} \label{sec:dynamic_cluster}
 A web 3.0 data network needs to have the capability to execute queries across $all$ nodes in the network in response to a client request. Since nodes will have vastly differing schemas, effective mechanisms for searching and query proessing \cite{query_reformulation, query_processing1, query_processing2} are needed. High level architecture of a \textsf{Picolo} node is depicted in \figref{fig:node_arch}.
 \begin{figure}[h!] \centering
-	\includegraphics[width=\fscale{1}]{node_arch.png}
+	\includegraphics[width=\fscale{0.76}]{node_arch.png}
 	\caption{A \textsf{Picolo} node}
 	\label{fig:node_arch}
 \end{figure}
