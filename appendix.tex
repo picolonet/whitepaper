@@ -3,10 +3,10 @@
 \begin{appendices}
 
 \section{EIP-1729. Introduce SQL semantics to EVM <WIP>}
-We are contemplating an EIP (Ethereum Improvement Proposal) to give ethereum dapp developers a new choice for data storage. Not all data need to be replicated on every full node of ethereum as the need for strongest security maybe an overkill for most smart contracts. Such data can be stored on Picolo network at a contract defined replication factor. Specifically, the EIP plans to introduce SQL primitives like selections, projections, aggregates etc directly into solidity (feasibility currently being evaluated).
+We are contemplating an EIP (Ethereum Improvement Proposal) to give Ethereum dapp developers a new choice for data storage. Not all data need to be replicated on every full node of Ethereum as the need for strongest security maybe an overkill for most smart contracts. Such data can be stored on \textsf{Picolo} network at a contract defined replication factor. Specifically, the EIP plans to introduce SQL primitives like selections, projections, aggregates etc directly into solidity (feasibility currently being evaluated).
 \newline
 \newline
-Picolo may also be used by ``stateless clients'' and ``state minimized clients'' to query for data that is normally hosted by ``archival nodes'' in the current implementation or in the upcoming sharded implementation. Picolo's SQL capabilities make it easy for clients to construct complex queries that are not currently possible in the simple key-value lookups provided by the EVM (Ethereum Virtual Machine).
+\textsf{Picolo} may also be used by ``stateless clients'' and ``state minimized clients'' to query for data that is normally hosted by ``archival nodes'' in the current implementation or in the upcoming sharded implementation. \textsf{Picolo}'s SQL capabilities make it easy for clients to construct complex queries that are not currently possible in the simple key-value lookups provided by the EVM (Ethereum Virtual Machine).
 \newline\newline
 \texttt{<Mapping of SQL commands to EVM/eWASM opcodes to be defined here. Or maybe just a library contract or other ``listener'' mechanism will be easier to implement>}
 \end{appendices}

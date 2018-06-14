@@ -80,7 +80,7 @@
 %% Title, authors and addresses
 
 \title{Picolo: Fast p2p open database network\tnoteref{title1}}
-\tnotetext[title1]{Work in progress, Version 0.1 Draft.}
+\tnotetext[title1]{Version 1.0}
 
 \author{Picolo Labs\corref{auth1}}
 \cortext[auth1]{https://picolo.network}
@@ -92,14 +92,14 @@
 Picolo is a fast, scalable, fully decentralized, globally distributed transactional database network for blockchain based applications. It is a p2p network with an open participation model where any node can freely join and leave at will. Nodes discover each other in a decentralized manner via DHTs where each node maintains just enough routing information that will enable it to discover the topology of the whole network. It uses a probabilistic replication framework on top of DHTs to achieve an O(1) lookup latency in the average case. It also adds a layer on top of DHTs that allows locating nodes by geographic regions.
 \newline
 \newline
-All nodes in the network are symmetric - they all run the same database software that provides a number of desirable features. Clients can interact with them via a generic SQL interface that has familiar methods such as selections, aggregations and projections. Nodes typically are part of a replica group (of a small size like 5) and the network is made up of many such groups. Nodes in a replica group are responsible for the same data where mutations to it are synchronously replicated to all replicas. Mutations are applied in the order seen by nodes where order is determined by timestamps that are a combination of physical and logical clocks. This gives a group the property of external consistency - the strongest consistency property a database can achieve. Distributed transactions across nodes are also made possible by using these hybrid timestamps. Automatic data sharding is supported when it grows too big or for load balancing purposes. Queries posed to the network can be run across all nodes with vastly differing schemas. Overtime, semantically similar schemas are logically grouped together for faster processing and richer results. There is a notion of \textit{user-controlled} and \textit{app-controlled} schemas that aids in achieving data sovereignty. Fine grained access control rules to data can be defined via a declarative language which are then enforced via encryption.
+All nodes in the network are symmetric - they all run the same database software that provides a number of desirable features. Clients can interact with them via a generic SQL interface that has familiar methods such as selections, aggregations and projections. Nodes typically are part of a replica group (of a small size like 5) and the network is made up of many such groups. Nodes in a replica group are responsible for the same data where mutations to it are synchronously replicated to all replicas. Mutations are applied in the order seen by nodes where order is determined by timestamps that are a combination of physical and logical clocks. This gives Picolo the property of external consistency - the strongest consistency property a database can achieve. Distributed transactions across nodes are also made possible by using these hybrid timestamps. Automatic data sharding is supported when it grows too big or for load balancing purposes. Queries posed to the network can be run across all nodes with vastly differing schemas. Overtime, semantically similar schemas are logically grouped together for faster processing and richer results. There is a notion of \textsf{user-controlled} and \textsf{app-controlled} schemas that aids in achieving data sovereignty. Fine grained access control rules to data can be defined via a declarative language which are then enforced via encryption.
 \newline
 \newline
-There are four types of participants in the network: \textit{storage providers}, \textit{storage consumers}, \textit{data providers} and \textit{data consumers}. Storage providers join the network to offer their spare computing resources like disk space, cpu and memory in exchange for cryptographic tokens. Consumers can pay providers with these tokens and use the resources provided to satisfy their needs. Since the network is open for anyone to participate, consumers need some safety guarantees before they can reliably store their data on untrusted nodes. So providers are required to put up security deposits and the network is designed to be tolerant to their byzantine behavior, punish malicious nodes by slashing their deposits and reward honest nodes for diagnosing and reporting byzantine behavior. A mechanism called \textit{Proof-of-Query} is used for the diagnosis and deposit slashing is enforced by a smart contract system.
+There are four types of participants in the network: \textsf{storage providers}, \textsf{storage consumers}, \textsf{data providers} and \textsf{data consumers}. Storage providers join the network to offer their spare computing resources like disk space, cpu and memory in exchange for cryptographic tokens. Consumers can pay providers with these tokens (among other ways) and use the resources provided to satisfy their needs. Since the network is open for anyone to participate, consumers need some safety guarantees before they can reliably store their data on untrusted nodes. So providers are required to put up security deposits and the network is designed to be tolerant to their byzantine behavior, to punish malicious nodes by slashing their deposits and to reward honest nodes for diagnosing and reporting byzantine behavior. A mechanism called \textsf{Proof-of-Query} is used for the diagnosis and deposit slashing is enforced by a smart contract system.
 \end{abstract}
 
 \begin{keyword}
-	decentralization \sep blockchain \sep ethereum \sep database \sep sql \sep access control \sep secret sharing \sep threshold cryptography \sep p2p \sep tokens \sep incentives \sep mechanism design \sep byzantine faults \sep data sharing
+	\textsf{decentralization \sep blockchain \sep ethereum \sep database \sep sql \sep access control \sep secret sharing \sep p2p \sep tokens \sep incentives \sep mechanism design \sep byzantine faults \sep data sharing}
 \end{keyword}
 
 \end{frontmatter}
@@ -111,23 +111,23 @@ There are four types of participants in the network: \textit{storage providers},
 %  INTRODUCTION
 %-----------------------------------------------------------------------------
 \section{Introduction}\label{Sect:Introduction}
-We are in the midst of building a new Internet. Blockchain networks like Ethereum have popularized the idea of unstoppable, owner less applications that are run on an open network of untrusted but incentivized nodes without the oversight of a central authority. An increasing number of these decentralized applications (\DJ apps) are being created everyday with evolving data storage needs. The first generation of these dapps stored their data entirely on a blockchain itself while the current generation are storing it on decentralized file storage systems like IPFS with just hashes of these data stored on the blockchain. Although this method works for dapps with simple storage needs like the need for storing data as a blob, it is very limiting for dapps with more complex requirements such as being able to store data at a more fine grained level and querying it efficiently. A popular option is then to use a cloud hosted database (ex: Google’s Cloud SQL) but that turns a dapp into a non-dapp by introducing centrality into the system. \newline\newline
-In this paper we introduce Picolo, an open database network that combines the benefits of a traditional database and peer-to-peer software. It is the world's first NewSQL $decentralized$ database system that offers features such as a SQL interface, distributed transactions, external consistency \cite{External_Consistency}, lock-free reads and snapshot reads. It is an open network that allows anyone with spare computing power and disk space to join the network and get rewarded for hosting and serving structured data.
+We are in the midst of building a new Internet. Blockchain networks like Ethereum have popularized the idea of unstoppable, owner less applications that are run on an open network of untrusted but incentivized nodes without the oversight of a central authority. An increasing number of these decentralized applications (\DJ apps) are being created everyday with evolving data storage needs. The first generation of these dapps stored their data entirely on a blockchain itself while the current ones are storing it on decentralized file storage systems like IPFS with just hashes of the data stored on the blockchain. Although this method works for dapps with simple storage needs like the need for storing data as a blob, it is very limiting for dapps with more complex requirements such as the need to store data at a more fine grained level and efficiently querying it. A popular option is then to use a cloud hosted database (ex: Google’s Cloud SQL) but that turns a dapp into a non-dapp by introducing centrality into the system. \newline\newline
+In this paper we introduce \textsf{Picolo}, an open database network that combines the benefits of a traditional database and p2p software. It is the world's first NewSQL $decentralized$ database system that offers features such as a SQL interface, distributed transactions, external consistency \cite{External_Consistency}, lock-free reads and snapshot reads. It is an open network that allows anyone with spare computing power and disk space to join the network and get rewarded for hosting and serving structured data.
 \newline\newline
-Features that set Picolo apart from other decentralized databases:
+Features that set \textsf{Picolo} apart from other decentralized databases:
 \begin{itemize}
 	\item Transactions can be applied across rows, columns and tables across nodes
 	\item Client controlled replication and data placement
-	\item Supports storage of typed data
-	\item Supports semi-relational structure for tables
+	\item Support for storage of typed data
+	\item Support for semi-relational structure for tables
 	\item Configurable backups and restore mechanisms
 	\item Allows for verifiable transaction logs
-	\item Detects data poisoning
-	\item Provides distributed query processing
-	\item Enables fine grained access control to data
+	\item Data poisoning detection
+	\item Distributed query processing
+	\item Fine grained access control to data
 	\newline
 \end{itemize}
-Rest of the paper is structured as follows: in section 2, we discuss some related work. Section 3 presents the overall design of the system, section 4 presents the network subsystem, section 5 presents the database subsystem and section 6 presents our approach in dealing with problems that arise in a network made up of untrusted nodes and discusses an incentive mechanism to make them behave as per system's needs. In section 7, we propose a message exchange protocol in the same vein as http but for relational data sharing. Section 8 concludes the paper.
+Rest of the paper is structured as follows: in section 2, we discuss some related work. Section 3 presents the overall design of the system, section 4 presents the network subsystem, section 5 presents the database subsystem and section 6 presents our approach to dealing with problems that arise in a network made up of untrusted nodes and discusses an incentive mechanism to make them behave as per system's needs. In section 7, we propose a message exchange protocol in the same vein as http but for relational data sharing. Section 8 concludes the paper.
 
 %-----------------------------------------------------------------------------
 %  BACKGROUND SECTION
@@ -153,28 +153,28 @@ Rest of the paper is structured as follows: in section 2, we discuss some relate
 \input{crypto}
 
 \section{MX Protocol} \label{sec:mx_protocol}
-Nodes in the network need to speak the same language for efficient discovery and communication of data. Hence the following message exchange scheme (see \figref{fig:mx}) is proposed similar to \cite{Protocol_Spec}. Note that the exact mapping between the following messages and underlying transport protocol is not discussed here and may change depending on the final transport protocol chosen (QUIC vs TCP)
+Nodes in the network need to speak the same language for efficient discovery and communication of data. Hence the following message exchange scheme (see \figref{fig:mx}) is proposed similar to \cite{Protocol_Spec}. Note that the exact mapping between the following messages and underlying transport protocol is not discussed here and may change depending on the final transport protocol chosen (\textsf{QUIC} vs \textsf{TCP})
 \newline
 \newline
-\textbf{PUT}:  A PUT message contains the query to be run, an optional list of nodes to run the query against and an optional max number of hops (needed in case of an empty node list). This is used for creating or updating data in the system.
+\textbf{PUT}:  A \textsf{PUT} message contains the query to be run, an optional list of nodes to run the query against and an optional max number of hops (needed in case of an empty node list). This is used for creating or updating data in the system.
 \newline
 \newline
-\textbf{GET}: A GET message contains the query to be run, max number of hops, the number of results to retrieve, the mode of retrieval (pull vs push) and a transaction identifier. Client sends this to a server to retrieve results that match the query. Parameters in GET can be varied depending on application needs - a streaming application may choose the push mode in which server pushes data to the client as it becomes available up until the specified number is met. A latency sensitive application may choose to retrieve a small number of results in a batch in one pull.
+\textbf{GET}: A \textsf{GET} message contains the query to be run, max number of hops, the number of results to retrieve, the mode of retrieval (pull vs push) and a transaction identifier. Client sends this to a server to retrieve results that match the query. Parameters in \textsf{GET} can be varied depending on application needs - a streaming application may choose the push mode in which server pushes data to the client as it becomes available up until the specified number is met. A latency sensitive application may choose to retrieve a small number of results in a batch in one pull.
 \newline
 \newline
-\textbf{SEND}: Server responds to each GET message with one or more SEND messages with results. In pull mode, there is only one SEND message followed by an END message where as in push mode there are multiple SEND messages followed by an END message.
+\textbf{SEND}: Servers respond to each \textsf{GET} message with one or more \textsf{SEND} messages with results. In pull mode, there is only one \textsf{SEND} message followed by an \textsf{END} message where as in push mode there are multiple \textsf{SEND} messages followed by an \textsf{END} message.
 \newline
 \newline
-\textbf{END}: Server sends END message to indicate to the client that it has finished sending all results in response to a particular GET message.
+\textbf{END}: Servers send \textsf{END} messages to clients to indicate that they have finished sending all results in response to a particular \textsf{GET} message.
 \newline
 \newline
-\textbf{CLOSE}: A client can send a CLOSE message to the server to indicate that it no longer is interested in the remaining query results and close the transaction. It doesn't have to wait until all the results are retrieved.
+\textbf{CLOSE}: A client can send a \textsf{CLOSE} message to the server to indicate that it no longer is interested in the remaining query results and close the transaction. It doesn't have to wait until all the results are retrieved.
 \newline
 \newline
-\textbf{OK}: Server sends this message to a client as a positive acknowledgment to the client's message.
+\textbf{OK}: Server sends this message to a client as a positive acknowledgment to a client's message.
 \newline
 \newline
-\textbf{ERROR}: Server sends this message to a client as a negatively acknowledge to the client's message.
+\textbf{ERROR}: Server sends this message to a client as a negative acknowledgment to a client's message.
 \begin{figure}[h!] \centering
 	\includegraphics[width=\fscale{1}]{mx.png}
 	\caption{GET message flow, time increasing from top to bottom}
