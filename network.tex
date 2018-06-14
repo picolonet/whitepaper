@@ -1,33 +1,20 @@
 \section{Network Subsystem} 
 \label{net}
-The network layer is a fully decentralized, peer-peer overlay-based routing layer among the nodes participating in the
-Picolo database network. The most important goal of the network layer is to help locate content as efficiently and
-quickly as possible while surviving certain kinds of failure or malicious intent.
-
-The network layer focuses on delivering messages which have application semantics such as database queries, read/write
-requests or other management functions to the respective nodes which can satisfy them. In the rest of this Section, we
-use the word object or content to loosely refer to content such as Tables, Shards, Metadata and such, i.e., any
-application specific data that is content-addressable and needs to be part of the lookup layer. An item is content
-addressable if its {\em address} or {\em key} or the primary {\em identifier} is purely a function of its content and
-does not include parameters relating to the location and method of storage. Our p2p overlay routing infrastructure offers
-efficient, scalable, location-independent routing of messages directly to nearby copies of an object or service using
-only localized resources.
-
-{\em Location Independent routing:} Location independent routing refers to a class of techniques for locating objects
+The network layer is a fully decentralized, p2p overlay-based routing layer among the nodes participating in the \textsf{\textsf{Picolo}} network. The most important goal of the network layer is to help locate content as efficiently and quickly as possible while surviving certain kinds of failure or malicious intent. It focuses on delivering messages which have application semantics such as database queries, read/write requests or other management functions to the respective nodes which can satisfy them. In the rest of this section, we use the word object or content to loosely refer to content such as tables, shards, metadata and such, i.e., any
+application specific data that is content-addressable and needs to be part of the lookup layer. An item is content addressable if its {\em address} or {\em key} or the primary {\em identifier} is purely a function of its content and does not include parameters related to the location and method of storage. Our p2p overlay routing infrastructure offers efficient, scalable, location-independent routing of messages directly to nearby copies of an object or service using only localized resources.
+\newline\newline
+\textbf{Location independent routing}: Location independent routing refers to a class of techniques for locating objects
 based on content rather than their location, while attempting to find the shortest path possible to reach such objects.
-This property is important in our design for Picolo and any decentralized system since it helps reduce the impact of
+This property is important in our design for \textsf{Picolo} and any decentralized system since it helps reduce the impact of
 failures, node departures and Byzantine node behavior (including collusion) since a node does not have explicit {\em
-control} over the content it can host or be responbile for. This control gets delegated to the content routing layer,
-where using certain mechanisms, it becomes possible to provide some level of hosting/location control to the application
-(dapp) developer, user or other policy-based decision processes (such as privacy policies enforced by a Government or
-organization).  Peer-peer networking literature refers to this functionality as Decentralized Object Location and
-Routing (DOLR) \cite{dolr2003}.
-
-Picolo's design offers the following properties which are required of any high
-performance p2p overlay-based lookup layer:
+control} over the content it can host or be responsible for. This control gets delegated to the content routing layer,
+where it becomes possible to provide some level of hosting/location control to the application
+(dapp) developer, user or other policy-based decision processes (such as privacy policies enforced by a government or
+organization).  P2p networking literature refers to this functionality as Decentralized Object Location and
+Routing (DOLR) \cite{dolr2003}. \textsf{Picolo}'s design offers the following properties which are required of any high performance p2p overlay-based lookup layer:
 
 \begin{itemize}
-    \item {\em Determinstic Node Mapping}: Picolo is able to locate objects anywhere in the network. That is, there
+    \item {\em Determinstic node mapping}: \textsf{Picolo} is able to locate objects anywhere in the network. That is, there
         should be no object in the network that cannot be accessed using the lookup layer. Also, the mapping of objects
         to their location in the network should be the same regardless of where the lookup originates.
     \item {\em Low routing inefficiency}: Routes should have low {\em stretch}. Stretch is the ratio between (network
@@ -38,30 +25,27 @@ performance p2p overlay-based lookup layer:
     \item {\em Dynamic membership}: The system allows arrival and departure of nodes while maintaining functionality.
         This is important for handling failures and Byzantine behavior of nodes.
 \end{itemize}
-
-In the next subsection \ref{net:background}, we summarize a wide-range of research on p2p overlays and storage systems
-over the last two decades that has influenced our design and thought process in Picolo. In Section \ref{net:design} we
-present the overall design of the network layer including the Picolo namespace (Section \ref{net:namespace}). Section
-\ref{net:node_dynamics} presents mechanisms to handle node arrivals and departures into the Picolo overlay network. We
-discuss route optimizations using caching and replication in Section \ref{net:replication}.
-
-The Picolo overlay layer can be implemented on top of any datagram network protocol such as UDP or IP for transport.
+In \cref{net:background}, we summarize a wide-range of research on p2p overlays and storage systems
+over the last two decades that has influenced our design and thought process. In \cref{net:design} we
+present the overall design of the network layer including the \textsf{Picolo} namespace ( \cref{net:namespace}). \cref{net:node_dynamics} presents mechanisms to handle node arrivals and departures into the \textsf{Picolo} overlay network. We discuss route optimizations using caching and replication in \cref{net:replication}.
+\newline\newline
+The \textsf{Picolo} overlay layer can be implemented on top of any datagram network protocol such as UDP or IP for transport.
 While we use IP or IPv6 for the layer-3 connectivity on the Internet, it is possible to use a suite of protocols for the
-transport layer depending on the localized network conditions. In Section \ref{net:net_proto}, we discuss the details of
-the transport mechanism used in Picolo for node-node communication. Finally, we discuss how responsibility is delegated
-to nodes and how Trust and Governance happens in Section \ref{net:gov}.
+transport layer depending on the localized network conditions. In \cref{net:net_proto}, we discuss the details of
+the transport mechanism used in \textsf{Picolo} for node-to-node communication. Finally, we discuss how responsibility is delegated
+to nodes and how trust and governance happens in \cref{net:gov}.
 
 \subsection{Background} \label{net:background}
 
-Napster \cite{Napster} was one of the first popular service that provided much of the original inspiration for peer-peer
+Napster \cite{Napster} was one of the first popular services that provided much of the original inspiration for p2p
 systems although its database was centralized.  DNS is an example of a widely deployed distributed and largely
 decentralized key-value database that powers every lookup and interaction on the Internet \cite{Mockapetris_1988}. DNS
 relies on special root servers to bootstrap the lookup protocol. The Freenet \cite{freenet_thesis, Clarke_2001} and the
 Gnutella \cite{Gnutella} p2p systems were popular in the previous decade for file sharing. Both systems were designed
 for sharing of large files over a longer duration of time. Content reliabilty including lookup reliability and network
 latency goals were necessary in this enviroment. 
-
-The second generation of peer-peer systems include research driven projects such as Chord \cite{Stoica_2001}, Content
+\newline\newline
+The second generation of p2p systems include research driven projects such as Chord \cite{Stoica_2001}, Content
 Addressable Network (CAN)
 \cite{Ratnasamy_2001}, Pastry \cite{Rowstron_2001}, Tapestry \cite{tapestry2004} and
 Kademlia. Chord along with CAN, Tapestry and Pastry developed the concept of distributed hash tables (DHTs) as a
@@ -70,11 +54,11 @@ both FreeNet and Gnutella by providing a definite answer to a lookup query in a 
 these protocols are able to locate content within \( O(log N) \) where \(N\) is the number of nodes in the system. From
 an 
 API perspective, these overlays provide a key-based routing (KBR) interface that supports deterministic routing of
-messages to a live node that has the responsiblity for the "value" corresponding to the given key. These systems also
+messages to a live node that has the responsiblity for the ``value'' corresponding to the given key. These systems also
 support high level APIs such as Dynamic Object Location and Routing (DOLR) \cite{dolr2003}. Most DHT's use the concept
-of consistent hashing to distribute the load evenly among the nodes. Consistent hashing refers to a technique which
+of consistent hashing to distribute load evenly among the nodes. Consistent hashing refers to a technique which
 creates `buckets' of items such that a small change in the buckets does not lead to a large amount of rehashing.
-
+\newline\newline
 % {\em Consistent hashing:}
 % Typical hashing based schemes do a good job of spreading load through a known, fixed collection of servers. Since the
 % Blockchain consists of nodes on the Internet which can appear and disappear based on incentives and other criteria, our
@@ -92,37 +76,33 @@ creates `buckets' of items such that a small change in the buckets does not lead
 Chord uses such hash functions to map nodes and content uniformly to a circular 160-bit
 namespace. Chord improves the scalability of consistent hashing by removing the requirement that every node knows about
 every other node. Each node only maintains about \(O (log N) \) state information about other nodes in an \( N \) node
-network. When nodes join or leave, they require \( O(log^2 N) \) messages to keep the network updated.
-
-CAN routes messages in a {\em d}-dimensional space where each node maintains a routing table with \(O(d)\) entries and
+network. When nodes join or leave, they require \( O(log^2 N) \) messages to keep the network updated. CAN routes messages in a {\em d}-dimensional space where each node maintains a routing table with \(O(d)\) entries and
 any node can be reached in \(O(dN^{1/d})\) routing hops. CAN's routing table does not grow with network size, but the
-number of routing hops grows faster than \(log N\).
-
-When compared to Chord and CAN, Pastry and Tapestry take network distances into account when constructing overlay
+number of routing hops grows faster than \(log N\). When compared to Chord and CAN, Pastry and Tapestry take network distances into account when constructing overlay
 topologies. While Chord and CAN use shortest overlay hops and other runtime heuristics, both Tapestry and Pastry
 construct locally optimal routing tables to reduce any routing inefficiencies. 
-
+\newline\newline
 Pastry and Tapestry share some similarities to the work by Plaxton et al \cite{Plaxton_1997} and to the routing layer in
 the Landmark hierarchy \cite{Tsuchiya_1988}. The approach consists of routing based on address prefixes or otherwise
 called prefix-based routing. However, both Pastry and Tapestry include an ability to self-organize the network structure
 and achieve network locality in content mapping which also lends support for replication.
 In addition, Tapestry also allows some application-based locality management by "publishing" location pointers
 throughout the network for efficiently locating content and services.
-
+\newline\newline
 Kademlia \cite{kademlia} is another p2p DHT-based routing system that uses prefix-based routing by arranging 160-bit IDs
 (node IDs and content IDs) in a binary tree style data-structure for efficient routing. It uses an XOR-based distance
 metric for building the routing table and for the routing algorithm itself. In terms of its performance and other
 features, it is very similar to the above systems such as Chord, CAN, Pastry and Tapestry, but it offers simplicity in
 its routing and lookup algorithms which make it attrative for implementation. IPFS \cite{ipfs} uses a version of
 Kademlia for locating files for decentralized applications.
-
+\newline\newline
 Other notable systems include Viceroy \cite{viceroy} which provides logarithmic hops through nodes with constant degree
 routing tables. SkipNet \cite{skipnet} uses a multidimensional skip-list data structure to support overlay routing,
 maintaining both a DNS-based namesapce for operational locality and a randomized namespace for network locality. Other
 overlay proposals such as Koorde \cite{koorde} and Naor et al \cite{simple_hash} attain lower bounds on local routing
 state but oversimplify some of the other features. 
-
-The third generation of P2P research includes building applications on top of these DHT systems, validating them as
+\newline\newline
+The third generation of p2p research includes building applications on top of these DHT systems, validating them as
 novel infrastructures or tuning them for specific use cases. For example, applications such as PAST \cite{past} and
 SCRIBE \cite{scribe} are built on top of Pastry. Decentralized file storage application project OceanStore \cite{oceanstore} was built
 on top of Tapestry, while CFS \cite{cfs} was build on top of Chord. FarSite \cite{farsite} uses a conventional
@@ -132,14 +112,14 @@ System \cite{overcast}, which provides reliable single-source multicast streams.
 \subsection{Design of the Picolo overlay network}
 \label{net:design}
 
-The Picolo overlay network consists of a p2p DHT based lookup for mapping key to objects, content or services. This
-mapping resides inside a namespace, thus funtionality gets replicated across namespaces allowing a wide-range of
-applications to co-exist. The APIs provided by the network layer are influenced by research from the P2p networking
-community and discussed in Section \ref{net:core_api}.  There is a caching layer that allows for frequenly used items to
+The \textsf{Picolo} overlay network consists of a p2p DHT based lookup for mapping keys to objects, content or services. This
+mapping resides inside a namespace, thus functionality gets replicated across namespaces allowing a wide-range of
+applications to co-exist. The APIs provided by the network layer are influenced by research from the p2p networking
+community and discussed in \cref{net:core_api}.  There is a caching layer that allows for frequently used items to
 be propagated closer to the demand endpoints in the network including ability to replicate as needed.
 
-A Picolo {\em network node} is a node that participates in the Picolo network overlay functionality such as primary and
-secondary routing, functions that allow topology maintenance and related mechanisms. It is possible for a Picolo node to
+A \textsf{Picolo} {\em network node} is a node that participates in the \textsf{Picolo} network overlay functionality such as primary and
+secondary routing, functions that allow topology maintenance and related mechanisms. It is possible for a \textsf{Picolo} node to
 particpate in the network functionality, the database functionality or both depending on its resources (such as disk
 space, internet connectivity).
 
@@ -147,40 +127,35 @@ space, internet connectivity).
 \label{net:namespace}
 
 Both nodes and content have IDs that map to a single 256-bit space using a hash function. This technique is fundamental
-to make the routing layer content-addressable. The addressing is hexadecimal based, which is the radix used for the
-prefix calculation and lookup in the routing table. This design is similar to how addressing and routing work in IPv6.
+to making the routing layer content-addressable. The addressing is hexadecimal based, which is the radix used for the
+prefix calculation and lookup in the routing table. This design is similar to how addressing and routing works in IPv6.
 The node ID is a hash of its public-key certificate using a SHA-256 hash function. The content ID is a SHA-256 hash of
 the application type, database name and version and the table name (and possibly a shard number if needed). As long as
 the same consistent method is used to create content IDs, the actual format of the input string doesn't affect
-functionality at the network layer (and can thus be determined by the application being used such as a Database, etc).
-
-This space can be segregaged using a namespace identifier, which allows multiple such "naming layers" to co-exist. For
+functionality at the network layer (and can thus be determined by the application being used). 
+\newline\newline
+This space can be segregated using a namespace identifier, which allows multiple such "naming layers" to co-exist. For
 example, one way to assign naming layers could be based on a per-application type. The content and node IDs have to be
-unique only within the namespace. The default namespace, which is global, is the keyword "default".
-
-Each namespace has a separate datastructure and functionality thus, creating an isolated "virtual overlay" on a
+unique only within the namespace. The default namespace, which is global, is the keyword "default". Each namespace has a separate datastructure and functionality thus, creating an isolated "virtual overlay" on a
 per-namespace basis. For the rest of this section, the discussion gets isolated to within a single naming layer, such as
 the "default" namespace.
 
 \subsubsection{Core API}
 \label{net:core_api}
-Picolo's network layer supports an API similar to a standard p2p overlay network, for a detailed discussion refer
+\textsf{Picolo}'s network layer supports an API similar to a standard p2p overlay network, for a detailed discussion refer
 \cite{dolr2003}. The primary goal of the API is to publish and locate objects, content or service identifiers within a given
-namespace. All operations that occur in a namespace can be replicated across namespaces as needed.
-
-Currenlty, we support the following API methods in a decentralized manner:
+namespace. All operations that occur in a namespace can be replicated across namespaces as needed. Currenlty, we support the following API methods in a decentralized manner:
 \begin{itemize}
-    \item {\em Publish(namespace, content key, object, credentials)}: Makes the content available on the network, including first a copy on
+    \item \textsf{Publish(namespace, content key, object, credentials)}: Makes the content available on the network, including first a copy on
         the local node. The object could be a database table or a shard. Operations on the object fall within the
-        context of the database layer and are discussed in a later Section.
-    \item {\em Unpublish(namespace, content key, credentials)}: Removes the content from the network making it inaccessible.
-    \item {\em Lookup(namespace, content key, credentials)}: Lookup item with the given content key using the p2p lookup protocol
-        discussed in this Section. The API returns a node identifier which can be used in the next method to execute a
+        context of the database layer and are discussed in a later section.
+    \item \textsf{Unpublish(namespace, content key, credentials)}: Removes the content from the network making it inaccessible.
+    \item \textsf{Lookup(namespace, content key, credentials)}: Lookup item with the given content key using the p2p lookup protocol
+        discussed in this section. The API returns a node identifier which can be used in the next method to execute a
         remote funationality on it.
-    \item {\em RemoteCall(namespace, node ID or content key, credentials, method details)}: This executes a given functionality
-        on a remote node. If the key is given, it first does a node lookup using the Lookup() method.
+    \item \textsf{RemoteCall(namespace, node ID or content key, credentials, method details)}: This executes a given functionality
+        on a remote node. If the key is given, it first does a node lookup using the \textsf{Lookup()} method.
 \end{itemize}
-
 These methods can be called on a single node. They can also be called using a client SDK which shall be provided. The
 client SDK would use the DHT layer to first find "any" node, connect to it and call the above methods. These methods
 might use other algorithmic constructs which define core aspects of the routing layer and shall be discussed further in
@@ -189,14 +164,10 @@ the following subsections.
 \subsubsection{Routing and Lookup}
 \label{net:routing}
 
-Picolo uses a prefix-based routing mechanism to find the node for a given content ID. The content ID can be computed
-by using a combination of the Database name, Table name and shard ID (if sharding exists, or version information).
-Optional values such as read/write shards or specific functionality flavors can also be used to "color" the content key
-(i.e. create variants or replicas etc).
-
+\textsf{Picolo} uses a prefix-based routing mechanism to find the node for a given content ID. The content ID can be computed by using a combination of the database name, table name and shard ID (if sharding exists, or version information). Optional values such as read/write shards or specific functionality flavors can also be used to "color" the content key (i.e. create variants or replicas etc).
+\newline\newline
 % TODO Figures:
 % network stretch example (nice to have).
-
 % TODO:
 % DONE. Describe the routing map. level by level. for a single lookup node. Diagram to illustrate an example routing map.
 % DONE. Describe the home node function as hash(content_ID, j) for j = 1 to R_N to generate N home nodes. ContentID = a json
@@ -206,28 +177,19 @@ Optional values such as read/write shards or specific functionality flavors can 
 %   Describe algorithm to notify neighbors.
 % Discussion on failures and any optimizations.
 % IMP: How are secondary routing links organized ?
-
-{\em Routing to a destination ID:}
-Given a destination ID, each Picolo node that participates in the routing functionality constructs a routing map, which
+\textbf{Routing to a destination ID}:
+Given a destination ID, each \textsf{Picolo} node that participates in the routing functionality constructs a routing map, which
 is similar to routing tables used in layer-3 systems today. Using these routing maps, routing of a message happens {\em
 locally} and {\em incrementally} at each node in the overlay path to the destination. The core routing method is to
 route using a prefix-match. This is similar to the Classless InterDomain Routing (CIDR) routing architecture for the Internet
-\cite{cidr_rfc}.
-
-The routing works as follows. We resolve digits from the most significant to the least (left to right). A node N has a
+\cite{cidr_rfc}. The routing works as follows. We resolve digits from the most significant to the least (left to right). A node N has a
 routing map with multiple levels. The number of levels are equal to the number of digits in the ID space. For a 256 bit
-ID with a hexadecimal base, we have 64 digits. At level \(i\), we have nodes that match \(i\) digits with the
-destination ID for \( i \in [ 0..63 ]\).
-
-At any given level, the number of entries are equal to the base of the ID space, that is, we have 16 entries, one for
-each digit \( [ 0, 1, 2..F ] \). At the \(i\) th level, the \( j\)th entry is the node with a prefix of \( prefix(ID, i)
-+ j\), where \(prefix(A,j)\) represents the prefix of \(A\) of length \(j\). As an example, Table
-\ref{table:routing_map} shows the different levels for the node with ID "691D".  Suppose we wish to route the ID "692B"
+ID with a hexadecimal base, we have 64 digits. At level \textsf{i}, we have nodes that match \textsf{i} digits with the destination ID for \( \textsf{i} \in \textsf{[ 0..63 ]}\). At any given level, the number of entries are equal to the base of the ID space, that is, we have 16 entries, one for
+each digit \textsf{[ 0, 1, 2..F ]}. At the \textsf{i} th level, the \textsf{j} th entry is the node with a prefix of \textsf{prefix(ID, i) + j}, where \textsf{prefix(A,j)} represents the prefix of \textsf{A} of length \textsf{j}. As an example, Table \ref{table:routing_map} shows the different levels for the node with ID "691D".  Suppose we wish to route the ID "692B"
 given the routing table and we are doing a lookup at level 2. This means we have a prefix match of "69" and are
-searching for a node in the column for the digit "2". This happens to be node \(C_2\) and thus the query is then
+searching for a node in the column for the digit "2". This happens to be node \(\textsf{C}_\textsf{2}\) and thus the query is then
 forwarded there. Similarly, suppose we are asked to route to node "615B". This would be at level 1 since we have a match
-for the prefix "6". We would thus route to node \(B_1\) matching the column"1" and row "6".
-
+for the prefix "6". We would thus route to node \(\textsf{B}_\textsf{1}\) matching the column"1" and row "6".
 \begin{table}[h]
 \begin{center}
     \renewcommand{\arraystretch}{1.5}
@@ -247,52 +209,43 @@ for the prefix "6". We would thus route to node \(B_1\) matching the column"1" a
     to node \(B_0\). Similarly, to route to ID "6911", we would forward to node \(D_1\).}
 \end{center}
 \end{table}
-
-{\em Home Node Set:} The content ID for a given content is computed using a cryptographic function such as SHA-256. The
-network design allows the use of any cryptographic hash function with a even distribution of hash values. The content ID 
+\textbf{\newline Home Node Set}: The content ID for a given content is computed using a cryptographic function such as SHA-256. The
+network design allows the use of any cryptographic hash function with an even distribution of hash values. The content ID 
 consists of this hash value, a {\em replica count {\bf r}} and possibly any other parameters bundled as a JSON blob.
-
 As discussed in the previous Section, both node IDs and content IDs are confined to the same 256-bit space.  Every content ID
 maps to one or more {\em home nodes} that form a {\em home node set}. A home node is the node that is responsible for
 either directly hosting the content if it has that capability or has a link to another node that hosts content.
 Essentially from the routing layer's perspetive, the routing function ends once we reach a home node. If the replica
-count \( r > 1\), then the content maps to a {\em set} of home nodes where each home node is independent from the rest.
-
-The function \(HomeNodes(ContentID)\) returns a set of home nodes. An implementation of this function using SHA-256 is as follows:
+count \( r > 1\), then the content maps to a {\em set} of home nodes where each home node is independent from the rest. The function \textsf{HomeNodes(ContentID)} returns a set of home nodes. An implementation of this function using SHA-256 is as follows:
 \begin{align}
     X_{id} &= \{X_{256}, r\} \\
     H_X &= HomeNodes(X_{id}) \\
         &= \{ y_i : y_i = \textrm{SHA-256}(X_{256}, j) \quad \forall \quad j = 1 .. r\}
 \end{align}
-
-Mapping a content to multiple home nodes is purely for fault tolerance purposes and can be configured by the Database
-schema (application designer) as needed. For simplicity of the rest of this Section, we shall assume that there is a
+Mapping a content to multiple home nodes is purely for fault tolerance purposes and can be configured by the database
+schema (application designer) as needed. For simplicity of the rest of this section, we shall assume that there is a
 single home node, i.e., \( r = 1\) or \( |H_X| = 1\) as all the algorithms and concepts easily extend to the case with
 multiple home nodes.  In any case, the size of \( H_X \) is expected to be small for any given \(X\).
-
-In Picolo, nodes can participate in different kinds of functionality such as hosting or routing or both. This
+\newline\newline
+In \textsf{Picolo}, nodes can participate in different kinds of functionality such as hosting or routing or both. This
 segregation allows certain nodes to either participate in the network routing functionality (and handle that load) or
 provide the database functionality or both depending on various factors (such as resource availability). In the case
-that a Picolo home node stores a link to another node which hosts the content, such a link is called a {\em content
+that a \textsf{Picolo} home node stores a link to another node which hosts the content, such a link is called a {\em content
 link}. This link is not part of the routing layer since the routing functionality ends with finding a home node. When a
-Picolo node stores a link to another node as a part of the routing map such a link is called a {\em node link}. Thus,
+\textsf{Picolo} node stores a link to another node as a part of the routing map such a link is called a {\em node link}. Thus,
 the links stored in a routing map as discussed above are all node links.
-
-\begin{property}[Unique Home node set] The home node set \(H_X\) for a content ID \(X\) must be unique, that is,
+\begin{property}[\textsf{Unique Home node set}] The home node set \(H_X\) for a content ID \(X\) must be unique, that is,
     \(H_X\) must generated the exact same set regardless of where it is computed in the network.
 \label{property_unique_home}
 \end{property}
-
-Note that the example implementation of \(HomeNodes(ContentID)\) does satisfy this property. This property is important
-to ensure that our decentralized overlay-based routing algorithm as discussed in this Section will work in a
+Note that the example implementation of \textsf{HomeNodes(ContentID)} does satisfy this property. This property is important
+to ensure that our decentralized overlay-based routing algorithm as discussed in this section will work in a
 deterministic manner regardless of the starting point in the network.
-
+\newline\newline
 The goal of the routing protocol is to find a route with low stretch (ideally a stretch of 1.0). Stretch is the ratio
 between (network level) distance traveled from (say) node A to node B to the minimal network distance between node A and B.
 Since we are routing at the overlay layer, a route on the p2p overlay might result in a suboptimal route at the network
-level.
-
-Figure \ref{fig:network-stretch} illustrates the concept of network stretch and why a low stretch is important. In this
+level. Figure \ref{fig:network-stretch} illustrates the concept of network stretch and why a low stretch is important. In this
 example, we are routing from node A to F. The p2p overlay route goes from node A to D, then to E, B and finally to F.
 This results in an inefficiency as seen at the layer-3 since messages travel the same links multiple times. This
 inefficiency is captured by the "stretch" metric as a ratio of the p2p overlay route to the optimal layer-3 route (which
@@ -308,34 +261,34 @@ improvements would result in significant practical performance gains seen at the
     \label{fig:network-stretch}
 \end{figure}
 
-{\em Secondary Routing Layer for Low-Stretch:} Network nodes in Picolo have two types of routing layers. The first is
+\textbf{\newline Secondary routing layer for low-stretch}: Network nodes in \textsf{Picolo} have two types of routing layers. The first is
 called a {\em principal} route layer which defines the core neighbor links that connect the node to its neighbors. The
 Principal or primary route layer uses the route map (as discussed above) that uses a prefix-based routing algorithm. The
 goal of the principal routing layer is to maintain a highly reliable foundational network topology. Issues with these
 links might cause the node to be marked as having serious failures (and thus trigger failure mode operation semantics).
-The second set of links are direct links to specific nodes and are maintained as a hash table of <Node ID, IP Address>
+The second set of links are direct links to specific nodes and are maintained as a hash table of \textsf{<Node ID, IP Address>}
 mappings. These are used for optimizations, such as to store direct content links to popular items or to cache links to popular home
 nodes, etc. We call these the {\em cache links} or {\em secondary links}. We shall discuss the distributed caching
-algorithm separately in Section \ref{net:replication} which will provide probabilistic guarantees of a lookup cost of
+algorithm separately in \cref{net:replication} which will provide probabilistic guarantees of a lookup cost of
 \(O(1)\) for most queries thus reducing the routing stretch.
 
-{\em Explicit soft-state publishing:} Nodes in Picolo send periodic {\em heartbeat} messages to other nodes through the
+\textbf{\newline Explicit soft-state publishing:} Nodes in \textsf{Picolo} send periodic {\em heartbeat} messages to other nodes through the
 p2p overlay network as given by their routing tables. This heatbeat message includes any content links or content IDs
 that the nodes are hosting. These messages are routed along the {\em principal} routing links which every node maintains
 for two reasons: Firstly, these messages are not latency critical and thus don't need to use the secondary layer. They
 serve to validate and refresh the network metrics of the primary links. They help discover "holes" or link/node
 failures. Secondly, these heartbeat messages also help deposit content links at various intermediate nodes that help
 route them. The content links and latency metrics expire according to a timeout and are refreshed with such messages.
-This operation of advertising content with an automatic expiry is called {\em soft-state publishing}. Picolo also
+This operation of advertising content with an automatic expiry is called {\em soft-state publishing}. \textsf{Picolo} also
 supports targeted re-publishing of content such as when a node comes back online after a disruption or when a node
 leaves/joins the network.
 
-{\em Query routing:} Lookup or querying for a specific content ID (or a set) happens in the following manner. A client
-that wishes to make such a query connects to one of the network nodes in Picolo. The network node then computes
-\(HomeNodes(contentID)\) for the requested content. The lookup or query request is then forwarded to one (or more)
+\textbf{\newline Query routing:} Lookup or querying for a specific content ID (or a set) happens in the following manner. A client
+that wishes to make such a query connects to one of the network nodes in \textsf{Picolo}. The network node then computes
+\textsf{HomeNodes(contentID)} for the requested content. The lookup or query request is then forwarded to one (or more)
 of the home nodes from this set. In the process of this lookup, if at any stage, multiple node paths are encountered,
 then the query can be forwarded along all paths (to minimize latency but incur a slightly higher cost) or can be
-forwarded along the path with the best latency. These tradeoffs can be exposed at the \(HomeNodes(contentID)\) API
+forwarded along the path with the best latency. These tradeoffs can be exposed at the \textsf{HomeNodes(contentID)} API
 call to allow the application developer to make such choices.
 
 \begin{figure}[t]
@@ -367,19 +320,19 @@ performance in the expected/average case.
 %directly routes it to the home node for YYY, thus saving a few network hops.
 
 \begin{theorem}
-Picolo's network layer can perform location independent routing given Property \ref{property_unique_home}.
+\textsf{Picolo}'s network layer can perform location independent routing given Property \ref{property_unique_home}.
 \end{theorem}
 
-The proof for this theorem follows from two facts. First, for a content ID \(X\), the function \(H_X = HomeNodes(X)\) returns
+The proof for this theorem follows from two facts. First, for a content ID \(X\), the function \(H_X = \textsf{HomeNodes(X)}\) returns
 the same set of nodes regardless of which network node this is executed on, thus, proving that the result is purely a function
 of the content ID \(X\). Secondly, we note that the routing protcol requires home nodes (either directly hosting content or content links)
 to periodically send heartbeat messages through the principal links to the rest of the network. This ensures that any node in the 
 network will have the routing layer capabilty to reach atleast one node in this set \(H_X\), thus proving the
 "routability" of the home node set \(H_X\). This proves the Theorem. 
 
-\begin{theorem}[Fault Tolerance]
+\begin{theorem}[\textsf{Fault Tolerance}]
    
-    Let \(X\) be any content ID and let its set of home nodes be given by \( H_X = HomeNodes(X) \). Also, let \(S_n\) be
+    Let \(X\) be any content ID and let its set of home nodes be given by \( H_X = \textsf{HomeNodes(X)} \). Also, let \(S_n\) be
     the set of all nodes (of cardinality \(n\)) which form the network that satisfy the above properties and Theorems.
     Now, if \( |H_x| > 1 \) and \( \forall a, b \in S_n, P(a|b) = P(a) \) where \( P(a) = \) probability of node \(a \in
     H_x \), then \(H_x\) has fault tolerance with relabilty of \( | H_x | \).
@@ -387,22 +340,22 @@ network will have the routing layer capabilty to reach atleast one node in this 
 \end{theorem}
 
 The proof of this Theorem can be seen in the following manner. First, the Theorem \ref{property_unique_home} states that
-Picolo can do location independent routing for any node \(y \in S_n\) where \(S_n\) is the set of nodes in the network.
+\textsf{Picolo} can do location independent routing for any node \(y \in S_n\) where \(S_n\) is the set of nodes in the network.
 Now, for a content ID \(X\) if the probability of any node \(z \in H_X\) is uncorrelated with any other nodes (they are
 independent) then by Theorem \ref{property_unique_home} they can be independently routed by the network. Now, the fault
 tolerance property follows from the observation that the only remaining way faults (network or node failures) can be
 correlated is by attempting a hash-prediction (reverse hash attacks) on the cryptographic hash function used in the
-\(HomeNodes(X)\) function, which has been proven to be computationally hard for our choice of SHA-256.
+\textsf{HomeNodes(X)} function, which has been proven to be computationally hard for our choice of SHA-256.
 
 \subsubsection{Delegate Routing}
 
-There is one pratical aspect of routing in a p2p overlay like Picolo that we have not addressed in order to
+There is one practical aspect of routing in a p2p overlay like \textsf{Picolo} that we have not addressed in order to
 simpify the discussion thus far.  This has to do with whether home nodes will actually exist in a sparse network space.
-We discuss this issue and present a solution that is a drop-in replacement for the \(HomeNodes(X)\) function and
+We discuss this issue and present a solution that is a drop-in replacement for the \textsf{HomeNodes(X)} function and
 preserves the above Theorems and properties.
 
-Node and content IDs in Picolo map to a relatively large space, i.e. \(2^{256}\) in size. Let \( H_X =
-HomeNodes(X)\) for content ID X. Given the large ID space and relatively sparse nature of the network nodes (a
+Node and content IDs in \textsf{Picolo} map to a relatively large space, i.e. \(2^{256}\) in size. Let \( H_X =
+\textsf{HomeNodes(X)}\) for content ID X. Given the large ID space and relatively sparse nature of the network nodes (a
 thousand or a million nodes out of \(2^{256}\), it is unlikely that nodes in \(H_X\) would have an exact match in the
 network. (this is expected with any content based DHTs routing layer \cite{Stoica_2001, Rowstron_2001}).
 Nevertheless, we route to each node \(y \in H_X\) as if it exists. During this process we might encounter empty neighbor
@@ -418,9 +371,9 @@ where the lookup query originates for a content ID \(X\), it will always compute
 Delegate routing thus becomes a determinstic routing function computed by the network in a distributed manner. It is
 important to note that this delegate resolution is the same regardless of where the function computation originates in the network.
 
-Now, we can replace the function \(HomeNodes(X)\) with a new function \(H_X = DelegateNodes(X)\) that automatically returns a
+Now, we can replace the function \textsf{HomeNodes(X)} with a new function \(H_X = \textsf{DelegateNodes(X)}\) that automatically returns a
 set \(H_X\) such that each node in \(H_X\) exists in the network. All the analysis, properties and Theorems discussed
-above extend directly to the \(DelegateNodes(X)\) as a drop-in replacement for the \(HomeNodes(X)\) function.
+above extend directly to the \textsf{DelegateNodes(X)} as a drop-in replacement for the \textsf{HomeNodes(X)} function.
 
 % TODO mark this as a property ?
 % We solve this problem by mapping each node \(y \in H_x \) to a \(Delegate(y)\) which is a node that exists on the network.
@@ -433,7 +386,7 @@ departures.
 
 \subsubsection{Node insertion}
 
-In this Section, we discuss how a new node can join the network and create a routing map for both the principal layer
+In this section, we discuss how a new node can join the network and create a routing map for both the principal layer
 and the secondary layer. The routing map has to be created so that the network properties and key Theorems hold.
 
 Node insertion happens in the following manner. A new node \(N\) first creates its 256 bit ID,
@@ -446,14 +399,14 @@ that it is available.
 \(N\) computes its principal routing maps in the following manner. It uses the Delegate routing function to find the set of delegate
 nodes to route to the content ID \(N_{id}\). However, at each hop we use the information from the nodes being contacted
 to construct the neighbor map.
-
-{\em New Node Notification:} The final step is to inform the other nodes of \(N\). This is done by going through the
+\newline\newline
+\textbf{New node notification}: The final step is to inform the other nodes of \(N\). This is done by going through the
 nodes at each level in the routing map that \(N\) has constructed and sending them an explicit heartbeat message. This
 includes any nodes that are delegates for \(N\). This will ensure that new queries will start getting routed to \(N\).
 
 \subsubsection{Failures and node departures}
 
-Nodes can depart the Picolo overlay network in two ways: First, is the case of a graceful departure, where the departing
+Nodes can depart the \textsf{Picolo} overlay network in two ways: First, is the case of a graceful departure, where the departing
 node send out an explicit notification through the network informing of the departure. This allows the network to adapt
 before the node leaves, by updating the routing tables and moving content out of the departing node if necessary.
 
@@ -468,38 +421,34 @@ tables accordingly by initiating the departure API calls as for the first case.
 
 \subsection{Replication and caching}
 \label{net:replication}
-Structured peer-peer distributed hash tables can implement lookups in \( O(log N)\) hops. Since each hop could add between 100-500
+Structured p2p distributed hash tables can implement lookups in \( O(log N)\) hops. Since each hop could add between 100-500
 ms of latency, for a network of 10K to 100K nodes this computes to about 4-5 seconds for a lookup (or more). Thus, we
 require a caching and replication strategy to reduce this cost especially for popular items. The discussion in this
-Section applies to any content or service thats is made available through the p2p system and thus extends beyond the
-Database as a blockchain service provided by Picolo.
-
-There has been significant prior work on caching and replicating strategies for peer-peer overlay networks. Methods such
+section applies to any content or service thats is made available through the p2p system and thus extends beyond \textsf{Picolo}.
+\newline\newline
+There has been significant prior work on caching and replicating strategies for p2p overlay networks. Methods such
 as Beehive \cite{beehive} provide a closed-form replication algorithm based on a derived equation that guarantees
 \(O(1)\) lookup but require full knowledge of the network, such as number of nodes and popularity values for each data
 item. While this system might be good for analysis and benchmark purposes, its implementation is not pratical for
-Picolo. Kelips \cite{kelips} is a probabilistic algorithm that also provides \(O(1)\) lookup performance (in the
+\textsf{Picolo}. Kelips \cite{kelips} is a probabilistic algorithm that also provides \(O(1)\) lookup performance (in the
 expected case) by dividing the network into \(O(\sqrt(N))\) affinity groups each of \(\sqrt(N)\) size. They use the
 gossip protocol to replicate content to all nodes within an affinity group. Work by Gupta et al \cite{one_hop_lookup}
 explore the tradeoff between routing table size and lookup latency. They offer a guaranteed \(O(1)\) lookup by
 maintaining routes to each and every node in the network. Farsite \cite{farsite} provides a better ttradeoff by using
-routing tables of \(O(dn^{1/3})\) size to route within \(O(d)\) hops.
-
-Other peer-peer applications such as PAST \cite{past} and CFS \cite{cfs} use fixed size caches on intermediate nodes to
+routing tables of \(O(dn^{1/3})\) size to route within \(O(d)\) hops. Other p2p applications such as PAST \cite{past} and CFS \cite{cfs} use fixed size caches on intermediate nodes to
 cache the objects being queried. While they are unable to provide closed-form analytic bounds on query time, their
 average case performance is reasonably good.
-
+\newline\newline
 We draw on the above literature to find the right balance between routing table size, cache and replication storage at
-nodes versus lookup latency. The strategy presented in this Section achieves \(O(1)\) lookup on average for networks
+nodes versus lookup latency. The strategy presented in this section achieves \(O(1)\) lookup on average for networks
 with standard node and popularity dynamics. In other words, we allow for node joins, failures, unexpected departures
 (including malicious intent) along with changes in service or object popularity. We also allow for "flash crowds", that
 is, an item, object or service (such as a table-shard, or certain rows in a table) can quickly gain popularity (as given
 by standard Internet virality models \cite{virality_model}).
-
 \begin{itemize}
     \item A node caches or replicates an item with a probability that is proportional to the number of queries it is
         expected to get for that item in the upcoming time interval T.
-    \item The difference between a cache and a replica is application specific. For the Database application that the
+    \item The difference between a cache and a replica is application specific. For the database application that the
         network layer hosts, it depends on whether a particular table or a shard is allowed to have write permissions on
         the replica.
     \item When a node caches or replicates an item, it affects the probabilitic demand distribution for the item at
@@ -507,9 +456,8 @@ by standard Internet virality models \cite{virality_model}).
     \item Thus, by repeating this algorithm iteratively, it would converge to the best caching pattern which would reduce
         lookup times with high probability for all items on the network.
 \end{itemize}
-
 Each node maintains these cached links as a part of the secondary or "cache" routing layer which is essentially a lookup
-map of <node ID, IP Address> pairs. It is possible for nodes to maintain relatively large caches since they are only
+map of \textsf{<Node ID, IP Address>} pairs. It is possible for nodes to maintain relatively large caches since they are only
 limited by the memory and node dynamic characteristics of the network. Cached links that use the methodologies discussed
 above can significantly reduce lookup latencies. Also the downside of a stale cache link is quite low, since any node
 can always initiate a principal routing layer based lookup procedure.
@@ -517,41 +465,35 @@ can always initiate a principal routing layer based lookup procedure.
 \subsection{Node Connectivity protocol}
 \label{net:net_proto}
 
-We describe the details of the transport protocol layer of a Picolo node. We call this the Node Connectivity Protocol
+We describe the details of the transport protocol layer of a \textsf{Picolo} node. We call this the Node Connectivity Protocol
 layer. This protocol layer is responsible for connecting to a set of peers, maintaining network connectivity under
-possibly varying network conditions and allowing for a peer-peer network programing model (as opposed to client-server
+possibly varying network conditions and allowing for a p2p network programing model (as opposed to client-server
 programming model which most transport protocols are based off).  The protocol layer should also work with nodes that
 are behind Network Address Translators (NATs).
-
-When a Picolo node starts for the first time (fresh install), it will query a set of "root" servers, similar to the DNS
+\newline\newline
+When a \textsf{Picolo} node starts for the first time (fresh install), it will query a set of "root" servers, similar to the DNS
 architecture of the Internet which is one of the largest decentralized lookup databases in the world \cite{icann_root}. 
 These root servers populate the nodes with a list of neighboring nodes and content to bootstrap with. It uses algorithms
-outlined in the previous Section to populate its routing table.
-
-As part of downloading the node binary, each download is given a certificate signed by the Picolo root servers. This
+outlined in the previous Section to populate its routing table. As part of downloading the node binary, each download is given a certificate signed by the \textsf{Picolo} root servers. This
 certificate is the seed credential that lets the node become part of the network and is presented to other nodes when it
-wishes to be part of the core routing layer.
-
-With respect to the network layer semantics for making connections, we shall use either the QUIC protocol or the SPDY
+wishes to be part of the core routing layer. With respect to the network layer semantics for making connections, we shall use either the QUIC protocol or the SPDY
 protocol.
 \begin{figure}[t]
     \centering
     \includegraphics[width=0.5\textwidth]{fig/pic_netlayer.png}
   \caption{Comparison of network stacks for Traditional HTTP/2, QUIC and SPDY.}
 \end{figure}
-
+\newline\newline
 QUIC is a relatively new transport protocol designed by Google \cite{quic_sigcomm} that provides encrypted, multi-session transport over UDP
 instead of TCP for HTTPS traffic. It replaces the traditional HTTPS stack: HTTP/2, TLS, TCP with an integrated protocol
 layer directly over UDP. The key features include reduction in the head-of-line blocking delay and handshake delays to
 improve the performance for multi-session connections. However, QUIC is relatively new and the knee-jerk reaction from
 firewall manufacturers has been to block it until its fully understood. Also it does not work well with NATs that
-provide STUN protocol \cite{stun_protocol} support for drilling holes through their firewalls.  
-
-The network layer would use techniques derived from the STUN protocol to traverse nodes
+provide STUN protocol \cite{stun_protocol} support for drilling holes through their firewalls.  The network layer would use techniques derived from the STUN protocol to traverse nodes
 that are behind a NAT. By having a set of nodes (such as ones with a higher stake) behave as
 super-peers, its possible to craft a p2p version of the STUN protocol to enable
 other nodes behind a NAT to become part of the network \cite{p2p_nat}.
-
+\newline\newline
 SPDY (pronounced "SPeeDY"), is a protocol from the Chromium Project at Google \cite{speedy_protocol} to improve network performance for web
 pages. It requires changes at both end points for the protocol to work and is able to improve load times by about 64\%
 on average. It build upon previous proposals such as the Stream Control Transmission Protocol (SCTP)
@@ -571,16 +513,12 @@ over an SSL based secure layer that can utilize certificates as credentials amon
 Nodes maintain local analytics which are periodically updated to a special distributed system-level analytics
 database. Analytics include counters for table queries, statistics for various operations (CRUD), latency numbers, route
 changes and similar network statistics. The analytics database is a special permissioned database that only entities
-(developers, institutions) with the right credentials can modify.
-
-A similar but separate database is used for fault diagnosis, collecting data on Byzantine failures, crash logs and
-unexpected node departures. A third database is purely used for logs, both at the network level and the database level.
-
-Both databases are readable by all nodes who are part of the network. These databases provide the basic mechanism for
+(developers, institutions) with the right credentials can modify. A similar but separate database is used for fault diagnosis, collecting data on Byzantine failures, crash logs and
+unexpected node departures. A third database is purely used for logs, both at the network level and the database level. Both databases are readable by all nodes who are part of the network. These databases provide the basic mechanism for
 establishing trust and stake for nodes in the network.
 
 \subsubsection{Trust ladder}
-While we haven't created a detailed specification for how Trust and Governance work in the network, the basic principles
+While we haven't created a detailed specification for how trust and governance work in the network, the basic principles
 are the following:
 \begin{itemize}
     \item New nodes that obtain a fresh certificate, start at the lowest level of trust. They are able to participate in
@@ -592,7 +530,7 @@ are the following:
         change the principal routes, or be able to bootstrap new nodes into the network requires a higher level of trust
         or stake.
     \item The highest level of trust includes nodes that have the ability to update node binaries, issue certificates,
-        grant access to other nodes and similar acts of Governance. While it might be possible for regular nodes to
+        grant access to other nodes and similar acts of governance. While it might be possible for regular nodes to
         enter this level through a combination of service-based trust and stake, the membership might be managed by a
         council of network admins or developers.
 \end{itemize}
