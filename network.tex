@@ -210,7 +210,7 @@ for the prefix "6". We would thus route to node \(\textsf{B}_\textsf{1}\) matchi
 \textbf{\newline Home Node Set}: The content ID for a given content is computed using a cryptographic function such as SHA-256. The
 network design allows the use of any cryptographic hash function with an even distribution of hash values. The content ID 
 consists of this hash value, a {\em replica count {\bf r}} and possibly any other parameters bundled as a JSON blob.
-As discussed in the previous Section, both node IDs and content IDs are confined to the same 256-bit space.  Every content ID
+As discussed in the previous section, both node IDs and content IDs are confined to the same 256-bit space.  Every content ID
 maps to one or more {\em home nodes} that form a {\em home node set}. A home node is the node that is responsible for
 either directly hosting the content if it has that capability or has a link to another node that hosts content.
 Essentially from the routing layer's perspetive, the routing function ends once we reach a home node. If the replica
@@ -308,7 +308,7 @@ query could take if it were to follow the principal routes in the routing map.
 
 The secondary routes are also shown in the Figure as dotted lines. In the example shown, node "5146" has a cached link
 to the storage node for the content ID "5824" and thus directly routes the message to that node. Cached links can thus
-optimize the routing and reduce the network stretch by a significant factor.  In practice, our routing caching algorithm will
+optimize the routing and reduce the network stretch by a significant factor.  In practice, our route caching algorithm will
 ensure that most lookups and queries can be satisfied using the cache routing network, so that we can get an \(O(1)\) lookup
 performance in the expected/average case.
 
@@ -426,11 +426,10 @@ section applies to any content or service thats is made available through the p2
 \newline\newline
 There has been significant prior work on caching and replicating strategies for p2p overlay networks. Methods such
 as Beehive \cite{beehive} provide a closed-form replication algorithm based on a derived equation that guarantees
-\(O(1)\) lookup but require full knowledge of the network, such as number of nodes and popularity values for each data
+\(O(1)\) lookup but requires full knowledge of the network, such as number of nodes and popularity values for each data
 item. While this system might be good for analysis and benchmark purposes, its implementation is not pratical for
 \textsf{Picolo}. Kelips \cite{kelips} is a probabilistic algorithm that also provides \(O(1)\) lookup performance (in the
-expected case) by dividing the network into \(O(\sqrt(N))\) affinity groups each of \(\sqrt(N)\) size. They use the
-gossip protocol to replicate content to all nodes within an affinity group. Work by Gupta et al \cite{one_hop_lookup}
+expected case) by dividing the network into \(O(\sqrt(N))\) affinity groups each of \(\sqrt(N)\) size. They use a gossip protocol to replicate content to all nodes within an affinity group. Work by Gupta et al \cite{one_hop_lookup}
 explore the tradeoff between routing table size and lookup latency. They offer a guaranteed \(O(1)\) lookup by
 maintaining routes to each and every node in the network. Farsite \cite{farsite} provides a better ttradeoff by using
 routing tables of \(O(dn^{1/3})\) size to route within \(O(d)\) hops. Other p2p applications such as PAST \cite{past} and CFS \cite{cfs} use fixed size caches on intermediate nodes to
@@ -472,7 +471,7 @@ are behind Network Address Translators (NATs).
 When a \textsf{Picolo} node starts for the first time (fresh install), it will query a set of "root" servers, similar to the DNS
 architecture of the Internet which is one of the largest decentralized lookup databases in the world \cite{icann_root}. 
 These root servers populate the nodes with a list of neighboring nodes and content to bootstrap with. It uses algorithms
-outlined in the previous Section to populate its routing table. As part of downloading the node binary, each download is given a certificate signed by the \textsf{Picolo} root servers. This
+outlined in the previous section to populate its routing table. As part of downloading the node binary, each download is given a certificate signed by the \textsf{Picolo} root servers. This
 certificate is the seed credential that lets the node become part of the network and is presented to other nodes when it
 wishes to be part of the core routing layer. With respect to the network layer semantics for making connections, we shall use either the QUIC protocol or the SPDY
 protocol.
@@ -494,8 +493,8 @@ other nodes behind a NAT to become part of the network \cite{p2p_nat}.
 \newline\newline
 SPDY (pronounced "SPeeDY"), is a protocol from the Chromium Project at Google \cite{speedy_protocol} to improve network performance for web
 pages. It requires changes at both end points for the protocol to work and is able to improve load times by about 64\%
-on average. It build upon previous proposals such as the Stream Control Transmission Protocol (SCTP)
-\cite{sctp_rfc} that allow multiple sessions to coexist on a single TCP connection. SPDY can work well in network
+on average. It builds upon previous proposals such as the Stream Control Transmission Protocol (SCTP)
+\cite{sctp_rfc} that allows multiple sessions to coexist on a single TCP connection. SPDY can work well in network
 environments where firewalls are biased towards blocking most ports but the HTTP and HTTPS. SPDY allows bi-directional
 session initiation to happen and thus is more p2p flavored that other web protocols. It also has multi-session support
 over an SSL based secure layer that can utilize certificates as credentials among other methods.
