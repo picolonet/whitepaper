@@ -279,7 +279,14 @@ Since we are routing at the overlay layer, a route on the p2p overlay might resu
 level. Figure XXX illustrates the concept of network stretch and why a low stretch is important. In essence, stretch
 captures any inefficiencies at the network layer incurred by routing at the p2p overlay layer.
 
-FILL
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=0.40\textwidth]{fig/network-stretch.png}
+  \caption{Example of why a low network stretch is important fo any p2p routing overlay protocol. The solid lines show
+    the layer-3 network topology. The solid grey arrow shows the route taken by a p2p overlay routing protocol to route
+    from A to F (which is A, D, E, B, F).}
+    \label{fig:network-stretch}
+\end{figure}
 
 \begin{property}[Unique Home node set] The home node set \(H_X\) for a content ID \(X\) must be unique, that is,
     \(H_X\) must generated the exact same set regardless of where it is computed in the network.
@@ -320,9 +327,16 @@ then the query can be forwarded along all paths (to minimize latency but incur a
 forwarded along the path with the best latency. These tradeoffs can be exposed at the \(HomeNodes(contentID)\) API
 call to allow the application developer to make such choices.
 
-FILL
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=0.55\textwidth]{fig/routing-eg.png}
+  \caption{Example of routing a query for the ID "5824". The query originates at node 691D in the above illustration.
+    The solid black lines show the principal routing map. The dashed lines show the cached links. The think grey curved
+    arrow shows the eventual path taken by the query.}
+    \label{fig:routing-eg}
+\end{figure}
 
-Figure XXX shows an example of routing a query for a content ID YYY. The dotted arrows show the cached content links from
+Figure \ref{fig:routing-eg} shows an example of routing a query for a content ID YYY. The dotted arrows show the cached content links from
 secondary or cache routing network. The primary or principal links are shown in solid arrow. The example the lookup operation
 for the content ID YYY originating at two different points in the network A and B. The query at A utilizes the principal
 links and finds the home node for the content ID YYY. The query at B ends up hitting a node C which has a cached link that
