@@ -250,9 +250,9 @@ for the prefix "6". We would thus route to node \(B_1\) matching the column"1" a
 
 {\em Home Node Set:} The content ID for a given content is computed using a cryptographic function such as SHA-256. The
 network design allows the use of any cryptographic hash function with a even distribution of hash values. The content ID 
-consists of this hash value, a {\em replica count r} and possibly any other parameters bundled as a json blob.
+consists of this hash value, a {\em replica count {\bf r}} and possibly any other parameters bundled as a JSON blob.
 
-As discussed in the previous Section both node IDs and content IDs are confined to a 256-bit space.  Every content ID
+As discussed in the previous Section, both node IDs and content IDs are confined to the same 256-bit space.  Every content ID
 maps to one or more {\em home nodes} that form a {\em home node set}. A home node is the node that is responsible for
 either directly hosting the content if it has that capability or has a link to another node that hosts content.
 Essentially from the routing layer's perspetive, the routing function ends once we reach a home node. If the replica
@@ -275,7 +275,17 @@ segregation allows certain nodes to either participate in the network routing fu
 provide the database functionality or both depending on various factors (such as resource availability). In the case
 that a Picolo home node stores a link to another node which hosts the content, such a link is called a {\em content
 link}. This link is not part of the routing layer since the routing functionality ends with finding a home node. When a
-Picolo node stores a link to another node as a part of the routing map such a link is called a {\em node link}.
+Picolo node stores a link to another node as a part of the routing map such a link is called a {\em node link}. Thus,
+the links stored in a routing map as discussed above are all node links.
+
+\begin{property}[Unique Home node set] The home node set \(H_X\) for a content ID \(X\) must be unique, that is,
+    \(H_X\) must generated the exact same set regardless of where it is computed in the network.
+\label{property_unique_home}
+\end{property}
+
+Note that the example implementation of \(HomeNodes(ContentID)\) does satisfy this property. This property is important
+to ensure that our decentralized overlay-based routing algorithm as discussed in this Section will work in a
+deterministic manner regardless of the starting point in the network.
 
 The goal of the routing protocol is to find a route with low stretch (ideally a stretch of 1.0). Stretch is the ratio
 between (network level) distance traveled from (say) node A to node B to the minimal network distance between node A and B.
@@ -284,7 +294,7 @@ level.
 
 Figure \ref{fig:network-stretch} illustrates the concept of network stretch and why a low stretch is important. In this
 example, we are routing from node A to F. The p2p overlay route goes from node A to D, then to E, B and finally to F.
-This results in an inefficiency as seen at the layer-3 since the message traverses the same link multiple times. This
+This results in an inefficiency as seen at the layer-3 since messages travel the same links multiple times. This
 inefficiency is captured by the "stretch" metric as a ratio of the p2p overlay route to the optimal layer-3 route (which
 is A to B to F in this example). Since this is at the routing layer which most network messages would take, even small
 improvements would result in significant practical performance gains seen at the application level.
@@ -298,25 +308,16 @@ improvements would result in significant practical performance gains seen at the
     \label{fig:network-stretch}
 \end{figure}
 
-\begin{property}[Unique Home node set] The home node set \(H_X\) for a content ID \(X\) must be unique, that is,
-    \(H_X\) must generated the exact same set regardless of where it is computed in the network.
-\label{property_unique_home}
-\end{property}
-
-Note that the example implementation of \(HomeNodes(ContentID)\) does satisfy this property. This property is important
-to ensure that our decentralized overlay-based routing algorithm as discussed in this Section will work in a
-deterministic manner regardless of the starting point in the network.
-
 {\em Secondary Routing Layer for Low-Stretch:} Network nodes in Picolo have two types of routing layers. The first is
 called a {\em principal} route layer which defines the core neighbor links that connect the node to its neighbors. The
-Pricipal or primary route layer uses the route map as discussed above that uses a prefix-based routing algorithm. The
-goal of the principal routing layer is to maintain highly reliable foundational network topology. Issues with these
+Principal or primary route layer uses the route map (as discussed above) that uses a prefix-based routing algorithm. The
+goal of the principal routing layer is to maintain a highly reliable foundational network topology. Issues with these
 links might cause the node to be marked as having serious failures (and thus trigger failure mode operation semantics).
 The second set of links are direct links to specific nodes and are maintained as a hash table of <Node ID, IP Address>
-mappings. These are used for optimizations, such as to content links to popular items or to cache links to popular home
+mappings. These are used for optimizations, such as to store direct content links to popular items or to cache links to popular home
 nodes, etc. We call these the {\em cache links} or {\em secondary links}. We shall discuss the distributed caching
-algorithm separately in Section \ref{net:replication} which will high probabilistic guarantee of a lookup cost of
-\(O(1)\) thus reducing the routing stretch.
+algorithm separately in Section \ref{net:replication} which will provide probabilistic guarantees of a lookup cost of
+\(O(1)\) for most queries thus reducing the routing stretch.
 
 {\em Explicit soft-state publishing:} Nodes in Picolo send periodic {\em heartbeat} messages to other nodes through the
 p2p overlay network as given by their routing tables. This heatbeat message includes any content links or content IDs
@@ -369,18 +370,20 @@ performance in the expected/average case.
 Picolo's network layer can perform location independent routing given Property \ref{property_unique_home}.
 \end{theorem}
 
-The proof for this theorem follows from two facts. First, for a content \(x\), the function \(H_x = FindHomeNodes(x)\) returns
+The proof for this theorem follows from two facts. First, for a content ID \(X\), the function \(H_X = HomeNodes(X)\) returns
 the same set of nodes regardless of which network node this is executed on, thus, proving that the result is purely a function
-of the content \(x\). Secondly, due to the routing protcol requires home nodes (either directly hosting content or content links)
+of the content ID \(X\). Secondly, we note that the routing protcol requires home nodes (either directly hosting content or content links)
 to periodically send heartbeat messages through the principal links to the rest of the network. This ensures that any node in the 
-network will have the routing layer capabilty to reach atleast one node in this set \(H_x\), thus demonstrating the invariant. 
+network will have the routing layer capabilty to reach atleast one node in this set \(H_X\), thus proving the
+"routability" of the home node set \(H_X\). This proves the Theorem. 
 
 \begin{theorem}[Fault Tolerance]
    
-    For a content ID \(x\) with its set of home nodes given by \( H_x = FindHomeNodes(x) \) and \(S_n\) be the set of
-all nodes (of cardinality \(n\)) which satisfies the above properties, if \( |H_x| > 1 \) and \( \forall a, b \in S_n,
+    For a content ID \(X\) with its set of home nodes given by \( H_X = HomeNodes(X) \) and \(S_n\) be the set of all
+    nodes (of cardinality \(n\)) which satisfies the above properties, if \( |H_x| > 1 \) and \( \forall a, b \in S_n,
     P(a|b) = P(a) \) where \( P(a) = \) probability of node \(a \in H_x \), then \(H_x\) has fault tolerance with
     relabilty of \( | H_x | \).
+
 \end{theorem}
 
 \subsubsection{Delegate Routing}
