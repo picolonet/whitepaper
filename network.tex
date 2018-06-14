@@ -274,10 +274,16 @@ link}. This link is not part of the routing layer since the routing functionalit
 Picolo node stores a link to another node as a part of the routing map such a link is called a {\em node link}.
 
 The goal of the routing protocol is to find a route with low stretch (ideally a stretch of 1.0). Stretch is the ratio
-between (network level) distance traveled from node A to node B to the minimal network distance between node A and B.
+between (network level) distance traveled from (say) node A to node B to the minimal network distance between node A and B.
 Since we are routing at the overlay layer, a route on the p2p overlay might result in a suboptimal route at the network
-level. Figure XXX illustrates the concept of network stretch and why a low stretch is important. In essence, stretch
-captures any inefficiencies at the network layer incurred by routing at the p2p overlay layer.
+level.
+
+Figure \ref{fig:network-stretch} illustrates the concept of network stretch and why a low stretch is important. In this
+example, we are routing from node A to F. The p2p overlay route goes from node A to D, then to E, B and finally to F.
+This results in an inefficiency as seen at the layer-3 since the message traverses the same link multiple times. This
+inefficiency is captured by the "stretch" metric as a ratio of the p2p overlay route to the optimal layer-3 route (which
+is A to B to F in this example). Since this is at the routing layer which most network messages would take, even small
+improvements would result in significant practical performance gains seen at the application level.
 
 \begin{figure}[h]
     \centering
@@ -504,7 +510,7 @@ With respect to the network layer semantics for making connections, we shall use
 protocol.
 \begin{figure}[h]
     \centering
-    \includegraphics[width=0.7\textwidth]{fig/pic_netlayer.png}
+    \includegraphics[width=0.5\textwidth]{fig/pic_netlayer.png}
   \caption{Comparison of network stacks for Traditional HTTP/2, QUIC and SPDY.}
 \end{figure}
 
