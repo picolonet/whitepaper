@@ -46,7 +46,7 @@ All peers (replicas) in a database cluster constantly ping each other (once ever
 \newline
 \textbf{Note on signatures}: In our current plan signatures are stored per row. So when a row update occurs on a specific column or group of columns, the signature needs to be recreated for the whole row. This involves fetching the whole row, applying the update, creating the signature on the new row and putting back the whole row. The data overhead with this process might prove to be too much. We are evaluating an alternate scheme where signatures are stored per cell instead using a short signature scheme like BLS \cite{bls}. Trade offs between these two schemes need to be more thoroughly evaluated.
 \begin{figure}[h!] \centering
-	\includegraphics[width=\fscale{0.76}]{poq.png}
+	\includegraphics[width=\fscale{0.76}]{poq2.png}
 	\caption{\textsf{Proof-of-Query} pings}
 	\label{fig:poq}
 \end{figure}
