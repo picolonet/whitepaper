@@ -1,7 +1,24 @@
 \section{Database Subsystem}
 In this section, we discuss core database concepts like byzantine paxos, role of timestamps in achieving external consistency, distributed transactions and sharding. Concepts that are most new to a database network built for the  decentralized world like distributed query processing, dynamic clustering, data sovereignty and decentralized fine-grained access control are presented.
 
-\subsection{Consensus, replication \& sharding} \label{sec:paxos}
+\subsection{Blockchain consensus}
+
+One of the key questions to answer in a decentralized environment is that of the {\em validity, credibility or
+consensus} on a transaction. For example, when a monetary transaction is made among two or more parties, is there consensus among the
+involved parties, or among the network as a whole ?
+
+In Picolo, when defining the database schema, it is possible to specify if a consensus is required among the all
+participating nodes on the network or only among the participating entities in the application or any combination of
+these. It might also be possible to specify a requirement of validation or permission from entities such as regulatory
+bodies if they exist in the context of the application.
+
+Once the blockchain grants consensus to a transaction, the credential is captured as a multi-party signed certificate
+which can be presented to Picolo to authorize the transaction on the database. Picolo can work with any and all existing
+consensus methods used by the major blockchains today. Also for transactions that are public on a public ledger, it
+is possible to insert a cryptographic reference to the transaction which would represent a database read operation on
+Picolo, thereby making it possible to share the transaction as a link (on a ledger or otherwise).
+
+\subsection{Database Consensus, replication \& sharding} \label{sec:paxos}
 All data on \textsf{Picolo} is replicated for durability and high availability. Storage consumers have the option of choosing a replication factor that suits their needs. They can also choose where to locate their data based on where their users are located to achieve better latency or to comply with regulations like GDPR. This data locality can easily be achieved by instructing the network layer to only allow replicas that belong to a geographic region to join the replica group. Consensus is achieved amongst replicas by a running a variant of paxos that is tolerant to byzantine faults.
  \subsubsection{Paxos based replication}
  We modify the algorithms in \cite{byzantine_paxos} to make the leader election more frequent and add a slashing condition that punishes byzantine behavior. There are two roles that each replica can take: \textsf{proposer} and \textsf{acceptor}. Proposers initiate changes to the state by proposing new commands to be appended to a \textsf{sequence} from which the replica state is generated and acceptors vote on which sequence to accept. The system moves through different \textsf{views}. A view can be thought of as a discrete time period (in the order of minutes) with a monotonically increasing view number $\textsf{view}_\textsf{num}$ and has a distinguished proposer called \textsf{leader}. If one imagines that each replica has a number from the set ${1..\mathcal{N}}$ where $\mathcal{N}$ is the number of replicas, then the leader for a view can simply be chosen as $\textsf{leader}_\textsf{view} = \textsf{view}_\textsf{num} \enspace \% \enspace \mathcal{N}$. There are two modes in which the consensus process happens: \textsf{fast} and \textsf{classic}.
